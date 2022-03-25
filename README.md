@@ -47,7 +47,7 @@ Required Reading: "Probabilistic topic models" [Blei, 2012](http://www.cs.columb
 Required Reading: "Variational Inference: A Review for Statisticians” [Blei et al, 2017](https://www.tandfonline.com/doi/full/10.1080/01621459.2017.1285773) <br>
 Optional Reading: Murphy, Ch 10.2
 
-### Week 6 (5/2 & 5/4): Nonlinear Factor Models and Fixed-Form VI
+### Week 6 (5/2 & 5/4): Variational Autoencoders and Fixed-Form VI
 Required Reading: “An Introduction to Variational Autoencoders” (Ch 1 and 2) [Kingma and Welling, 2019](https://arxiv.org/pdf/1906.02691.pdf)
 Optional Reading: Murphy, Ch 10.3
 
