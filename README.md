@@ -59,6 +59,6 @@ Optional Reading: Murphy, Ch 8
 Required Reading: Bishop, Ch 6.4
 Optional Reading: [Adams et al, 2019](https://homepages.inf.ed.ac.uk/imurray2/pub/09poisson/adams-murray-mackay-2009b.pdf)
 
-### Weeks 9 and 10: Advanced Topics
+### Weeks 9 and 10: Research Topics in Probabilistic Machine Learning
 
 
