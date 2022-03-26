@@ -7,7 +7,7 @@ Stanford University
 ---
 
 ## Course Description: 
-Probabilistic modeling and inference of multivariate data. Topics may include multivariate Gaussian models, probabilistic graphical models, MCMC and variational Bayesian inference, dimensionality reduction, principal components, factor analysis, matrix completion, topic modeling, and state space models. Extensive work with data involving programming, ideally in Python and/or R. 
+Probabilistic modeling and inference of multivariate data. Topics may include multivariate Gaussian models, probabilistic graphical models, MCMC and variational Bayesian inference, dimensionality reduction, principal components, factor analysis, matrix completion, topic modeling, and state space models. Extensive work with data involving programming, ideally in Python. 
 
 ## Prerequisites:
 Students should be comfortable with probability and statistics as well as multivariate calculus and linear algebra. This course will emphasize implementing models and algorithms, so coding proficiency is required.
