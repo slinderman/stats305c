@@ -16,7 +16,9 @@ Students should be comfortable with probability and statistics as well as multiv
 - Time: Monday and Wednesday, 11:30am-1pm 
 - Level: advanced undergrad and up
 - Grading basis: credit or letter grade
-- Office hours: Monday 1-2pm (Scott) and Tuesday 5:30-7pm (Matt)
+- Office hours: 
+  - Monday 1-2pm (Scott)
+  - Tuesday 5:30-7pm in Fish Bowl, Sequoia Hall (Matt)
 - Final evaluation: Exam
 
 ## Books
