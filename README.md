@@ -26,6 +26,9 @@ Students should be comfortable with probability and statistics as well as multiv
 - Murphy. Probabilistic Machine Learning: An Introduction. MIT Press, 2022. [link](https://probml.github.io/pml-book/book1.html)
 - Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. [link](http://www.stat.columbia.edu/~gelman/book/)
 
+## Assignments
+- [Assignment 1: Bayesian Linear Regression](https://github.com/slinderman/stats305c/blob/main/assignments/hw1/hw1.ipynb). Due **Weds. Apr 6 at midnight** on GradeScope. 
+
 ## Tentative Schedule
 
 ### Week 1 (3/28 & 3/30): Multivariate Normal Models and Conjugate Priors
