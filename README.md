@@ -1,6 +1,6 @@
 # STATS305C: Applied Statistics III
 Instructor: Scott Linderman <br>
-TA: Matt MacKay <br>
+TA: Matt MacKay, James Yang <br>
 Term: Spring 2022 <br>
 Stanford University
 
@@ -18,6 +18,7 @@ Students should be comfortable with probability and statistics as well as multiv
 - Grading basis: credit or letter grade
 - Office hours: 
   - Monday 1-2pm (Scott)
+  - Tuesday 11am-12:30pm [Zoom](https://stanford.zoom.us/j/98216869509?pwd=anZoZTJIRmYvOS9ET2Jza1hiclJQUT09) for now (trying to get a room for future OH) (James)
   - Tuesday 5:30-7pm in Fish Bowl, Sequoia Hall (Matt)
 - Final evaluation: Exam
 
