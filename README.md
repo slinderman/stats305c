@@ -24,7 +24,7 @@ Students should be comfortable with probability and statistics as well as multiv
 
 ## Books
 - Bishop. Pattern recognition and machine learning. New York: Springer, 2006. [link](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
-- Murphy. Probabilistic Machine Learning: An Introduction. MIT Press, 2022. [link](https://probml.github.io/pml-book/book1.html)
+- Murphy. Probabilistic Machine Learning: An Introduction. MIT Press, 2022. [link](https://probml.github.io/pml-book/book2.html)
 - Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. [link](http://www.stat.columbia.edu/~gelman/book/)
 
 ## Assignments
