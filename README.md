@@ -19,7 +19,7 @@ Students should be comfortable with probability and statistics as well as multiv
 - Office hours: 
   - Monday 1-2pm (Scott)
   - Tuesday 11am-12:30pm [Zoom](https://stanford.zoom.us/j/98216869509?pwd=anZoZTJIRmYvOS9ET2Jza1hiclJQUT09) for now (trying to get a room for future OH) (James)
-  - Tuesday 5:30-7pm in Fish Bowl, Sequoia Hall (Matt)
+  - Tuesday 5:30-7pm in Bowker, Sequoia Hall (Matt)
 - Final evaluation: Exam
 
 ## Books
