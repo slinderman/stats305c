@@ -19,12 +19,12 @@ Students should be comfortable with probability and statistics as well as multiv
 - Office hours: 
   - Monday 1-2pm (Scott)
   - Tuesday 11am-12:30pm [Zoom](https://stanford.zoom.us/j/98216869509?pwd=anZoZTJIRmYvOS9ET2Jza1hiclJQUT09) for now (trying to get a room for future OH) (James)
-  - Tuesday 5:30-7pm in Fish Bowl, Sequoia Hall (Matt)
+  - Tuesday 5:30-7pm in Bowker, Room 207, Sequoia Hall (Matt)
 - Final evaluation: Exam
 
 ## Books
 - Bishop. Pattern recognition and machine learning. New York: Springer, 2006. [link](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
-- Murphy. Probabilistic Machine Learning: An Introduction. MIT Press, 2022. [link](https://probml.github.io/pml-book/book1.html)
+- Murphy. Probabilistic Machine Learning: An Introduction. MIT Press, 2022. [link](https://probml.github.io/pml-book/book2.html)
 - Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. [link](http://www.stat.columbia.edu/~gelman/book/)
 
 ## Assignments
