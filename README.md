@@ -18,8 +18,8 @@ Students should be comfortable with probability and statistics as well as multiv
 - Grading basis: credit or letter grade
 - Office hours: 
   - Monday 1-2pm (Scott)
-  - Tuesday 11am-12:30pm [Zoom](https://stanford.zoom.us/j/98216869509?pwd=anZoZTJIRmYvOS9ET2Jza1hiclJQUT09) for now (trying to get a room for future OH) (James)
   - Tuesday 5:30-7pm in Bowker, Room 207, Sequoia Hall (Matt)
+  - Friday 2-3:30pm [Zoom](https://stanford.zoom.us/j/91206623255?pwd=bTJ0S2F2TnNiM01wNjdycExoMzZjdz09) (James)
 - Final evaluation: Exam
 
 ## Books
