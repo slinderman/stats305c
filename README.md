@@ -24,7 +24,7 @@ Students should be comfortable with probability and statistics as well as multiv
 
 ## Books
 - Bishop. Pattern recognition and machine learning. New York: Springer, 2006. [link](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
-- Murphy. Probabilistic Machine Learning: An Introduction. MIT Press, 2022. [link](https://probml.github.io/pml-book/book2.html)
+- Murphy. Probabilistic Machine Learning: Advanced Topics. MIT Press, 2023. [link](https://probml.github.io/pml-book/book2.html)
 - Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. [link](http://www.stat.columbia.edu/~gelman/book/)
 
 ## Assignments
@@ -38,7 +38,7 @@ Students should be comfortable with probability and statistics as well as multiv
 
 ### Week 2 (4/4 & 4/6): Hierarchical Models and Gibbs Sampling
 - Required Reading: Bishop, Ch 8.1-8.2 and 11.2-11.3
-- Optional Reading: Murphy, Ch 3.5.2, 4.2, and 12.1-12.3
+- Optional Reading: Murphy, Ch 3.5.2, 4.2, and 11.1-11.3
 - Optional Reading: Gelman, Ch 5
 
 ### Week 3 (4/11 & 4/13): Probabilistic PCA and Factor Analysis
