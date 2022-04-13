@@ -41,8 +41,9 @@ Students should be comfortable with probability and statistics as well as multiv
 - Optional Reading: Murphy, Ch 3.5.2, 4.2, and 11.1-11.3
 - Optional Reading: Gelman, Ch 5
 
-### Week 3 (4/11 & 4/13): Probabilistic PCA and Factor Analysis
+### Week 3 (4/11 & 4/13): Continuous Latent Variable Models and HMC
 - Required Reading: Bishop, Ch 12.1-12.2 
+- Required Reading: MCMC using Hamiltonian dynamics [Neal, 2012](https://arxiv.org/abs/1206.1901)
 
 ### Week 4 (4/18 & 4/20): Mixture Models and EM
 - Required Reading: Bishop, Ch 9
