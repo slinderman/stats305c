@@ -28,7 +28,9 @@ Students should be comfortable with probability and statistics as well as multiv
 - Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. [link](http://www.stat.columbia.edu/~gelman/book/)
 
 ## Assignments
-- [Assignment 1: Bayesian Linear Regression](https://github.com/slinderman/stats305c/blob/main/assignments/hw1/hw1.ipynb). Due **Weds. Apr 6 at midnight** on GradeScope. 
+- [Assignment 1: Bayesian Linear Regression](https://github.com/slinderman/stats305c/blob/main/assignments/hw1/hw1.ipynb). Due **Weds. Apr 6 at 11:59pm** on GradeScope. 
+- [Assignment 2: Gibbs Sampling and Metropolis-Hastings](https://github.com/slinderman/stats305c/blob/main/assignments/hw2/hw2.ipynb). Due **Weds. Apr 13 at 11:59pm** on GradeScope. 
+- [Assignment 3: Continuous Latent Variable Models](https://github.com/slinderman/stats305c/blob/main/assignments/hw3/hw3.ipynb). Due **Weds. Apr 20 at 11:59pm** on GradeScope. 
 
 ## Tentative Schedule
 
