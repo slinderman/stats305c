@@ -33,7 +33,7 @@ Students should be comfortable with probability and statistics as well as multiv
 - [Assignment 3: Continuous Latent Variable Models](https://github.com/slinderman/stats305c/blob/main/assignments/hw3/hw3.ipynb). Due **Weds. Apr 20 at 11:59pm** on GradeScope. 
 - [Assignment 4: Bayesian Mixture Models](https://github.com/slinderman/stats305c/blob/main/assignments/hw4/hw4.ipynb). Due **Weds. Apr 27 at 11:59pm** on GradeScope. 
 - [Assignment 5: Poisson Matrix Factorization](https://github.com/slinderman/stats305c/blob/main/assignments/hw5/hw5.ipynb). Due **Weds. May 4 at 11:59pm** on GradeScope. 
-- - [Assignment 6: Neural Networks and VAEs](https://github.com/slinderman/stats305c/blob/main/assignments/hw6/hw6.ipynb). Due **Weds. May 11 at 11:59pm** on GradeScope. 
+- [Assignment 6: Neural Networks and VAEs](https://github.com/slinderman/stats305c/blob/main/assignments/hw6/hw6.ipynb). Due **Weds. May 11 at 11:59pm** on GradeScope. 
 
 ## Tentative Schedule
 
