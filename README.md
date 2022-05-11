@@ -70,6 +70,7 @@ Students should be comfortable with probability and statistics as well as multiv
 
 ### Week 8 (5/16 & 5/18): Bayesian Nonparametrics and more MCMC
 - Required Reading: Bishop, Ch 6.4
+- Optional Reading: [Kingman, 1993, Ch 1-2](https://global.oup.com/academic/product/poisson-processes-9780198536932)
 - Optional Reading: [Adams et al, 2019](https://homepages.inf.ed.ac.uk/imurray2/pub/09poisson/adams-murray-mackay-2009b.pdf)
 
 ### Weeks 9 and 10: Research Topics in Probabilistic Machine Learning
