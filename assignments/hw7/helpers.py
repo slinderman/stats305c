@@ -15,17 +15,6 @@ import base64
 
 from pynwb import NWBHDF5IO
 
-def random_args(num_timesteps, num_states, stickiness=0.95,
-                seed=0, offset=0, scale=1):
-    """Construct random arguments to the HMM filtering and smoothing
-    functions.
-    """
-    torch.manual_seed(seed)
-    initial_dist = torch.ones(num_states) / num_states
-    transition_matrix = stickiness * torch.eye(num_states)
-    transition_matrix += (1 - stickiness) / (num_states - 1) * (1 - torch.eye(num_states))
-    log_likes = offset + scale * torch.randn(num_timesteps, num_states)
-    return initial_dist, transition_matrix, log_likes
 
 # initialize a color palette for plotting
 color_names = [
@@ -38,6 +27,7 @@ color_names = [
     ]
 
 colors = sns.xkcd_palette(color_names)
+
 
 def gradient_cmap(colors, nsteps=256, bounds=None):
     """Return a colormap that interpolates between a set of colors.
@@ -67,7 +57,45 @@ def gradient_cmap(colors, nsteps=256, bounds=None):
     cmap = LinearSegmentedColormap('grad_colormap', cdict, nsteps)
     return cmap
 
+
 cmap = gradient_cmap(colors)
+
+
+def random_args(num_timesteps, num_states, stickiness=0.95,
+                seed=0, offset=0, scale=1):
+    """Construct random arguments to the HMM filtering and smoothing
+    functions.
+    """
+    torch.manual_seed(seed)
+    initial_dist = torch.ones(num_states) / num_states
+    transition_matrix = stickiness * torch.eye(num_states)
+    transition_matrix += (1 - stickiness) / (num_states - 1) * (1 - torch.eye(num_states))
+    log_likes = offset + scale * torch.randn(num_timesteps, num_states)
+    return initial_dist, transition_matrix, log_likes
+
+
+def plot_dynamics(arhmm, lim=5, num_pts=10):
+    x = torch.linspace(-lim, lim, num_pts)
+    y = torch.linspace(-lim, lim, num_pts)
+    X, Y = torch.meshgrid(x, y)
+    xy = torch.column_stack((X.ravel(), Y.ravel()))
+
+    fig, axs = plt.subplots(1, arhmm.num_states, figsize=(3 * arhmm.num_states, 6))
+    for k in range(arhmm.num_states):
+        A = arhmm.emission_dynamics[k]
+        b = arhmm.emission_bias[k]
+        dxydt_m = xy @ A.T + b - xy
+        axs[k].quiver(xy[:, 0], xy[:, 1],
+                    dxydt_m[:, 0], dxydt_m[:, 1],
+                    color=colors[k % len(colors)])
+
+        axs[k].set_xlabel('$x_1$')
+        axs[k].set_xticks([])
+        if k == 0:
+            axs[k].set_ylabel("$x_2$")
+        axs[k].set_yticks([])
+        axs[k].set_aspect("equal")
+
 
 _VIDEO_TAG = """<video controls>
  <source src="data:video/x-m4v;base64,{0}" type="video/mp4">
