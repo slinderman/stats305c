@@ -34,8 +34,9 @@ Students should be comfortable with probability and statistics as well as multiv
 - [Assignment 4: Bayesian Mixture Models](https://github.com/slinderman/stats305c/blob/main/assignments/hw4/hw4.ipynb). Due **Weds. Apr 27 at 11:59pm** on GradeScope. 
 - [Assignment 5: Poisson Matrix Factorization](https://github.com/slinderman/stats305c/blob/main/assignments/hw5/hw5.ipynb). Due **Weds. May 4 at 11:59pm** on GradeScope. 
 - [Assignment 6: Neural Networks and VAEs](https://github.com/slinderman/stats305c/blob/main/assignments/hw6/hw6.ipynb). Due **Weds. May 11 at 11:59pm** on GradeScope. 
+- [Assignment 7: Hidden Markov Models](https://github.com/slinderman/stats305c/blob/main/assignments/hw7/hw7.ipynb). Due **Weds. May 18 at 11:59pm** on GradeScope. 
 
-## Tentative Schedule
+## Schedule
 
 ### Week 1 (3/28 & 3/30): Multivariate Normal Models and Conjugate Priors
 - Required Reading: Bishop, Ch 2.3
@@ -69,6 +70,7 @@ Students should be comfortable with probability and statistics as well as multiv
 
 ### Week 8 (5/16 & 5/18): Bayesian Nonparametrics and more MCMC
 - Required Reading: Bishop, Ch 6.4
+- Optional Reading: [Kingman, 1993, Ch 1-2](https://global.oup.com/academic/product/poisson-processes-9780198536932)
 - Optional Reading: [Adams et al, 2019](https://homepages.inf.ed.ac.uk/imurray2/pub/09poisson/adams-murray-mackay-2009b.pdf)
 
 ### Weeks 9 and 10: Research Topics in Probabilistic Machine Learning
