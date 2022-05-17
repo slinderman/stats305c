@@ -290,7 +290,8 @@ def make_crowd_movie(state_idx,
 
     if len(durs) == 0:
         print("no valid syllables found for state", state_idx)
-        return
+        return np.zeros((pad * 2, raw_size[1], raw_size[0], 3), dtype='uint8')
+
     max_dur = np.max(durs)
 
     # Initialize the crowd movie
