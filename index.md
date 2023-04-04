@@ -6,13 +6,13 @@ Stanford University
 
 ---
 
-## Course Description:
+## Course Description
 Probabilistic modeling and inference of multivariate data. Topics may include multivariate Gaussian models, probabilistic graphical models, MCMC and variational Bayesian inference, dimensionality reduction, principal components, factor analysis, matrix completion, topic modeling, and state space models. Extensive work with data involving Python programming using PyTorch.
 
-## Prerequisites:
+## Prerequisites
 Students should be comfortable with probability and statistics as well as multivariate calculus and linear algebra. This course will emphasize implementing models and algorithms, so coding proficiency is required.
 
-## Logistics:
+## Logistics
 - Time: Tuesday and Thursday, 10:30-11:50am
 - Level: advanced undergrad and up
 - Grading basis: credit or letter grade
@@ -33,7 +33,7 @@ You may also find these texts helpful
 
 | Date   | Topic | Reading |
 | ------ | ----- | ------- |
-| Apr 4  | Bayesian Analysis of the Normal Distribution <br> {Download}`[slides]<slides/lecture01.pdf>` [[notebook]](notebooks/01_bayes_normal.ipynb) | Ch 2.3, 3.4.3 |
+| Apr 4  | Bayesian Analysis of the Normal Distribution <br> {Download}`[slides]<slides/lecture01-bayes_normal.pdf>` [[notebook]](notebooks/01_bayes_normal.ipynb) | Ch 2.3, 3.4.3 |
 | Apr 6  | Multivariate Normal Distribution | Ch 2,3, 3.4.4 |
 | Apr 11 | Hierarchical Models | Ch 3.6.2, 4.2 |
 | Apr 13 | Introduction to MCMC | Ch 11.1-11.2, 12.1-12.3 |
