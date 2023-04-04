@@ -1,0 +1,1000 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Conjugate Bayesian Analysis of the Normal Distribution &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/01_bayes_normal';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="References" href="../lectures/99_references.html" />
+    <link rel="prev" title="HW0: PyTorch Primer" href="../assignments/hw0/hw0.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw0/hw0.html">HW0: PyTorch Primer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Conjugate Bayesian Analysis of the Normal Distribution</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/notebooks/01_bayes_normal.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/01_bayes_normal.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Conjugate Bayesian Analysis of the Normal Distribution</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-model-with-unknown-mean">Normal Model with Unknown Mean</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-the-posterior">Compute the posterior</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#warm-up-normal-model-with-unknown-precision">Warm-up: Normal Model with Unknown Precision</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-write-code-to-compute-the-posterior-of-the-precision-given-the-data">Exercise: Write code to compute the posterior of the precision given the data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-model-with-unknown-variance">Normal Model with Unknown Variance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-compute-the-posterior-distribution-of-the-variance-given-the-data">Exercise: Compute the posterior distribution of the variance given the data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-model-with-unknown-mean-and-variance">Normal Model with Unknown Mean and Variance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-compute-the-nix-posterior-over-the-mean-and-variance-given-data">Exercise: Compute the NIX posterior over the mean and variance given data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finally-plot-the-marginals-of-the-nix-distribution">Finally, plot the marginals of the NIX distribution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap">Recap</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="conjugate-bayesian-analysis-of-the-normal-distribution">
+<h1>Conjugate Bayesian Analysis of the Normal Distribution<a class="headerlink" href="#conjugate-bayesian-analysis-of-the-normal-distribution" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">StudentT</span><span class="p">,</span> <span class="n">TransformedDistribution</span>
+<span class="kn">from</span> <span class="nn">torch.distributions.transforms</span> <span class="kn">import</span> <span class="n">PowerTransform</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.cm</span> <span class="kn">import</span> <span class="n">Blues</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;talk&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="normal-model-with-unknown-mean">
+<h2>Normal Model with Unknown Mean<a class="headerlink" href="#normal-model-with-unknown-mean" title="Permalink to this heading">#</a></h2>
+<p><strong>Example:</strong> Modeling SAT scores.
+Suppose we have scores of <span class="math notranslate nohighlight">\(N\)</span> students from one class. Assume the scores are well modeled as Gaussian random variables and that they are conditionally independent given the mean and variance. For now, assume we know the variance but not the mean.</p>
+<p><strong>Notation:</strong> Let,</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_n \in \mathbb{R}\)</span> denote the score of the <span class="math notranslate nohighlight">\(n\)</span>-th student,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu \in \mathbb{R}\)</span> denote the (unknown) mean of the distribution, and</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma^2 \in \mathbb{R}_+\)</span> denote the (known) variance of the distribution.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu_0, \sigma_0^2\)</span> denote the mean and variance of the Gaussian prior on <span class="math notranslate nohighlight">\(\mu\)</span>.</p></li>
+</ul>
+<p><strong>Model:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mu &amp;\sim \mathcal{N}(\mu_0, \sigma_0^2) \\
+x_n \mid \mu, \sigma^2 &amp;\sim \mathcal{N}(\mu, \sigma^2)  \quad  \text{for } n =1, \ldots, N
+\end{align*}
+\end{split}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set model hyperparameters</span>
+<span class="n">mu0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">sigmasq0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">sigmasq</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="c1"># Simulate data</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq0</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sample_shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,))</span>
+
+<span class="c1"># Plot </span>
+<span class="n">prior</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq0</span><span class="p">))</span>
+<span class="n">lkhd</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq</span><span class="p">))</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">prior</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">grid</span><span class="p">)),</span> 
+        <span class="s1">&#39;:r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$p(\mu \mid \mu_0, \sigma_0^2)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">mu</span><span class="p">,</span> <span class="n">mu</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$\mu$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">lkhd</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">grid</span><span class="p">)),</span> 
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$p(x \mid \mu, \sigma^2)$&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">],</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$x_n$&quot;</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7efe5a0d4d00&gt;
+</pre></div>
+</div>
+<img alt="../_images/8d9439cb18cda3f2facc7578372738bb665be31554157f89887c9dfaf88eec5f.png" src="../_images/8d9439cb18cda3f2facc7578372738bb665be31554157f89887c9dfaf88eec5f.png" />
+</div>
+</div>
+<section id="compute-the-posterior">
+<h3>Compute the posterior<a class="headerlink" href="#compute-the-posterior" title="Permalink to this heading">#</a></h3>
+<p><strong>Goal:</strong> Infer <span class="math notranslate nohighlight">\(p(\mu \mid X, \eta)\)</span>, the posterior distribution over model parameters given  data and hyperparameters <span class="math notranslate nohighlight">\(\eta = (\sigma^2, \mu_0, \sigma_0^2)\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+  p(\mu \mid X, \eta) &amp;\propto
+  p(\mu \mid \eta) \prod_{n=1}^N p(x_n \mid \mu, \eta) \\
+  &amp;= \mathcal{N}(\mu \mid \mu_0, \sigma_0^2) \prod_{n=1}^N \mathcal{N}(x_n \mid \mu, \sigma^2) \\
+  &amp;\propto \exp \left\{ -\frac{1}{2 \sigma_0^2} (\mu - \mu_0)^2 \right\} \prod_{n=1}^N \exp \left\{ -\frac{1}{2 \sigma^2} (x_n - \mu)^2 \right\} \\
+  &amp;\propto
+  \exp \left\{ -\frac{1}{2} J_N \mu^2 + h_N \mu \right\}
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+  J_N = \frac{1}{\sigma_0^2} + \frac{N}{\sigma^2} \quad \text{and} \quad
+  h_N = \frac{\mu_0}{\sigma_0^2} + \sum_{n=1}^N \frac{x_n}{\sigma^2} 
+\end{align*}
+\]</div>
+<p><strong>Completing the square:</strong> Show that</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+  \exp\left\{-\frac{1}{2} J_N \mu^2 + h_N \mu \right\} &amp;\propto
+  %\exp \left\{-\frac{1}{2\tilde{\sigma}^2} (\mu - \tilde{\mu})^2 \right\}
+  \mathcal{N}(\mu \mid \mu_N, \sigma_N^2)
+\end{align*}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma_N^2 = J_N^{-1}\)</span> and <span class="math notranslate nohighlight">\(\mu_N = J_N^{-1} h_N\)</span>.</p>
+<p>Thus, <span class="math notranslate nohighlight">\(p(\mu \mid X, \eta) = \mathcal{N}(\mu \mid \mu_N, \sigma_N^2)\)</span> where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}  
+\begin{align*}
+  \mu_N &amp;= \frac{\sigma_0^2 \sigma^2}{\sigma^2 + N \sigma_0^2} \left( \frac{\mu_0}{\sigma_0^2} + \frac{1}{\sigma^2} \sum_{n=1}^N x_n \right) \\
+  &amp;= \frac{\sigma^2}{\sigma^2 + N\sigma_0^2} \mu_0 + \frac{N\sigma_0^2}{\sigma^2 + N\sigma_0^2} \mu_{\mathsf{ML}}.
+\end{align*}
+\end{split}\]</div>
+<p>and <span class="math notranslate nohighlight">\(\mu_{\mathsf{ML}} = \frac{1}{N} \sum_{n=1}^N x_n\)</span> is the maximum likelihood estimate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute the posterior p(\mu \mid X, \eta).</span>
+<span class="n">J_N</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">sigmasq0</span> <span class="o">+</span> <span class="n">N</span> <span class="o">/</span> <span class="n">sigmasq</span>
+<span class="n">h_N</span> <span class="o">=</span> <span class="n">mu0</span> <span class="o">/</span> <span class="n">sigmasq0</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span> <span class="o">/</span> <span class="n">sigmasq</span><span class="p">)</span>
+<span class="n">mu_N</span> <span class="o">=</span> <span class="n">h_N</span> <span class="o">/</span> <span class="n">J_N</span>
+<span class="n">sigmasq_N</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">J_N</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mu_N:     &quot;</span><span class="p">,</span> <span class="n">mu_N</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X.mean(): &quot;</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mu_N:      tensor(0.4590)
+X.mean():  tensor(0.4819)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plot the prior, likelihood, and posterior</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prior</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq0</span><span class="p">))</span>
+<span class="n">lkhd</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq</span><span class="p">))</span>
+<span class="n">post</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu_N</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq_N</span><span class="p">))</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">prior</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">grid</span><span class="p">)),</span> 
+        <span class="s1">&#39;:r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$p(\mu \mid \mu_0, \sigma_0^2)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">mu</span><span class="p">,</span> <span class="n">mu</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$\mu$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">lkhd</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">grid</span><span class="p">)),</span> 
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$p(x \mid \mu, \sigma^2)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">post</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">grid</span><span class="p">)),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$p(\mu \mid X, \mu_0, \sigma_0^2, \sigma^2)$&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">],</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$x_n$&quot;</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7efe5a14caf0&gt;
+</pre></div>
+</div>
+<img alt="../_images/1d21e568e71634ac2d7925fdf8905c8717f7d34f7bbbfb352e5fb72c372d820d.png" src="../_images/1d21e568e71634ac2d7925fdf8905c8717f7d34f7bbbfb352e5fb72c372d820d.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="warm-up-normal-model-with-unknown-precision">
+<h2>Warm-up: Normal Model with Unknown Precision<a class="headerlink" href="#warm-up-normal-model-with-unknown-precision" title="Permalink to this heading">#</a></h2>
+<p>Now suppose we know the mean <span class="math notranslate nohighlight">\(\mu\)</span> but not the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>.
+Our calculations will be a little simpler if we work with the <em>precision</em> instead, <span class="math notranslate nohighlight">\(\lambda = 1/\sigma^2\)</span>.
+Then,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(x \mid \mu, \lambda) &amp;=
+\left(\frac{\lambda}{2 \pi} \right)^{\frac{1}{2}} \exp \left\{-\frac{\lambda}{2} (x-\mu)^2 \right\}
+\end{align*}
+\]</div>
+<p>The conjugate prior is a scaled chi-squared distribution,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\lambda \sim \chi^2(\nu_0, \lambda_0)
+\end{align*}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\chi^2\)</span> denotes the scaled chi-squared distribution with density,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+    \chi^2(\lambda \mid \nu_0, \lambda_0) &amp;=
+     \frac{\left(\frac{\nu_0}{2\lambda_0}\right)^{\nu_0/2}}{\Gamma(\frac{\nu_0}{2})} \lambda^{\frac{\nu_0}{2} - 1} \exp\left\{-\frac{\lambda}{2}\frac{\nu_0}{\lambda_0} \right\}.
+\end{align*}
+\]</div>
+<p>Since the scaled chi-squared distribution is non-standard (not in torch) we’ll write our own. It’s just a reparameterization of the gamma distribution, after all. Specifically,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\chi^2(\nu_0, \lambda_0) \equiv \mathrm{Ga}(\tfrac{\nu_0}{2}, \tfrac{\nu_0}{2\lambda_0}),
+\end{align*}
+\]</div>
+<p>where the <span class="math notranslate nohighlight">\(\nu_0/2\)</span> is the shape and <span class="math notranslate nohighlight">\(\nu_0 / (2\lambda_0)\)</span> is the <em>rate</em> of the gamma distribution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ScaledChiSq</span><span class="p">(</span><span class="n">Gamma</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="n">Gamma</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dof</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dof</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">scale</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dof</span> <span class="o">=</span> <span class="n">dof</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+
+<span class="k">def</span> <span class="nf">sample_sum_sq</span><span class="p">(</span><span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample scaled chi squared random variables by taking the mean of squared </span>
+<span class="sd">    normal random variates, as presented in the notes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">zs</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">size</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">dof</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">zs</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check that the pdf matches the empirical distribution of samples</span>
+<span class="n">dof</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">chisq</span> <span class="o">=</span> <span class="n">ScaledChiSq</span><span class="p">(</span><span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+<span class="n">lmbdas</span> <span class="o">=</span> <span class="n">sample_sum_sq</span><span class="p">(</span><span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+
+<span class="c1"># Plot the pdf and the histogram of samples</span>
+<span class="n">bins</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">chisq</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+<span class="n">centers</span> <span class="o">=</span> <span class="p">(</span><span class="n">bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">lmbdas</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;samples&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">centers</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">chisq</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">centers</span><span class="p">)),</span> 
+         <span class="s1">&#39;-.r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;expected pdf&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7efe57dd1130&gt;
+</pre></div>
+</div>
+<img alt="../_images/b8dcfe72fecd0f761c5dc6e272b4b31be6c6c86790a7f655ea8f5784ad66d8f5.png" src="../_images/b8dcfe72fecd0f761c5dc6e272b4b31be6c6c86790a7f655ea8f5784ad66d8f5.png" />
+</div>
+</div>
+<p>Plot the density for a range of dof’s</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fix the scale and vary the degrees of freedom. </span>
+<span class="c1"># Evaluate the pdf on a dense grid.</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">dofs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dof</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dofs</span><span class="p">):</span>
+    <span class="n">chisq</span> <span class="o">=</span> <span class="n">ScaledChiSq</span><span class="p">(</span><span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">chisq</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">grid</span><span class="p">)),</span> 
+             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$\chi^2(</span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">)$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">),</span>
+             <span class="n">color</span><span class="o">=</span><span class="n">Blues</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dofs</span><span class="p">)))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$\lambda$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$p(\lambda)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Scaled $\chi^2$ Distribution&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/66609a8291c1aa9d7435e6cf33ab16f12a9cb64779bf34c3aa5c7210d0258403.png" src="../_images/66609a8291c1aa9d7435e6cf33ab16f12a9cb64779bf34c3aa5c7210d0258403.png" />
+</div>
+</div>
+<section id="exercise-write-code-to-compute-the-posterior-of-the-precision-given-the-data">
+<h3>Exercise: Write code to compute the posterior of the precision given the data<a class="headerlink" href="#exercise-write-code-to-compute-the-posterior-of-the-precision-given-the-data" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="normal-model-with-unknown-variance">
+<h2>Normal Model with Unknown Variance<a class="headerlink" href="#normal-model-with-unknown-variance" title="Permalink to this heading">#</a></h2>
+<p>If the precision <span class="math notranslate nohighlight">\(\lambda \sim \chi^2(\nu_0, \lambda_0)\)</span>, then the variance <span class="math notranslate nohighlight">\(\sigma^2 = 1/\lambda\)</span> is a scaled inverse <span class="math notranslate nohighlight">\(\chi^2\)</span> random variable,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+  \sigma^2 &amp;\sim \chi^{-2}(\nu_0, \sigma_0^2)
+\end{align*}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma_0^2 = 1/\lambda_0\)</span>.</p>
+<p>Its pdf can be found with the change of measure formula. Let <span class="math notranslate nohighlight">\(f(\sigma^2) = 1/\sigma^2\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+  \chi^{-2}(\sigma^2 \mid \nu_0, \sigma_0^2) 
+  &amp;= \left| \frac{\mathrm{d} f(\sigma^2)}{\mathrm{d} \sigma^2} \right| \chi^2(f(\sigma^2) \mid \nu_0, 1/\sigma_0^2)  \\
+  &amp;=  \frac{\left(\frac{\nu_0 \sigma_0^2}{2} \right)^{\nu_0/2}}{\Gamma(\frac{\nu_0}{2})} (\sigma^2)^{-\frac{\nu_0}{2} - 1} e^{-\frac{\nu_0 \sigma_0^2}{2 \sigma^2}} \\
+\end{align*}
+\end{split}\]</div>
+<p>The scaled inverse chi-squared is a special case of the inverse gamma distribution,~<span class="math notranslate nohighlight">\(\chi^{-2}(\nu_0, \sigma_0^2) \equiv \mathrm{IGa}(\tfrac{\nu_0}{2}, \tfrac{\nu_0 \sigma_0^2}{2})\)</span>, again using the rate parameterization.</p>
+<p>Since torch does not have an inverse gamma distribution class, we use the <code class="docutils literal notranslate"><span class="pre">torch.distributions.transforms</span></code> objects to implement the scaled inverse chi-squared distribution as a transformation of a gamma random variable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ScaledInvChiSq</span><span class="p">(</span><span class="n">TransformedDistribution</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of the scaled inverse \chi^2 distribution defined in class.</span>
+<span class="sd">    We will implement it as a transformation of a gamma distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">Gamma</span><span class="p">(</span><span class="n">dof</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dof</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PowerTransform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">TransformedDistribution</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">transforms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dof</span> <span class="o">=</span> <span class="n">dof</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check that the pdf matches the empirical distribution of samples</span>
+<span class="n">inv_chisq</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+<span class="n">sigmasqs</span> <span class="o">=</span> <span class="n">inv_chisq</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sample_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10000</span><span class="p">,))</span>
+
+<span class="c1"># Plot the pdf and the histogram of samples</span>
+<span class="n">bins</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">inv_chisq</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+<span class="n">centers</span> <span class="o">=</span> <span class="p">(</span><span class="n">bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sigmasqs</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;samples&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">centers</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inv_chisq</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">centers</span><span class="p">)),</span> 
+         <span class="s1">&#39;-.r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;expected pdf&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7efe56d494c0&gt;
+</pre></div>
+</div>
+<img alt="../_images/51d84991530bf2e42e6f34cb6dba11e096cf8ebcdcd0420cb9e929773ef291ed.png" src="../_images/51d84991530bf2e42e6f34cb6dba11e096cf8ebcdcd0420cb9e929773ef291ed.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fix the scale and vary the degrees of freedom. </span>
+<span class="c1"># Evaluate the pdf on a dense grid.</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">dofs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dof</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dofs</span><span class="p">):</span>
+    <span class="n">inv_chisq</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inv_chisq</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">grid</span><span class="p">)),</span> 
+             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$\chi^{{-2}}(</span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">)$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">),</span>
+             <span class="n">color</span><span class="o">=</span><span class="n">Blues</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dofs</span><span class="p">)))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$\sigma^2$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$p(\sigma^2)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Scaled $\chi^{-2}$ Distribution&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b552d39002e174e29f158a1116faf7b92efbaeca63d77ea16f532fcedc605c0d.png" src="../_images/b552d39002e174e29f158a1116faf7b92efbaeca63d77ea16f532fcedc605c0d.png" />
+</div>
+</div>
+<section id="exercise-compute-the-posterior-distribution-of-the-variance-given-the-data">
+<h3>Exercise: Compute the posterior distribution of the variance given the data<a class="headerlink" href="#exercise-compute-the-posterior-distribution-of-the-variance-given-the-data" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="normal-model-with-unknown-mean-and-variance">
+<h2>Normal Model with Unknown Mean and Variance<a class="headerlink" href="#normal-model-with-unknown-mean-and-variance" title="Permalink to this heading">#</a></h2>
+<p>Finally, let’s assume both the mean and the variance are unknown.
+Then, the conjugate prior is a <em>normal inverse chi-squared</em> (NIX) distribution.
+\begin{align}
+p(\mu, \sigma^2) &amp;= p(\sigma^2) , p(\mu \mid \sigma^2) \
+&amp;=
+\chi^{-2}(\sigma^2 \mid \nu_0, \sigma_0^2) , \mathcal{N}(\mu \mid \mu_0, \sigma^2 / \kappa_0) \
+&amp;\triangleq \mathrm{NIX}(\mu, \sigma^2 \mid \mu_0, \kappa_0, \nu_0, \sigma_0^2)
+\end{align}</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set NIX hypers</span>
+<span class="n">mu0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+<span class="n">kappa0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">nu0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">sigmasq0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+
+<span class="c1"># Evaluate the density on a grid</span>
+<span class="n">mu_grid</span><span class="p">,</span> <span class="n">sigmasq_grid</span> <span class="o">=</span> \
+    <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> 
+                   <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+<span class="n">log_prob</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">)</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">sigmasq_grid</span><span class="p">)</span>
+<span class="c1"># note that the following line broadcasts over the grid of sigmasq!</span>
+<span class="n">log_prob</span> <span class="o">+=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq_grid</span> <span class="o">/</span> <span class="n">kappa0</span><span class="p">))</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">,</span> <span class="n">sigmasq_grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_prob</span><span class="p">),</span> <span class="mi">25</span><span class="p">)</span>
+
+<span class="c1"># Draw samples</span>
+<span class="k">def</span> <span class="nf">sample_nix</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="n">sigmasq</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sample_shape</span><span class="o">=</span><span class="p">(</span><span class="n">size</span><span class="p">,))</span>
+    <span class="c1"># Sample the mean (note the broadcasting with a vector of sigmasq!)</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq</span> <span class="o">/</span> <span class="n">kappa0</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span>
+
+<span class="c1"># Plot the samples</span>
+<span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span> <span class="o">=</span> <span class="n">sample_nix</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="s1">&#39;w.&#39;</span><span class="p">,</span> <span class="n">markeredgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">.5</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$\mu$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$\sigma^2$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$NIX(\mu_0=</span><span class="si">{:.0f}</span><span class="s2">, \kappa_0=</span><span class="si">{:.0f}</span><span class="s2">, \nu_0=</span><span class="si">{:.0f}</span><span class="s2">, \sigma_0^2=</span><span class="si">{:.0f}</span><span class="s2">)$&quot;</span>\
+          <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$p(\mu, \sigma^2)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/torch/functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3483.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+</pre></div>
+</div>
+<img alt="../_images/829f7785550bb377685a2d297f06725116945e2a32154fee42ccefe15bedfb60.png" src="../_images/829f7785550bb377685a2d297f06725116945e2a32154fee42ccefe15bedfb60.png" />
+</div>
+</div>
+<section id="exercise-compute-the-nix-posterior-over-the-mean-and-variance-given-data">
+<h3>Exercise: Compute the NIX posterior over the mean and variance given data<a class="headerlink" href="#exercise-compute-the-nix-posterior-over-the-mean-and-variance-given-data" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="finally-plot-the-marginals-of-the-nix-distribution">
+<h3>Finally, plot the marginals of the NIX distribution<a class="headerlink" href="#finally-plot-the-marginals-of-the-nix-distribution" title="Permalink to this heading">#</a></h3>
+<p>The marginal distribution of the mean is <span class="math notranslate nohighlight">\(\mu \sim \mathrm{St}(\nu, \mu, \sigma^2 / \kappa)\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu_marginal</span> <span class="o">=</span> <span class="n">StudentT</span><span class="p">(</span><span class="n">nu0</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq0</span> <span class="o">/</span> <span class="n">kappa0</span><span class="p">))</span>
+
+<span class="c1"># Draw more samples</span>
+<span class="n">mu</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sample_nix</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+
+<span class="c1"># Check that the sample histogram matches the pdf</span>
+<span class="n">mu_grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">bins</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+<span class="n">centers</span> <span class="o">=</span> <span class="p">(</span><span class="n">bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;samples&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">mu_marginal</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">)),</span> 
+         <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$t(\mu \mid \nu_0, \mu_0, \sigma_0^2/\kappa_0)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+    <span class="n">Normal</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq0</span> <span class="o">/</span> <span class="n">kappa0</span><span class="p">))</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">)),</span> 
+         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;$N(\mu \mid \mu_0, \sigma_0^2 / \kappa_0)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$\mu$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$p(\mu)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ad02a9a1df11b1541005c6a63908c05e60ee3fdc7eae4fb0ac24dac32072820a.png" src="../_images/ad02a9a1df11b1541005c6a63908c05e60ee3fdc7eae4fb0ac24dac32072820a.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="recap">
+<h2>Recap<a class="headerlink" href="#recap" title="Permalink to this heading">#</a></h2>
+<p>This notebook covered Bayesian analysis of scalar Gaussian models with unknown mean and/or variance/precision. It also showed how to do a bunch of things in Python and PyTorch:</p>
+<ul class="simple">
+<li><p>Working with PyTorch <code class="docutils literal notranslate"><span class="pre">tensor</span></code>s (instead of numpy arrays)</p></li>
+<li><p>Using PyTorch <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> objects</p></li>
+<li><p>Creating new <code class="docutils literal notranslate"><span class="pre">Distribution</span></code>s by inheritance</p></li>
+<li><p>Using the <code class="docutils literal notranslate"><span class="pre">TransformedDistribution</span></code> and <code class="docutils literal notranslate"><span class="pre">torch.distributions.transforms</span></code></p></li>
+<li><p>Plotting with matplotlib</p></li>
+<li><p>Mixing math and code in Jupyter notebooks</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../assignments/hw0/hw0.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">HW0: PyTorch Primer</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../lectures/99_references.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">References</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-model-with-unknown-mean">Normal Model with Unknown Mean</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-the-posterior">Compute the posterior</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#warm-up-normal-model-with-unknown-precision">Warm-up: Normal Model with Unknown Precision</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-write-code-to-compute-the-posterior-of-the-precision-given-the-data">Exercise: Write code to compute the posterior of the precision given the data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-model-with-unknown-variance">Normal Model with Unknown Variance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-compute-the-posterior-distribution-of-the-variance-given-the-data">Exercise: Compute the posterior distribution of the variance given the data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-model-with-unknown-mean-and-variance">Normal Model with Unknown Mean and Variance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-compute-the-nix-posterior-over-the-mean-and-variance-given-data">Exercise: Compute the NIX posterior over the mean and variance given data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finally-plot-the-marginals-of-the-nix-distribution">Finally, plot the marginals of the NIX distribution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap">Recap</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

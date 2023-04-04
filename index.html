@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>STATS305C: Applied Statistics III &#8212; Applied Statistics III</title>
+    <title>Overview &#8212; Applied Statistics III</title>
   
   
   
@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Lab 0: PyTorch Primer" href="assignments/hw0/hw0.html" />
+    <link rel="next" title="HW0: PyTorch Primer" href="assignments/hw0/hw0.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -145,13 +145,17 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1 current active">
                 <a class="reference internal" href="#">
-                    STATS305C: Applied Statistics III
+                    Overview
                 </a>
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="assignments/hw0/hw0.html">Lab 0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assignments/hw0/hw0.html">HW0: PyTorch Primer</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/01_bayes_normal.html">Conjugate Bayesian Analysis of the Normal Distribution</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -292,7 +296,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>STATS305C: Applied Statistics III</h1>
+    <h1>Overview</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -306,19 +310,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#logistics">Logistics:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#books">Books</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#schedule">Schedule</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-1-3-28-3-30-multivariate-normal-models-and-conjugate-priors">Week 1 (3/28 &amp; 3/30): Multivariate Normal Models and Conjugate Priors</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-2-4-4-4-6-hierarchical-models-and-gibbs-sampling">Week 2 (4/4 &amp; 4/6): Hierarchical Models and Gibbs Sampling</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-3-4-11-4-13-continuous-latent-variable-models-and-hmc">Week 3 (4/11 &amp; 4/13): Continuous Latent Variable Models and HMC</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-4-4-18-4-20-mixture-models-and-em">Week 4 (4/18 &amp; 4/20): Mixture Models and EM</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-5-4-25-4-27-mixed-membership-models-and-mean-field-vi">Week 5 (4/25 &amp; 4/27): Mixed Membership Models and Mean Field VI</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-6-5-2-5-4-variational-autoencoders-and-fixed-form-vi">Week 6 (5/2 &amp; 5/4): Variational Autoencoders and Fixed-Form VI</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-7-5-9-5-11-state-space-models-and-message-passing">Week 7 (5/9 &amp; 5/11): State Space Models and Message Passing</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-8-5-16-5-18-bayesian-nonparametrics-and-more-mcmc">Week 8 (5/16 &amp; 5/18): Bayesian Nonparametrics and more MCMC</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#weeks-9-and-10-research-topics-in-probabilistic-machine-learning">Weeks 9 and 10: Research Topics in Probabilistic Machine Learning</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grading">Grading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#schedule">Schedule</a></li>
 </ul>
             </nav>
         </div>
@@ -330,8 +322,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="stats305c-applied-statistics-iii">
-<h1>STATS305C: Applied Statistics III<a class="headerlink" href="#stats305c-applied-statistics-iii" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h1>
 <p>Instructor: Scott Linderman <br>
 TA: Xavier Gonzalez <br>
 Term: Spring 2023 <br>
@@ -354,98 +346,116 @@ Stanford University</p>
 <li><p>Office hours:</p>
 <ul>
 <li><p>Weds 4:30-5:30pm in Wu Tsai Neurosciences Instiute Room M252G (Scott)</p></li>
-<li><p>Tuesday 5-7pm location TBD (Xavier)</p></li>
+<li><p>Thurs 5-7pm location TBD (Xavier)</p></li>
 </ul>
 </li>
+<li><p>Assignments released Friday, due the following Thursday at 11:59pm</p></li>
 </ul>
 </section>
 <section id="books">
 <h2>Books<a class="headerlink" href="#books" title="Permalink to this heading">#</a></h2>
+<p>We will primarily use</p>
 <ul class="simple">
 <li><p>Murphy. Probabilistic Machine Learning: Advanced Topics. MIT Press, 2023. <a class="reference external" href="https://probml.github.io/pml-book/book2.html">link</a></p></li>
 </ul>
-<p>You may also find the following references helpful:</p>
+<p>You may also find these texts helpful</p>
 <ul class="simple">
 <li><p>Bishop. Pattern recognition and machine learning. New York: Springer, 2006. <a class="reference external" href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf">link</a></p></li>
-<li><p>Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. <a class="reference external" href="http://www.stat.columbia.edu/~gelman/book/">link</a></p></li>
+<li><p>Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. <a class="reference external" href="http://www.stat.columbia.edu/~gelman/book/">link</a>
+`</p></li>
 </ul>
 </section>
 <section id="schedule">
 <h2>Schedule<a class="headerlink" href="#schedule" title="Permalink to this heading">#</a></h2>
-<section id="week-1-3-28-3-30-multivariate-normal-models-and-conjugate-priors">
-<h3>Week 1 (3/28 &amp; 3/30): Multivariate Normal Models and Conjugate Priors<a class="headerlink" href="#week-1-3-28-3-30-multivariate-normal-models-and-conjugate-priors" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Required Reading: Bishop, Ch 2.3</p></li>
-<li><p>Optional Reading: Murphy, Ch 2.3 and 3.2.4</p></li>
-</ul>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Topic</p></th>
+<th class="head"><p>Reading</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Apr 4</p></td>
+<td><p>Bayesian Analysis of the Normal Distribution <br> <a class="reference download internal" download="" href="_downloads/686543fde8dd0116cf3c991805242a2e/lecture01.pdf"><code class="xref download docutils literal notranslate"><span class="pre">[slides]</span></code></a> <a class="reference internal" href="notebooks/01_bayes_normal.html"><span class="doc std std-doc">[notebook]</span></a></p></td>
+<td><p>Ch 2.3, 3.4.3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Apr 6</p></td>
+<td><p>Multivariate Normal Distribution</p></td>
+<td><p>Ch 2,3, 3.4.4</p></td>
+</tr>
+<tr class="row-even"><td><p>Apr 11</p></td>
+<td><p>Hierarchical Models</p></td>
+<td><p>Ch 3.6.2, 4.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Apr 13</p></td>
+<td><p>Introduction to MCMC</p></td>
+<td><p>Ch 11.1-11.2, 12.1-12.3</p></td>
+</tr>
+<tr class="row-even"><td><p>Apr 18</p></td>
+<td><p>Probabilistic PCA and Factor Analysis</p></td>
+<td><p>Ch 28.3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Apr 20</p></td>
+<td><p>Hamiltonian Monte Carlo</p></td>
+<td><p><a class="reference external" href="https://arxiv.org/abs/1206.1901">Neal, 2012</a>, Ch 12.5</p></td>
+</tr>
+<tr class="row-even"><td><p>Apr 25</p></td>
+<td><p>Mixture Models</p></td>
+<td><p>Ch 28.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Apr 27</p></td>
+<td><p>Expectation Maximization</p></td>
+<td><p>Ch 6.5</p></td>
+</tr>
+<tr class="row-even"><td><p>May 2</p></td>
+<td><p>Mixed Membership Models</p></td>
+<td><p>Ch 28.5</p></td>
+</tr>
+<tr class="row-odd"><td><p>May 4</p></td>
+<td><p>Coordinate Ascent Variational Inference</p></td>
+<td><p><a class="reference external" href="https://www.tandfonline.com/doi/full/10.1080/01621459.2017.1285773">Blei et al, 2017</a>, Ch 10.1-10.3</p></td>
+</tr>
+<tr class="row-even"><td><p>May 9</p></td>
+<td><p>Variational Autoencoders</p></td>
+<td><p><a class="reference external" href="https://arxiv.org/pdf/1906.02691.pdf">Kingma and Welling, 2019</a>, Ch 21</p></td>
+</tr>
+<tr class="row-odd"><td><p>May 11</p></td>
+<td><p>Amortized Variational Inference</p></td>
+<td><p><a class="reference external" href="https://arxiv.org/pdf/1906.02691.pdf">Kingma and Welling, 2019</a>, Ch 10.2</p></td>
+</tr>
+<tr class="row-even"><td><p>May 16</p></td>
+<td><p>Hidden Markov Models</p></td>
+<td><p>Ch 29.2-29.5</p></td>
+</tr>
+<tr class="row-odd"><td><p>May 18</p></td>
+<td><p>Linear Dynamical Systems</p></td>
+<td><p>Ch 29.6-12.8</p></td>
+</tr>
+<tr class="row-even"><td><p>May 23</p></td>
+<td><p>Gaussian Processes</p></td>
+<td><p>Ch 18</p></td>
+</tr>
+<tr class="row-odd"><td><p>May 25</p></td>
+<td><p>Poisson Processes</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>May 30</p></td>
+<td><p>Stochastic Differential Equations</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>June 1</p></td>
+<td><p>Dirichlet Process Mixture Models</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>June 6</p></td>
+<td><p>Wrapping Up</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="week-2-4-4-4-6-hierarchical-models-and-gibbs-sampling">
-<h3>Week 2 (4/4 &amp; 4/6): Hierarchical Models and Gibbs Sampling<a class="headerlink" href="#week-2-4-4-4-6-hierarchical-models-and-gibbs-sampling" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Required Reading: Bishop, Ch 8.1-8.2 and 11.2-11.3</p></li>
-<li><p>Optional Reading: Murphy, Ch 3.5.2, 4.2, and 11.1-11.3</p></li>
-<li><p>Optional Reading: Gelman, Ch 5</p></li>
-</ul>
-</section>
-<section id="week-3-4-11-4-13-continuous-latent-variable-models-and-hmc">
-<h3>Week 3 (4/11 &amp; 4/13): Continuous Latent Variable Models and HMC<a class="headerlink" href="#week-3-4-11-4-13-continuous-latent-variable-models-and-hmc" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Required Reading: Bishop, Ch 12.1-12.2</p></li>
-<li><p>Required Reading: MCMC using Hamiltonian dynamics <a class="reference external" href="https://arxiv.org/abs/1206.1901">Neal, 2012</a></p></li>
-</ul>
-</section>
-<section id="week-4-4-18-4-20-mixture-models-and-em">
-<h3>Week 4 (4/18 &amp; 4/20): Mixture Models and EM<a class="headerlink" href="#week-4-4-18-4-20-mixture-models-and-em" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Required Reading: Bishop, Ch 9</p></li>
-<li><p>Optional Reading: Murphy, Ch 6.7</p></li>
-</ul>
-</section>
-<section id="week-5-4-25-4-27-mixed-membership-models-and-mean-field-vi">
-<h3>Week 5 (4/25 &amp; 4/27): Mixed Membership Models and Mean Field VI<a class="headerlink" href="#week-5-4-25-4-27-mixed-membership-models-and-mean-field-vi" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Required Reading: “Probabilistic topic models” <a class="reference external" href="http://www.cs.columbia.edu/~blei/fogm/2020F/readings/Blei2012.pdf">Blei, 2012</a></p></li>
-<li><p>Required Reading: “Variational Inference: A Review for Statisticians” <a class="reference external" href="https://www.tandfonline.com/doi/full/10.1080/01621459.2017.1285773">Blei et al, 2017</a></p></li>
-<li><p>Optional Reading: Murphy, Ch 10.2</p></li>
-</ul>
-</section>
-<section id="week-6-5-2-5-4-variational-autoencoders-and-fixed-form-vi">
-<h3>Week 6 (5/2 &amp; 5/4): Variational Autoencoders and Fixed-Form VI<a class="headerlink" href="#week-6-5-2-5-4-variational-autoencoders-and-fixed-form-vi" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Required Reading: “An Introduction to Variational Autoencoders” (Ch 1 and 2) <a class="reference external" href="https://arxiv.org/pdf/1906.02691.pdf">Kingma and Welling, 2019</a></p></li>
-<li><p>Optional Reading: Murphy, Ch 10.3</p></li>
-</ul>
-</section>
-<section id="week-7-5-9-5-11-state-space-models-and-message-passing">
-<h3>Week 7 (5/9 &amp; 5/11): State Space Models and Message Passing<a class="headerlink" href="#week-7-5-9-5-11-state-space-models-and-message-passing" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Required Reading: Bishop, Ch 13</p></li>
-<li><p>Optional Reading: Murphy, Ch 8</p></li>
-</ul>
-</section>
-<section id="week-8-5-16-5-18-bayesian-nonparametrics-and-more-mcmc">
-<h3>Week 8 (5/16 &amp; 5/18): Bayesian Nonparametrics and more MCMC<a class="headerlink" href="#week-8-5-16-5-18-bayesian-nonparametrics-and-more-mcmc" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Required Reading: Bishop, Ch 6.4</p></li>
-<li><p>Optional Reading: <a class="reference external" href="https://global.oup.com/academic/product/poisson-processes-9780198536932">Kingman, 1993, Ch 1-2</a></p></li>
-<li><p>Optional Reading: <a class="reference external" href="https://homepages.inf.ed.ac.uk/imurray2/pub/09poisson/adams-murray-mackay-2009b.pdf">Adams et al, 2019</a></p></li>
-</ul>
-</section>
-<section id="weeks-9-and-10-research-topics-in-probabilistic-machine-learning">
-<h3>Weeks 9 and 10: Research Topics in Probabilistic Machine Learning<a class="headerlink" href="#weeks-9-and-10-research-topics-in-probabilistic-machine-learning" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p>TBD</p></li>
-</ul>
-</section>
-</section>
-<section id="grading">
-<h2>Grading<a class="headerlink" href="#grading" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p>8 homeworks: 10% each, total 80%</p></li>
-<li><p>Final exam: 15%</p></li>
-<li><p>Participation: 5%</p></li>
-</ul>
-</section>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -488,7 +498,7 @@ Stanford University</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Lab 0: PyTorch Primer</p>
+        <p class="prev-next-title">HW0: PyTorch Primer</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -514,19 +524,7 @@ Stanford University</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#logistics">Logistics:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#books">Books</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#schedule">Schedule</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-1-3-28-3-30-multivariate-normal-models-and-conjugate-priors">Week 1 (3/28 &amp; 3/30): Multivariate Normal Models and Conjugate Priors</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-2-4-4-4-6-hierarchical-models-and-gibbs-sampling">Week 2 (4/4 &amp; 4/6): Hierarchical Models and Gibbs Sampling</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-3-4-11-4-13-continuous-latent-variable-models-and-hmc">Week 3 (4/11 &amp; 4/13): Continuous Latent Variable Models and HMC</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-4-4-18-4-20-mixture-models-and-em">Week 4 (4/18 &amp; 4/20): Mixture Models and EM</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-5-4-25-4-27-mixed-membership-models-and-mean-field-vi">Week 5 (4/25 &amp; 4/27): Mixed Membership Models and Mean Field VI</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-6-5-2-5-4-variational-autoencoders-and-fixed-form-vi">Week 6 (5/2 &amp; 5/4): Variational Autoencoders and Fixed-Form VI</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-7-5-9-5-11-state-space-models-and-message-passing">Week 7 (5/9 &amp; 5/11): State Space Models and Message Passing</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#week-8-5-16-5-18-bayesian-nonparametrics-and-more-mcmc">Week 8 (5/16 &amp; 5/18): Bayesian Nonparametrics and more MCMC</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#weeks-9-and-10-research-topics-in-probabilistic-machine-learning">Weeks 9 and 10: Research Topics in Probabilistic Machine Learning</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grading">Grading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#schedule">Schedule</a></li>
 </ul>
   </nav></div>
 
