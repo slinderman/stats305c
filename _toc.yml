@@ -6,6 +6,10 @@ parts:
     chapters:
     - file: assignments/hw0/hw0.ipynb
 
+  - caption: Notebooks
+    chapters:
+    - file: notebooks/01_bayes_normal.ipynb
+
   - caption: References
     chapters:
     - file: lectures/99_references.md
