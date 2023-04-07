@@ -1,0 +1,803 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>HW1: Bayesian Linear Regression &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'assignments/hw1/hw1';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Bayesian Analysis of the Normal Distribution" href="../../notebooks/01_bayes_normal.html" />
+    <link rel="prev" title="HW0: PyTorch Primer" href="../hw0/hw0.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">HW1: Bayesian Linear Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/02_mvn.html">The Multivariate Normal Distribution</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/assignments/hw1/hw1.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/assignments/hw1/hw1.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>HW1: Bayesian Linear Regression</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-linear-regression">Bayesian Linear Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pytorch">PyTorch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-derive-the-posterior-math">Problem 1: Derive the Posterior [Math]</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-the-posterior-mean-math">Problem 2: The Posterior Mean [Math]</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-data">Synthetic Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3-compute-the-posterior-code">Problem 3: Compute the posterior [Code]</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4-plot-the-posterior-density-of-the-variance-code">Problem 4: Plot the posterior density of the variance [Code]</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-5-plot-posterior-samples-of-the-regression-function-code">Problem 5: Plot posterior samples of the regression function. [Code]</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6-posterior-predictive-distribution-math">Problem 6: Posterior Predictive Distribution [Math]</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6a">Problem 6a</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6b">Problem 6b</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission Instructions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hw1-bayesian-linear-regression">
+<h1>HW1: Bayesian Linear Regression<a class="headerlink" href="#hw1-bayesian-linear-regression" title="Permalink to this heading">#</a></h1>
+<p>STATS305C, Stanford University, Spring 2023</p>
+<p><strong>Your name:</strong></p>
+<p><strong>Collaborators:</strong></p>
+<p><strong>Hours spent:</strong></p>
+<p>Please let us know how many hours in total you spent on this assignment so we can calibrate for future assignments. Your feedback is always welcome!</p>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> \
+    <span class="n">TransformedDistribution</span><span class="p">,</span> <span class="n">MultivariateNormal</span>
+<span class="kn">from</span> <span class="nn">torch.distributions.transforms</span> <span class="kn">import</span> <span class="n">PowerTransform</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="bayesian-linear-regression">
+<h2>Bayesian Linear Regression<a class="headerlink" href="#bayesian-linear-regression" title="Permalink to this heading">#</a></h2>
+<p>STATS 305A was all about linear regression. In this assignment, you’ll revisit that classic model from a Bayesian perspective.</p>
+<p>Let <span class="math notranslate nohighlight">\(\{\mathbf{x}_n, y_n\}_{n=1}^N\)</span> denote a dataset with covariates <span class="math notranslate nohighlight">\(\mathbf{x}_n \in \mathbb{R}^D\)</span> and scalar outcomes <span class="math notranslate nohighlight">\(y_n \in \mathbb{R}\)</span>. Let <span class="math notranslate nohighlight">\(\mathbf{X} \in \mathbb{R}^{N \times D}\)</span> denote the design matrix where each row is a vector of covariates and <span class="math notranslate nohighlight">\(\mathbf{y} \in \mathbb{R}^N\)</span> denote the vector of outcomes.</p>
+<p>We will model the outcomes as conditionally independent Gaussian random variables given the covariates and the parameters,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(\mathbf{y} \mid \mathbf{w}, \sigma^2, \mathbf{X})
+&amp;= \prod_{n=1}^N \mathcal{N}(y_n \mid \mathbf{w}^\top \mathbf{x}_n, \sigma^2),
+\end{align*}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{w} \in \mathbb{R}^D\)</span> are the <em>weights</em> and <span class="math notranslate nohighlight">\(\sigma^2 \in \mathbb{R}_+\)</span> is the conditional variance.</p>
+<p>In a <em>Bayesian</em> linear regression, we place a prior on the parameters,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(\mathbf{w}, \sigma^2 | \boldsymbol{\eta}) &amp;=
+\chi^{-2}(\sigma^2 \mid \nu_0, \sigma_0^2) \,
+\mathcal{N}(\mathbf{w} \mid \boldsymbol{\mu}_0, \sigma^2 \boldsymbol{\Lambda}_0^{-1}),
+\end{align*}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\nu_0 \in \mathbb{R}_+\)</span> sets the degrees of freedom, <span class="math notranslate nohighlight">\(\sigma_0^2\)</span> is the prior mean of the variance parameter, <span class="math notranslate nohighlight">\(\boldsymbol{\mu}_0\)</span> is the prior mean of the weights, and <span class="math notranslate nohighlight">\(\boldsymbol{\Lambda}_0 \in \mathcal{S}_D\)</span> is a positive definite <span class="math notranslate nohighlight">\(D \times D\)</span> precision matrix.
+We collect these <em>hyperparameters</em> into the vector <span class="math notranslate nohighlight">\(\boldsymbol{\eta} = (\nu_0, \sigma_0^2, \boldsymbol{\mu}_0, \boldsymbol{\Lambda}_0)\)</span>.</p>
+</section>
+<section id="pytorch">
+<h2>PyTorch<a class="headerlink" href="#pytorch" title="Permalink to this heading">#</a></h2>
+<p>As in the notebooks from class, you will use PyTorch to complete the coding portions of this assignment. If you are unfamiliar with PyTorch, <a class="reference external" href="https://pytorch.org/tutorials/beginner/introyt/tensors_deeper_tutorial.html">this</a> webpage provides an introductory tutorial to PyTorch tensors. You should also make sure you can solve the problems in <a class="reference internal" href="../hw0/hw0.html"><span class="doc std std-doc">homework 0</span></a>.</p>
+</section>
+<section id="problem-1-derive-the-posterior-math">
+<h2>Problem 1: Derive the Posterior [Math]<a class="headerlink" href="#problem-1-derive-the-posterior-math" title="Permalink to this heading">#</a></h2>
+<p>Derive the posterior distribution <span class="math notranslate nohighlight">\(p(\mathbf{w}, \sigma^2 \mid \mathbf{y}, \mathbf{X}, \boldsymbol{\eta})\)</span> where <span class="math notranslate nohighlight">\(\boldsymbol{\eta} = (\nu_0, \sigma_0^2, \boldsymbol{\mu}_0, \boldsymbol{\Lambda}_0)\)</span>. It should be of the same form as the prior,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(\mathbf{w}, \sigma^2 \mid \mathbf{y}, \mathbf{X}, \boldsymbol{\eta}) 
+&amp;= \chi^{-2}(\sigma^2 \mid \nu_N, \sigma_N^2) \mathcal{N}(\mathbf{w} \mid \boldsymbol{\mu}_N, \sigma^2 \boldsymbol{\Lambda}_N^{-1})
+\end{align*}
+\]</div>
+<p>for some <span class="math notranslate nohighlight">\(\nu_N\)</span>, <span class="math notranslate nohighlight">\(\sigma_N^2\)</span>, <span class="math notranslate nohighlight">\(\boldsymbol{\mu}_N\)</span>, and <span class="math notranslate nohighlight">\(\boldsymbol{\Lambda}_N\)</span>.</p>
+<p><em>Hint:</em> Remember that the “standard procedure” for deriving the posterior distribution is to write down the joint distribution (on both parameters and data), and then to only foucs on the terms you care about (the parameters). But, in this setting, you have to be very careful to keep both <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> and <span class="math notranslate nohighlight">\(\sigma^2\)</span>, because we are asking for the joint posterior.</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-2-the-posterior-mean-math">
+<h2>Problem 2: The Posterior Mean [Math]<a class="headerlink" href="#problem-2-the-posterior-mean-math" title="Permalink to this heading">#</a></h2>
+<p>a. What does the posterior mean <span class="math notranslate nohighlight">\(\mathbb{E}[\mathbf{w} \mid \mathbf{y}, \mathbf{X}, \boldsymbol{\eta}]\)</span> equal in the uninformative limit where <span class="math notranslate nohighlight">\(\boldsymbol{\Lambda}_0 \to 0\)</span> and <span class="math notranslate nohighlight">\(\nu_0 \to 0\)</span>?</p>
+<p>b. What does the posterior mean <span class="math notranslate nohighlight">\(\mathbb{E}[\sigma^2 \mid \mathbf{y}, \mathbf{X}, \boldsymbol{\eta}]\)</span> equal in the uninformative limit where <span class="math notranslate nohighlight">\(\boldsymbol{\Lambda}_0 \to 0\)</span> and <span class="math notranslate nohighlight">\(\nu_0 \to 0\)</span>? Write your answer in terms of the <em>hat matrix</em> <span class="math notranslate nohighlight">\(\mathbf{H} = \mathbf{X} (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top\)</span>.</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+<hr class="docutils" />
+<section id="synthetic-data">
+<h2>Synthetic Data<a class="headerlink" href="#synthetic-data" title="Permalink to this heading">#</a></h2>
+<p>We’ll do some simple analysis of a synthetic dataset with <span class="math notranslate nohighlight">\(N =20\)</span> data points. Each data point has covariates <span class="math notranslate nohighlight">\(\mathbf{x}_n = (1, x_n) \in \mathbb{R}^2\)</span> and scalar outcomes <span class="math notranslate nohighlight">\(y_n \in \mathbb{R}\)</span>. It looks like this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>wget<span class="w"> </span>-nc<span class="w"> </span>https://raw.githubusercontent.com/slinderman/stats305c/main/assignments/hw1/hw1.pt
+
+<span class="c1"># Load the data.</span>
+<span class="c1"># X = [[1, x_1]</span>
+<span class="c1">#      [1, x_2]</span>
+<span class="c1">#         ...</span>
+<span class="c1">#      [1, x_N]]</span>
+<span class="c1">#</span>
+<span class="c1"># y = [y_1, ..., y_N]</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;hw1.pt&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;ko&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$x$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$y$&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, the outcomes were simulated from a linear regression with Gaussian noise according to some true parameters (not given). You will compute and visualize the posterior distribution over the weights and variance given the data.</p>
+</section>
+<section id="problem-3-compute-the-posterior-code">
+<h2>Problem 3: Compute the posterior [Code]<a class="headerlink" href="#problem-3-compute-the-posterior-code" title="Permalink to this heading">#</a></h2>
+<p>Write a function to compute the posterior parameters given data and hyperparameters.</p>
+<p><em>Hints</em>: You may find the following commands in PyTorch useful:</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">a</span></code> is a tensor, <code class="docutils literal notranslate"><span class="pre">a.shape</span></code> is a tuple containing the shape of <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">a</span></code> is a tensor, <code class="docutils literal notranslate"><span class="pre">a.T</span></code> returns the transpose of <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">torch.linalg.solve</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> denotes element-wise multiplication while <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> denotes standard matrix-matrix or matrix-vector multiplication.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_posterior</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">Lambda_0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the posterior parameters nu_N, sigmasq_N, mu_N, and Lambda_N </span>
+<span class="sd">    given covariates X, outcomes y, and hyperparameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X:          (N, D) tensor of covariates</span>
+<span class="sd">        y:          (N,) tensor of outcomes</span>
+<span class="sd">        nu_0:       prior degrees of freedom</span>
+<span class="sd">        sigmasq_0:  prior mean of the variance parameter</span>
+<span class="sd">        mu_0:       prior mean of the weights</span>
+<span class="sd">        Lambda_0:   prior precision of the weights</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        nu_N:       posterior degrees of freedom</span>
+<span class="sd">        sigmasq_N:  posterior scale of the variance parameter</span>
+<span class="sd">        mu_N:       posterior mean of the weights</span>
+<span class="sd">        Lambda_N:   posterior precision of the weights</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    
+    <span class="k">return</span> <span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">,</span> <span class="n">mu_N</span><span class="p">,</span> <span class="n">Lambda_N</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Please run the following code to print your answers:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test:</span>
+<span class="n">hypers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">nu_0</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">sigmasq_0</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">mu_0</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">Lambda_0</span><span class="o">=</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">,</span> <span class="n">mu_N</span><span class="p">,</span> <span class="n">Lambda_N</span> <span class="o">=</span> <span class="n">compute_posterior</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">hypers</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;nu_N:       </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nu_N</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sigmasq_N:  </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mu_N:       </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">mu_N</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Lambda_N:   </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Lambda_N</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-4-plot-the-posterior-density-of-the-variance-code">
+<h2>Problem 4: Plot the posterior density of the variance [Code]<a class="headerlink" href="#problem-4-plot-the-posterior-density-of-the-variance-code" title="Permalink to this heading">#</a></h2>
+<p>Plot <span class="math notranslate nohighlight">\(p(\sigma^2 \mid X, y, \eta)\)</span> vs <span class="math notranslate nohighlight">\(\sigma^2\)</span> over the interval <span class="math notranslate nohighlight">\([10^{-3}, 2]\)</span>, where <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(y\)</span> continue to be the synthetic data we downloaded and used in Problem 3.</p>
+<p>You may use the <code class="docutils literal notranslate"><span class="pre">ScaledInvChiSq</span></code> distribution object below, which we copied from the demo for Lecture 1.</p>
+<p><em>Hint</em>: In Python, you can use <code class="docutils literal notranslate"><span class="pre">dir(object)</span></code> to list the attributes and functions that an object supports.</p>
+<p><em>Hint</em>: To learn more about PyTorch distributions, see the <a class="reference external" href="https://pytorch.org/docs/stable/distributions.html">docs</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ScaledInvChiSq</span><span class="p">(</span><span class="n">TransformedDistribution</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Implementation of the scaled inverse \chi^2 distribution,</span>
+<span class="sd">        </span>
+<span class="sd">        ..math:</span>
+<span class="sd">            \chi^{-2}(\nu_0, \sigma_0^2)</span>
+
+<span class="sd">        It is equivalent to an inverse gamma distribution, which we implement</span>
+<span class="sd">        as a transformation of a Gamma distribution. Thus, this class inherits</span>
+<span class="sd">        functions like `log_prob` from its parent.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dof:   degrees of freedom parameter</span>
+<span class="sd">            scale: scale of the $\chi^{-2}$ distribution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">Gamma</span><span class="p">(</span><span class="n">dof</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dof</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PowerTransform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">TransformedDistribution</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">transforms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dof</span> <span class="o">=</span> <span class="n">dof</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>        
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="c1">#</span>
+<span class="c1">##</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-5-plot-posterior-samples-of-the-regression-function-code">
+<h2>Problem 5: Plot posterior samples of the regression function. [Code]<a class="headerlink" href="#problem-5-plot-posterior-samples-of-the-regression-function-code" title="Permalink to this heading">#</a></h2>
+<p>Draw 50 samples from the posterior marginal distribution over the weights <span class="math notranslate nohighlight">\(\mathbf{w} \in \mathbb{R}^2\)</span>. For each sample, compute the expected value of <span class="math notranslate nohighlight">\(y\)</span> on a grid of points <span class="math notranslate nohighlight">\(x\)</span> evenly spaced between <span class="math notranslate nohighlight">\([-3, 3]\)</span>. Remember that our covariates were defined as <span class="math notranslate nohighlight">\(\mathbf{x} = (1, x)\)</span> so that for each sample of the weights you get a line for <span class="math notranslate nohighlight">\(\mathbb{E}[y \mid x, \mathbf{w}]\)</span> as a function of <span class="math notranslate nohighlight">\(x\)</span>. Plot these 50 lines on top of each other to get a sense of the posterior uncertainty in the regression function. (You may want to plot each line with some transparency, like <code class="docutils literal notranslate"><span class="pre">alpha=0.1</span></code>.) Overlay the observed data points.</p>
+<p><em>Hint</em>: You may find <code class="docutils literal notranslate"><span class="pre">torch.inverse</span></code> useful.</p>
+<p><em>Hint</em>: Remember that in the generative model we have posited, the distribution of <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> depends on <span class="math notranslate nohighlight">\(\sigma^2\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="c1">#</span>
+<span class="c1">##</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-6-posterior-predictive-distribution-math">
+<h2>Problem 6: Posterior Predictive Distribution [Math]<a class="headerlink" href="#problem-6-posterior-predictive-distribution-math" title="Permalink to this heading">#</a></h2>
+<p>The subparts of this problem will walk you through deriving the posterior predictive distribution of the outcome at a new input <span class="math notranslate nohighlight">\(\mathbf{x}_{N+1}\)</span>. That is, computing,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(y_{N+1} \mid x_{N+1}, \mathbf{y}, \mathbf{X}, \boldsymbol{\eta})
+\end{align*}
+\]</div>
+<p>integrating over the posterior distribution on the weights <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> and variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>.
+Remember that you found this posterior distribution in Problem 1, but for the purpose of this question it’s enough to leave it in the form</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(\mathbf{w}, \sigma^2 \mid \mathbf{y}, \mathbf{X}, \boldsymbol{\eta}) 
+&amp;= \chi^{-2}(\sigma^2 \mid \nu_N, \sigma_N^2) \mathcal{N}(\mathbf{w} \mid \boldsymbol{\mu}_N, \sigma^2 \boldsymbol{\Lambda}_N^{-1}),
+\end{align*}
+\]</div>
+<p>i.e. you don’t need to plug in the values for for some <span class="math notranslate nohighlight">\(\nu_N\)</span>, <span class="math notranslate nohighlight">\(\sigma_N^2\)</span>, <span class="math notranslate nohighlight">\(\boldsymbol{\mu}_N\)</span>, and <span class="math notranslate nohighlight">\(\boldsymbol{\Lambda}_N\)</span> that you found in Problem 1.</p>
+<section id="problem-6a">
+<h3>Problem 6a<a class="headerlink" href="#problem-6a" title="Permalink to this heading">#</a></h3>
+<p>Using the product rule of probability, write out the joint distribution of the posterior over the parameters and the observation of the next data point <span class="math notranslate nohighlight">\(y_{N+1}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+  p(y_{N + 1}, \mathbf{w}, \sigma^2 | x_{N + 1}, \mathbf{y}, \mathbf{X}, \boldsymbol{\eta}).
+\end{align*}
+\]</div>
+<p>You can (and please do) replace any densities from a known family with the notation <span class="math notranslate nohighlight">\(\text{symbol for the family}( \text{variable name} | \text{parameters})\)</span>. (We follow this notation in how we write out the posterior above).</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-6b">
+<h3>Problem 6b<a class="headerlink" href="#problem-6b" title="Permalink to this heading">#</a></h3>
+<p>Now using the sum rule of probability, compute the posterior predictive distribution</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+  p(y_{N + 1}, | x_{N + 1}, \mathbf{y}, \mathbf{X}, \boldsymbol{\eta}) = \int  p(y_{N + 1}, \mathbf{w}, \sigma^2 | x_{N + 1}, \mathbf{y}, \mathbf{X}, \boldsymbol{\eta}) d\mathbf{w} d\sigma^2.
+\end{align*}
+\]</div>
+<p><em>Hint:</em> You can do this integral without taking any integrals! Thinks about conjugate families and how the Student T distribution came up in lectures.</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="submission-instructions">
+<h2>Submission Instructions<a class="headerlink" href="#submission-instructions" title="Permalink to this heading">#</a></h2>
+<p><strong>Formatting:</strong> check that your code does not exceed 80 characters in line width. You can set <em>Tools → Settings → Editor → Vertical ruler column</em> to 80 to see when you’ve exceeded the limit.</p>
+<p>Download your notebook in .ipynb format and use the following commands to convert it to PDF.  Then run the following command to convert to a PDF:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">pdf</span> <span class="o">&lt;</span><span class="n">yourlastname</span><span class="o">&gt;</span><span class="n">_hw1</span><span class="o">.</span><span class="n">ipynb</span>
+</pre></div>
+</div>
+<p>(Note that for the above code to work, you need to rename your file <code class="docutils literal notranslate"><span class="pre">&lt;yourlastname&gt;_hw1.ipynb</span></code>)</p>
+<p>Possible causes for errors:</p>
+<ul class="simple">
+<li><p>the “Open in colab” button. Just delete the code that creates this button (go to the top cell and delete it)</p></li>
+<li><p>Latex errors: many latex errors aren’t visible in the notebook. Try binary search: comment out half of the latex at a time, until you find the bugs</p></li>
+</ul>
+<p>Getting this HW into PDF form isn’t meant to be a burden. One quick and easy approach is to open it as a Jupyter notebook, print, save to pdf. Just make sure your latex math answers aren’t cut off so I can grade them.</p>
+<p>Please post on Ed or come to OH if there are any other problems submitting the HW.</p>
+<p><strong>Installing nbconvert:</strong></p>
+<p>If you’re using Anaconda for package management,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">anaconda</span> <span class="n">nbconvert</span>
+</pre></div>
+</div>
+<p><strong>Upload</strong> your .pdf file to Gradescope. Please tag your questions!</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./assignments/hw1"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../hw0/hw0.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">HW0: PyTorch Primer</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../notebooks/01_bayes_normal.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Bayesian Analysis of the Normal Distribution</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-linear-regression">Bayesian Linear Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pytorch">PyTorch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-derive-the-posterior-math">Problem 1: Derive the Posterior [Math]</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-the-posterior-mean-math">Problem 2: The Posterior Mean [Math]</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-data">Synthetic Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3-compute-the-posterior-code">Problem 3: Compute the posterior [Code]</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4-plot-the-posterior-density-of-the-variance-code">Problem 4: Plot the posterior density of the variance [Code]</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-5-plot-posterior-samples-of-the-regression-function-code">Problem 5: Plot posterior samples of the regression function. [Code]</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6-posterior-predictive-distribution-math">Problem 6: Posterior Predictive Distribution [Math]</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6a">Problem 6a</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6b">Problem 6b</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission Instructions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
