@@ -18,7 +18,7 @@ Students should be comfortable with probability and statistics as well as multiv
 - Grading basis: credit or letter grade
 - Office hours:
   - Weds 4:30-5:30pm in Wu Tsai Neurosciences Instiute Room M252G (Scott)
-  - Thurs 5-7pm location TBD (Xavier)
+  - Thurs 5-7pm location Wu Tsai Neurosciences Instiute Room S275 (Xavier)
 - Assignments released Friday, due the following Thursday at 11:59pm
 
 ## Books
