@@ -1,7 +1,7 @@
 # STATS305C: Applied Statistics III
 Instructor: Scott Linderman <br>
-TA: Matt MacKay, James Yang <br>
-Term: Spring 2022 <br>
+TA: Xavier Gonzalez <br>
+Term: Spring 2023 <br>
 Stanford University
 
 ---
@@ -29,40 +29,20 @@ You may also find the following references helpful:
 
 ## Schedule
 
-### Week 1: Multivariate Normal Models and Conjugate Priors
-- Required Reading: Bishop, Ch 2.3
-- Optional Reading: Murphy, Ch 2.3 and 3.2.4
+Week 1: Multivariate Normal Models and Conjugate Priors
 
-### Week 2: Hierarchical Models and Gibbs Sampling
-- Required Reading: Bishop, Ch 8.1-8.2 and 11.2-11.3
-- Optional Reading: Murphy, Ch 3.5.2, 4.2, and 11.1-11.3
-- Optional Reading: Gelman, Ch 5
+Week 2: Hierarchical Models and Gibbs Sampling
 
-### Week 3: Continuous Latent Variable Models and HMC
-- Required Reading: Bishop, Ch 12.1-12.2
-- Required Reading: MCMC using Hamiltonian dynamics [Neal, 2012](https://arxiv.org/abs/1206.1901)
+Week 3: Continuous Latent Variable Models and HMC
 
-### Week 4: Mixture Models and EM
-- Required Reading: Bishop, Ch 9
-- Optional Reading: Murphy, Ch 6.7
+Week 4: Mixture Models and EM
 
-### Week 5: Mixed Membership Models and Mean Field VI
-- Required Reading: "Probabilistic topic models" [Blei, 2012](http://www.cs.columbia.edu/~blei/fogm/2020F/readings/Blei2012.pdf)
-- Required Reading: "Variational Inference: A Review for Statisticians” [Blei et al, 2017](https://www.tandfonline.com/doi/full/10.1080/01621459.2017.1285773)
-- Optional Reading: Murphy, Ch 10.2
+Week 5: Mixed Membership Models and Mean Field VI
 
-### Week 6: Variational Autoencoders and Fixed-Form VI
-- Required Reading: “An Introduction to Variational Autoencoders” (Ch 1 and 2) [Kingma and Welling, 2019](https://arxiv.org/pdf/1906.02691.pdf)
-- Optional Reading: Murphy, Ch 10.3
+Week 6: Variational Autoencoders and Fixed-Form VI
 
-### Week 7: State Space Models and Message Passing
-- Required Reading: Bishop, Ch 13
-- Optional Reading: Murphy, Ch 8
+Week 7: State Space Models and Message Passing
 
-### Week 8: Bayesian Nonparametrics and more MCMC
-- Required Reading: Bishop, Ch 6.4
-- Optional Reading: [Kingman, 1993, Ch 1-2](https://global.oup.com/academic/product/poisson-processes-9780198536932)
-- Optional Reading: [Adams et al, 2019](https://homepages.inf.ed.ac.uk/imurray2/pub/09poisson/adams-murray-mackay-2009b.pdf)
+Week 8: Bayesian Nonparametrics and more MCMC
 
-### Weeks 9 and 10: Research Topics in Probabilistic Machine Learning
-- TBD
+Weeks 9 and 10: Research Topics in Probabilistic Machine Learning
