@@ -11,6 +11,7 @@ parts:
     chapters:
     - file: notebooks/01_bayes_normal.ipynb
     - file: notebooks/02_mvn.ipynb
+    - file: notebooks/03_hier_gauss.ipynb
 
   - caption: References
     chapters:
