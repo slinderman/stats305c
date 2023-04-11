@@ -1,0 +1,1050 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Hierarchical Gaussian Models &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/03_hier_gauss';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="References" href="../lectures/99_references.html" />
+    <link rel="prev" title="The Multivariate Normal Distribution" href="02_mvn.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_mvn.html">The Multivariate Normal Distribution</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Hierarchical Gaussian Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/notebooks/03_hier_gauss.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/03_hier_gauss.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Hierarchical Gaussian Models</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-test-scores-across-schools">Modeling Test Scores across Schools</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eight-schools-example">Eight Schools Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-the-marginal-posterior-over-the-global-variance">Compute the marginal posterior over the global variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-the-posterior-of-the-global-mean-given-the-global-variance">Compute the posterior of the global mean given the global variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-the-posterior-of-the-per-school-effect">Compute the posterior of the per-school effect</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-the-posterior-distribution-of-the-per-school-effect-given-the-global-variance">Compute the posterior distribution of the per-school effect given the global variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#draw-samples-from-the-posterior-distribution">Draw samples from the posterior distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap">Recap</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#questions">Questions</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hierarchical-gaussian-models">
+<h1>Hierarchical Gaussian Models<a class="headerlink" href="#hierarchical-gaussian-models" title="Permalink to this heading">#</a></h1>
+<p>Lecture 3 introduced probabilistic graphical models and, in particular, hierarchical Gaussian models. These are some of the most complex models where we can still do <em>exact</em> posterior inference. The motivating example was the “Eight Schools” dataset from Gelman et al. Here, we work through this example in code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">Categorical</span><span class="p">,</span> \
+    <span class="n">TransformedDistribution</span>
+<span class="kn">from</span> <span class="nn">torch.distributions.transforms</span> <span class="kn">import</span> <span class="n">PowerTransform</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.cm</span> <span class="kn">import</span> <span class="n">Blues</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ScaledInvChiSq</span><span class="p">(</span><span class="n">TransformedDistribution</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of the scaled inverse \chi^2 distribution defined in class.</span>
+<span class="sd">    We will implement it as a transformation of a gamma distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">Gamma</span><span class="p">(</span><span class="n">dof</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dof</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PowerTransform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">TransformedDistribution</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">transforms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dof</span> <span class="o">=</span> <span class="n">dof</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="modeling-test-scores-across-schools">
+<h2>Modeling Test Scores across Schools<a class="headerlink" href="#modeling-test-scores-across-schools" title="Permalink to this heading">#</a></h2>
+<p>Suppose we have test scores from <span class="math notranslate nohighlight">\(S\)</span> schools. Let <span class="math notranslate nohighlight">\(N_s\)</span> denote the number of students from school <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(x_{s,n} \in \mathbb{R}\)</span> denote the score of the <span class="math notranslate nohighlight">\(n\)</span>-th student from the <span class="math notranslate nohighlight">\(s\)</span>-th school.</p>
+<p>We aim to build a probabilistic model of the scores <span class="math notranslate nohighlight">\(\mathbf{X} = \{\{x_{s,n}\}_{n=1}^{N_s}\}_{s=1}^S\)</span> that will allow us to study relative performance across schools.</p>
+<p>The individual scores are not exchangeable since they are organized into groups by school. However, the schools themselves are exchangeable.
+This motivates the following <strong>hierarchical model</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    \tau^2 &amp;\sim \chi^{-2}(\nu_0, \tau_0^2) \\
+    \mu &amp;\sim \mathcal{N}(\mu_0, \tau^2 / \kappa_0) \\
+    \theta_s &amp;\sim \mathcal{N}(\mu, \tau^2) \qquad \text{for } s=1,\ldots,S \\
+    x_{s,n} &amp;\sim \mathcal{N}(\theta_s, \sigma_s^2) \qquad \text{for } n=1,\ldots,N_s \text{ and } s=1,\ldots,S
+\end{align*}
+\end{split}\]</div>
+<p>Each school has its own mean <span class="math notranslate nohighlight">\(\theta_s\)</span>, and the means are conditionally independent given the global mean and variance, <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\tau^2\)</span>, respectively. Hence, the means are exchangeable.</p>
+<p>We can simplify the likelihood by observing that as a function of the parameter <span class="math notranslate nohighlight">\(\theta_s\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    \prod_{n=1}^{N_s} \mathcal{N}(x_{s,n} \mid \theta_s, \sigma_s^2) 
+    % &amp;\propto \exp\left\{-\frac{1}{2\sigma_s^2} (x_{s,n} - \theta_s)^2 \right\} \\
+    % &amp;\propto \exp\left\{-\frac{N}{2\sigma_s^2} \theta_s^2 + \frac{N}{\sigma_s^2} \left(\frac{1}{N}\sum_{n=1}^{N_s} x_{s,n}\right) \theta_s \right\} \\
+    &amp;\propto \mathcal{N}(\bar{x}_s \mid \theta_s, \bar{\sigma}_s^2)
+\end{align*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\bar{x}_s = \tfrac{1}{N_s} \sum_{n=1}^{N_s} x_{s,n}\)</span> and <span class="math notranslate nohighlight">\(\bar{\sigma}_s^2 = \tfrac{\sigma_s^2}{N_s}\)</span>.</p>
+<p>Put differently, the school mean is a <strong>sufficient statistic</strong> of the likelihood (when variance is known).</p>
+</section>
+<section id="eight-schools-example">
+<h2>Eight Schools Example<a class="headerlink" href="#eight-schools-example" title="Permalink to this heading">#</a></h2>
+<p>We will use data from a classic example given in Ch 5.5 of Gelman et al (2013). This example is used by numerous probabilistic programming libraries, like <a class="reference external" href="https://www.tensorflow.org/probability/examples/Eight_Schools">TensorFlow Probability</a> and <a class="reference external" href="https://github.com/pyro-ppl/numpyro">NumPyro</a>.</p>
+<p>Gelman et al. say,</p>
+<blockquote>
+<div><p>A study was performed for the Educational Testing Service to analyze the effects of special coaching programs for SAT-V (Scholastic Aptitude Test-Verbal) in each of eight high schools. The outcome variable in each study was the score on a special administration of the SAT-V, a standardized multiple choice test administered by the Educational Testing Service and used to help colleges make admissions decisions; the scores can vary between 200 and 800, with mean about 500 and standard deviation about 100. The SAT examinations are designed to be resistant to short-term efforts directed specifically toward improving performance on the test; instead they are designed to reflect knowledge acquired and abilities developed over many years of education. Nevertheless, each of the eight schools in this study considered its short-term coaching program to be very successful at increasing SAT scores. Also, there was no prior reason to believe that any of the eight programs was more effective than any other or that some were more similar in effect to each other than to any other.</p>
+</div></blockquote>
+<p><em>Note: This is a little odd, but rather than modeling the scores directly, we will model the treatment effects under a linear model that controls for other stuff. The estimated effects a magnitude and standard error. These will be our <span class="math notranslate nohighlight">\(\bar{x}_s\)</span> and. <span class="math notranslate nohighlight">\(\bar{\sigma}_s\)</span> values.</em></p>
+<p><em>Note: we’re given the standard deviations rather than the variances of the scores.</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hyper parameters</span>
+<span class="n">S</span> <span class="o">=</span> <span class="mi">8</span>                <span class="c1"># number of schools</span>
+<span class="n">mu_0</span> <span class="o">=</span> <span class="mf">0.0</span>           <span class="c1"># prior mean of the global effect</span>
+<span class="n">kappa_0</span> <span class="o">=</span> <span class="mf">0.1</span>        <span class="c1"># prior concentration in the NIX prior</span>
+<span class="n">nu_0</span> <span class="o">=</span> <span class="mf">0.1</span>           <span class="c1"># degrees of freedom</span>
+<span class="n">tausq_0</span> <span class="o">=</span> <span class="mf">100.0</span>      <span class="c1"># prior mean of the variance \tau^2</span>
+
+<span class="c1"># This is the data</span>
+<span class="n">x_bars</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">28</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">12</span><span class="p">])</span>  
+<span class="n">sigma_bars</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">18</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="compute-the-marginal-posterior-over-the-global-variance">
+<h2>Compute the marginal posterior over the global variance<a class="headerlink" href="#compute-the-marginal-posterior-over-the-global-variance" title="Permalink to this heading">#</a></h2>
+<p>Integrate over <span class="math notranslate nohighlight">\(\mu\)</span> to obtain,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    p(\tau^2 \mid \mathbf{X}, \boldsymbol{\eta}) 
+    &amp;\propto \int p(\mu, \tau^2, \mathbf{X} \mid \boldsymbol{\eta}) \, \mathrm{d} \mu \\
+    &amp;= p(\tau^2) \int \left[\mathcal{N}(\mu \mid \mu_0, \tau^2/ \kappa_0) \prod_{s=1}^S \mathcal{N}(\bar{x}_s \mid \mu, \bar{\sigma}_s^2 + \tau^2)\right] \, \mathrm{d} \mu 
+\end{align*}
+\end{split}\]</div>
+<p>The integral is very doable (a good exercise!) but it’s a bit of a pain.</p>
+<p>Alternatively, note that the following holds for any <span class="math notranslate nohighlight">\(\mu\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+    p(\tau^2 \mid \mathbf{X}, \boldsymbol{\eta}) 
+    &amp;= \frac{p(\mu, \tau^2 \mid \mathbf{X}, \boldsymbol{\eta})}{p(\mu \mid \tau^2, \mathbf{X}, \boldsymbol{\eta})} 
+    \propto \frac{p(\tau^2) \mathcal{N}(\mu \mid \mu_0, \tau^2/ \kappa_0) \prod_{s=1}^S \mathcal{N}(\bar{x}_s \mid \mu, \bar{\sigma}_s^2 + \tau^2)}{\mathcal{N}(\mu \mid \hat{\mu}, v_\mu)}.
+\end{align*}
+\]</div>
+<p>This is just Bayes’ rule.</p>
+<p>Plug in <span class="math notranslate nohighlight">\(\mu = \hat{\mu}\)</span> since that will cause many terms in the denominator to disappear. Then,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+    p(\tau^2 \mid \mathbf{X}, \boldsymbol{\eta}) &amp;\propto p(\tau^2) \frac{\sqrt{v_\mu} }{\tau} e^{-\frac{\kappa_0}{2 \tau^2} (\mu - \mu_0)^2}
+    \prod_{s=1}^S \frac{1}{\sqrt{\bar{\sigma}_s^2 + \tau^2}} \exp\left\{-\frac{1}{2} \left(\frac{\bar{x}_s - \hat{\mu}}{\sqrt{\bar{\sigma}_s^2 + \tau^2}} \right)^2 \right\} \triangleq f(\tau^2)
+\end{align*}
+\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+    v_\mu &amp;= \frac{1}{\lambda_0 +\sum_{s=1}^S \lambda_s} &amp;
+    \hat{\mu} &amp;= \frac{\lambda_0 \mu_0 + \sum_{s=1}^S \lambda_s \bar{x}_s}{\lambda_0 + \sum_{s=1}^S \lambda_s } &amp;
+    \lambda_0 &amp;= \frac{\kappa_0}{\tau^2} &amp;
+    \lambda_s &amp;= \frac{1}{\bar{\sigma}_s^2 + \tau^2}
+\end{align*}
+\]</div>
+<p>This function is complicated because both <span class="math notranslate nohighlight">\(v_\mu\)</span> and <span class="math notranslate nohighlight">\(\hat{\mu}\)</span> depend on <span class="math notranslate nohighlight">\(\tau^2\)</span>. Nevertheless, <span class="math notranslate nohighlight">\(\tau^2\)</span> is only a one-dimensional variable, so we can use numerical quadrature to compute the normalizing constant <span class="math notranslate nohighlight">\(\int f(\tau^2) \, \mathrm{d} \tau^2\)</span> and draw samples from this posterior.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_log_f</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">x_bars</span><span class="p">,</span> <span class="n">sigma_bars</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute \log f(\tau^2), as defined above.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    tausq:      a length (T,) tensor of \tau^2 values </span>
+<span class="sd">    x_bars:     a length (S,) tensor of \bar{x}_s values</span>
+<span class="sd">    sigma_bars: a length (S,) tensor of \bar{\sigma}_s values</span>
+<span class="sd">    mu_0:       prior mean of \mu</span>
+<span class="sd">    kappa_0:    prior precision of \mu</span>
+<span class="sd">    nu_0:       degrees of freedom of prior on \tau^2</span>
+<span class="sd">    tausq_0:    mean of prior on \tau^2</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    \log f(\tau^2) evaluated at each of the (T,) values of tausq</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log_f</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu_0</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">)</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">tausq</span><span class="p">)</span>
+
+    <span class="c1"># Compute the parameters of the posterior on the global mean, \mu</span>
+    <span class="c1"># Handle broadcasting over a 1D tensor of \tausq values.</span>
+    <span class="n">lambda_0</span> <span class="o">=</span> <span class="n">kappa_0</span> <span class="o">/</span> <span class="n">tausq</span>
+    <span class="n">lambda_s</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigma_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">tausq</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span>
+    <span class="n">v_mu</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">lambda_0</span> <span class="o">+</span> <span class="n">lambda_s</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">mu_hat</span> <span class="o">=</span> <span class="p">(</span><span class="n">lambda_0</span> <span class="o">*</span> <span class="n">mu_0</span> <span class="o">+</span> <span class="p">(</span><span class="n">lambda_s</span> <span class="o">*</span> <span class="n">x_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> \
+        <span class="p">(</span><span class="n">lambda_0</span> <span class="o">+</span> <span class="n">lambda_s</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Back to log_f</span>
+    <span class="n">log_f</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">v_mu</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tausq</span><span class="p">)</span>
+    <span class="n">log_f</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">kappa_0</span> <span class="o">/</span> <span class="n">tausq</span> <span class="o">*</span> <span class="p">(</span><span class="n">mu_hat</span> <span class="o">-</span> <span class="n">mu_0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">log_f</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">lambda_s</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">log_f</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">lambda_s</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">mu_hat</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">log_f</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now evaluate <span class="math notranslate nohighlight">\(\log f(\tau^2)\)</span> on a dense grid of <span class="math notranslate nohighlight">\(\tau^2\)</span> values. Then use the <a class="reference external" href="https://en.wikipedia.org/wiki/LogSumExp#log-sum-exp_trick_for_log-domain_calculations"><strong>log-sum-exp trick</strong></a> to normalize the values in the log space before exponentiating to get the posterior density.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tausq_grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1e-1</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">log_f</span> <span class="o">=</span> <span class="n">compute_log_f</span><span class="p">(</span><span class="n">tausq_grid</span><span class="p">,</span> <span class="n">x_bars</span><span class="p">,</span> <span class="n">sigma_bars</span><span class="p">,</span> 
+                      <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">)</span>
+
+<span class="c1"># normalize and exponentiate to get the posterior probability</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="n">tausq_grid</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tausq_grid</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">p_tausq</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_f</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">logsumexp</span><span class="p">(</span><span class="n">log_f</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+
+<span class="c1"># Plot the pdf</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tausq_grid</span><span class="p">,</span> <span class="n">p_tausq</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\tau^2$&quot;</span><span class="p">)</span>
+<span class="c1"># plt.xticks(torch.arange(0,401, 50))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p(\tau^2 \mid \mathbf</span><span class="si">{X}</span><span class="s2">, \mathbf{\eta})$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/fb625a51e0cb4c434b6b3168b1f35f47b5f6d9f598a3769fa94993fb46bb01fc.png" src="../_images/fb625a51e0cb4c434b6b3168b1f35f47b5f6d9f598a3769fa94993fb46bb01fc.png" />
+</div>
+</div>
+<p>The posterior probability of <span class="math notranslate nohighlight">\(\tau^2\)</span> is a little harder to see than the posterior distribution on <span class="math notranslate nohighlight">\(\tau\)</span>. Apply the change of variables to look at <span class="math notranslate nohighlight">\(p(\tau \mid \mathbf{X}, \boldsymbol{\eta})\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tau_grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tausq_grid</span><span class="p">)</span>
+<span class="n">p_tau</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">p_tausq</span> <span class="o">*</span> <span class="n">tau_grid</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;posterior mean of tau:&quot;</span><span class="p">)</span>
+<span class="n">tau_mean</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_tau</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">tau_grid</span><span class="p">)</span> <span class="o">*</span> <span class="n">tau_grid</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">tau_var</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_tau</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">tau_grid</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">tau_grid</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tau_mean</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;E[tau]: </span><span class="si">{:.3f}</span><span class="s2">  Std[tau]: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tau_mean</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tau_var</span><span class="p">)))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tau_grid</span><span class="p">,</span> <span class="n">p_tau</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\tau$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p(\tau \mid \mathbf</span><span class="si">{X}</span><span class="s2">, \mathbf{\eta})$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;p_tau.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>posterior mean of tau:
+E[tau]: 4.459  Std[tau]: 2.541
+</pre></div>
+</div>
+<img alt="../_images/51d4a833cd3628c059a20af68f1325b1224f74ded87d556531b7de3eabc00817.png" src="../_images/51d4a833cd3628c059a20af68f1325b1224f74ded87d556531b7de3eabc00817.png" />
+</div>
+</div>
+</section>
+<section id="compute-the-posterior-of-the-global-mean-given-the-global-variance">
+<h2>Compute the posterior of the global mean given the global variance<a class="headerlink" href="#compute-the-posterior-of-the-global-mean-given-the-global-variance" title="Permalink to this heading">#</a></h2>
+<p>To compute the posterior over the global mean <span class="math notranslate nohighlight">\(\mu\)</span> given the global variance <span class="math notranslate nohighlight">\(\tau\)</span>, we need to marginalize over the per-school parameters <span class="math notranslate nohighlight">\(\boldsymbol{\theta}\)</span>. This is usually intractable, but since this model is conditionally linear and Gaussian, we can do it analytically.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    p(\mu \mid \tau^2, \mathbf{X}, \boldsymbol{\eta}) 
+    % &amp;\propto p(\mu, \tau^2, \mathbf{X}, \boldsymbol{\eta}) \\
+    &amp;\propto \int p(\mu, \tau^2, \boldsymbol{\theta}, \mathbf{X} \mid \boldsymbol{\eta}) \, \mathrm{d} \boldsymbol{\theta} \\
+    &amp;\propto \prod_{s=1}^S \int \mathcal{N}(\theta_s \mid \mu, \tau^2) \, \mathcal{N}(\bar{x}_s \mid \theta_s, \bar{\sigma}_s^2) \, \mathrm{d} \theta_s \\
+    &amp;= \prod_{s=1}^S \mathcal{N}(\bar{x}_s \mid \mu, \bar{\sigma}_s^2 + \tau^2) \\
+    &amp;\propto \mathcal{N}(\mu \mid \hat{\mu}, v_\mu) 
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+    v_\mu &amp;= \frac{1}{\lambda_0 + \sum_{s=1}^S \lambda_s} &amp;
+    \hat{\mu} &amp;= \frac{\lambda_0 \mu_0 + \sum_{s=1}^S \lambda_s \bar{x}_s}{\lambda_0 + \sum_{s=1}^S \lambda_s } &amp;
+    \lambda_0 &amp;= \kappa_0 / \tau^2 &amp;
+    \lambda_s &amp;= \frac{1}{\bar{\sigma}_s^2 + \tau^2}
+\end{align*}
+\]</div>
+<p>The posterior mean of <span class="math notranslate nohighlight">\(\mu\)</span> is a precision-weighted average of the school means.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_posterior_mu</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">x_bars</span><span class="p">,</span> <span class="n">sigma_bars</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the mean and variance of the posterior distribution on the global </span>
+<span class="sd">    mean given the global variance, as defined above.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    tausq:      a length (T,) tensor of \tau^2 values </span>
+<span class="sd">    mu_0:       prior mean of \mu</span>
+<span class="sd">    kappa_0:    prior precision of \mu</span>
+<span class="sd">    x_bars:     a length (S,) tensor of \bar{x}_s values</span>
+<span class="sd">    sigma_bars: a length (S,) tensor of \bar{\sigma}_s values</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    \hat{\mu} and v_\mu evaluated at each of the (T,) values of tausq</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lambda_0</span> <span class="o">=</span> <span class="n">kappa_0</span> <span class="o">/</span> <span class="n">tausq</span>
+    <span class="n">lambda_s</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigma_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">tausq</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span>
+    <span class="n">v_mu</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">lambda_0</span> <span class="o">+</span> <span class="n">lambda_s</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">mu_hat</span> <span class="o">=</span> <span class="p">(</span><span class="n">lambda_0</span> <span class="o">*</span> <span class="n">mu_0</span> <span class="o">+</span> <span class="p">(</span><span class="n">lambda_s</span> <span class="o">*</span> <span class="n">x_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> \
+        <span class="p">(</span><span class="n">lambda_0</span> <span class="o">+</span> <span class="n">lambda_s</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">mu_hat</span><span class="p">,</span> <span class="n">v_mu</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pick a few values of \tau^2 and plot the posterior on mu for each value</span>
+<span class="n">tausqs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
+<span class="n">mu_hat</span><span class="p">,</span> <span class="n">v_mu</span> <span class="o">=</span> <span class="n">compute_posterior_mu</span><span class="p">(</span><span class="n">tausqs</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">x_bars</span><span class="p">,</span> <span class="n">sigma_bars</span><span class="p">)</span>
+
+<span class="n">mu_grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">tausq</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tausqs</span><span class="p">,</span> <span class="n">mu_hat</span><span class="p">,</span> <span class="n">v_mu</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">,</span> 
+             <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">Normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span><span class="p">))</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">)),</span>
+             <span class="n">color</span><span class="o">=</span><span class="n">Blues</span><span class="p">((</span><span class="n">tausq</span> <span class="o">/</span> <span class="n">tausqs</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">.</span><span class="n">numpy</span><span class="p">()),</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\tau^2 = </span><span class="si">{:.0f}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tausq</span><span class="p">)</span>
+             <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$\mu$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p(\mu \mid \tau^2, \mathbf</span><span class="si">{X}</span><span class="s2">, \mathbf{\eta})$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;p_mu.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b311cf3002703b1244e1c7762b4a3698b9cd6b6f11fde6adc07c5135684b191d.png" src="../_images/b311cf3002703b1244e1c7762b4a3698b9cd6b6f11fde6adc07c5135684b191d.png" />
+</div>
+</div>
+</section>
+<section id="compute-the-posterior-of-the-per-school-effect">
+<h2>Compute the posterior of the per-school effect<a class="headerlink" href="#compute-the-posterior-of-the-per-school-effect" title="Permalink to this heading">#</a></h2>
+<p>This is the easy one:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    p(\boldsymbol{\theta} \mid \mu, \tau^2, \mathbf{X}, \boldsymbol{\eta})
+    &amp;\propto \prod_{s=1}^S \Big[ \mathcal{N}(\theta_s \mid \mu, \tau^2) \mathcal{N}(\bar{x}_s \mid \theta_s, \bar{\sigma}_s^2) \Big] \\
+    &amp;\propto \prod_{s=1}^S \mathcal{N}(\theta_s \mid \hat{\theta}_s, v_s)
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+    v_s &amp;= \left(\frac{1}{\bar{\sigma}_s^2} + \frac{1}{\tau^2} \right)^{-1} &amp;
+    \hat{\theta}_s &amp;= v_s \left(\frac{\bar{x}_s}{\bar{\sigma}_s^2} + \frac{\mu}{\tau^2} \right)
+\end{align*}
+\]</div>
+<p>I.e. the conditional means are precision-weighted averages of the prior and sample means.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_posterior_theta</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">x_bars</span><span class="p">,</span> <span class="n">sigma_bars</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the mean and variance of the posterior distribution on per-school</span>
+<span class="sd">    means and variances given the global variance, \tau^2, and the global mean,</span>
+<span class="sd">    \mu. </span>
+
+<span class="sd">    Note: Broadcast over a tensor of tausq and mu values. </span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    tausq:      a length (T,) tensor of \tau^2 values </span>
+<span class="sd">    mu:         a length (T,) tensor of mu values </span>
+<span class="sd">    x_bars:     a length (S,) tensor of \bar{x}_s values</span>
+<span class="sd">    sigma_bars: a length (S,) tensor of \bar{\sigma}_s values</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    (T, S) arrays of \hat{\theta}_s and v_{\theta_s} evaluated at each of the </span>
+<span class="sd">    T values of tausq and mu for each of the S schools.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">v_theta</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">((</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sigma_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">tausq</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]))</span>
+
+    <span class="n">theta_hat</span> <span class="o">=</span> <span class="n">v_theta</span> <span class="o">*</span> <span class="p">((</span><span class="n">x_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">sigma_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> \
+                           <span class="o">+</span> <span class="n">mu_hat</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">/</span> <span class="n">tausq</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span>
+                           
+    <span class="k">return</span> <span class="n">theta_hat</span><span class="p">,</span> <span class="n">v_theta</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="compute-the-posterior-distribution-of-the-per-school-effect-given-the-global-variance">
+<h2>Compute the posterior distribution of the per-school effect given the global variance<a class="headerlink" href="#compute-the-posterior-distribution-of-the-per-school-effect-given-the-global-variance" title="Permalink to this heading">#</a></h2>
+<p>Last but not least, note that,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    p(\theta_s \mid \tau, \mathbf{x}, \boldsymbol{\eta}) &amp;= 
+    \int p(\theta_s \mid \mu, \tau, \mathbf{x}, \boldsymbol{\eta}) \, p(\mu \mid \tau, \mathbf{x}, \boldsymbol{\eta}) \, \mathrm{d} \mu \\
+    &amp;\propto \int \mathcal{N}(\bar{x}_s \mid \theta_s, \bar{\sigma}_s^2) \, \mathcal{N}(\theta_s \mid \mu, \tau^2) \, \mathcal{N}(\mu \mid \hat{\mu}, v_\mu) \, \mathrm{d} \mu \\
+    &amp;\propto \mathcal{N}(\bar{x}_s \mid \theta_s, \bar{\sigma}_s^2) \, \mathcal{N}(\theta_s \mid \hat{\mu}, \tau^2 + v_\mu) \\
+    &amp;= \mathcal{N}(\theta_s \mid \hat{\theta}_s, v_{\theta_s}) 
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+    v_{\theta_s} &amp;= \left(\frac{1}{\bar{\sigma}_2^2} + \frac{1}{\tau^2 + v_\mu^2} \right)^{-1} 
+    &amp;
+    \hat{\theta}_s &amp;= v_{\theta_s} \left(\frac{\bar{x}_s}{\bar{\sigma}_s^2} + \frac{\hat{\mu}}{\tau^2 + v_\mu} \right)
+\end{align*}
+\]</div>
+<p>Again, note that <span class="math notranslate nohighlight">\(\tau^2\)</span> affects all of these quantities!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_posterior_theta2</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">x_bars</span><span class="p">,</span> <span class="n">sigma_bars</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the mean and variance of the posterior distribution on the </span>
+<span class="sd">    per-school means given the global variance, as defined above.</span>
+
+<span class="sd">    Note: the `[None, :]` syntax is creating new axes so that the elementwise</span>
+<span class="sd">    operations broadcast as desired. The result should be a pair of (T, S) </span>
+<span class="sd">    arrays where T is the number of tausq values and S is the number of schools.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    tausq:      a length (T,) tensor of \tau^2 values </span>
+<span class="sd">    mu_0:       prior mean of \mu</span>
+<span class="sd">    kappa_0:    prior precision of \mu</span>
+<span class="sd">    x_bars:     a length (S,) tensor of \bar{x}_s values</span>
+<span class="sd">    sigma_bars: a length (S,) tensor of \bar{\sigma}_s values</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    (T, S) arrays of \hat{\theta}_s and v_{\theta_s} evaluated at each of the </span>
+<span class="sd">    T values of tausq for each of the S schools.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lambda_0</span> <span class="o">=</span> <span class="n">kappa_0</span> <span class="o">/</span> <span class="n">tausq</span>
+    <span class="n">lambda_s</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigma_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">tausq</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span>
+    <span class="n">v_mu</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">lambda_0</span> <span class="o">+</span> <span class="n">lambda_s</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">mu_hat</span> <span class="o">=</span> <span class="p">(</span><span class="n">lambda_0</span> <span class="o">*</span> <span class="n">mu_0</span> <span class="o">+</span> <span class="p">(</span><span class="n">lambda_s</span> <span class="o">*</span> <span class="n">x_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> \
+        <span class="p">(</span><span class="n">lambda_0</span> <span class="o">+</span> <span class="n">lambda_s</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="n">v_theta</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">((</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sigma_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> \
+                   <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">tausq</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">v_mu</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])))</span>
+    <span class="n">theta_hat</span> <span class="o">=</span> <span class="n">v_theta</span> <span class="o">*</span> <span class="p">((</span><span class="n">x_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">sigma_bars</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> \
+                           <span class="o">+</span> <span class="n">mu_hat</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">tausq</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">v_mu</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]))</span>
+                           
+    <span class="k">return</span> <span class="n">theta_hat</span><span class="p">,</span> <span class="n">v_theta</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theta_hat</span><span class="p">,</span> <span class="n">v_theta</span> <span class="o">=</span> <span class="n">compute_posterior_theta2</span><span class="p">(</span>
+    <span class="n">tausq_grid</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">x_bars</span><span class="p">,</span> <span class="n">sigma_bars</span><span class="p">)</span>
+
+<span class="c1"># Plot the posterior mean as a function of \tau for all schools at once</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tau_grid</span><span class="p">,</span> <span class="n">theta_hat</span><span class="p">[:,</span> <span class="n">s</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;School </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\tau$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mathbb</span><span class="si">{E}</span><span class="s2">[\theta_s \mid \tau, \mathbf</span><span class="si">{X}</span><span class="s2">, \mathbf{\eta})$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;p_theta.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/dab2b4bc6f9a7849e387201894f45e22fa0a89f835c02473024d9f787820f140.png" src="../_images/dab2b4bc6f9a7849e387201894f45e22fa0a89f835c02473024d9f787820f140.png" />
+</div>
+</div>
+<p>Now plot the posterior over <span class="math notranslate nohighlight">\(\theta_s\)</span> over a range of <span class="math notranslate nohighlight">\(\tau\)</span>’s separately for each school.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># fig, axs = plt.subplots(S, 1, figsize=(3, 3*S), sharex=True)</span>
+<span class="c1"># for s in range(S):</span>
+<span class="c1">#     ln = axs[s].plot(tau_grid, theta_hat[:, s])</span>
+<span class="c1">#     axs[s].fill_between(tau_grid, </span>
+<span class="c1">#                         theta_hat[:, s] - 2 * torch.sqrt(v_theta[:, s]),</span>
+<span class="c1">#                         theta_hat[:, s] + 2 * torch.sqrt(v_theta[:, s]),</span>
+<span class="c1">#                         color=ln[0].get_color(), alpha=0.1</span>
+<span class="c1">#                         )</span>
+
+<span class="c1">#     if s == S-1: axs[s].set_xlabel(r&quot;$\tau$&quot;)</span>
+<span class="c1">#     axs[s].set_ylabel(r&quot;$p(\theta_s \mid \tau, X, \eta)$&quot;)</span>
+<span class="c1">#     axs[s].set_title(&quot;School {}&quot;.format(s+1))</span>
+
+<span class="c1"># plt.tight_layout()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="draw-samples-from-the-posterior-distribution">
+<h2>Draw samples from the posterior distribution<a class="headerlink" href="#draw-samples-from-the-posterior-distribution" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N_samples</span> <span class="o">=</span> <span class="mi">10000</span>
+
+<span class="c1"># Sample global standard deviation, \tau</span>
+<span class="n">centers</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">tau_grid</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">tau_grid</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+<span class="n">width</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">tau_grid</span><span class="p">)</span>
+<span class="n">inds</span> <span class="o">=</span> <span class="n">Categorical</span><span class="p">(</span><span class="n">probs</span><span class="o">=</span><span class="n">p_tau</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">width</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">N_samples</span><span class="p">,))</span>
+<span class="n">tau_samples</span> <span class="o">=</span> <span class="n">centers</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span>
+
+<span class="c1"># Sample global mean, \mu</span>
+<span class="n">mu_hat</span><span class="p">,</span> <span class="n">v_mu</span> <span class="o">=</span> <span class="n">compute_posterior_mu</span><span class="p">(</span>
+    <span class="n">tau_samples</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">x_bars</span><span class="p">,</span> <span class="n">sigma_bars</span><span class="p">)</span>
+<span class="n">mu_samples</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu_hat</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v_mu</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+<span class="c1"># Sample per-school effects, \theta_s</span>
+<span class="n">theta_hat</span><span class="p">,</span> <span class="n">v_theta</span> <span class="o">=</span> <span class="n">compute_posterior_theta</span><span class="p">(</span><span class="n">tau_samples</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">mu_samples</span><span class="p">,</span>
+                                             <span class="n">x_bars</span><span class="p">,</span> <span class="n">sigma_bars</span><span class="p">)</span>
+<span class="n">theta_samples</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">theta_hat</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v_theta</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;posterior statistics of school effect (theta_s)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mean:   &quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">theta_samples</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;std:    &quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">theta_samples</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;median: &quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">theta_samples</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;5%:     &quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">theta_samples</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;95%:    &quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">theta_samples</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>posterior statistics of school effect (theta_s)
+mean:    tensor([8.6455, 6.8015, 5.7383, 6.7419, 5.0388, 5.7982, 8.5835, 6.9828])
+std:     tensor([5.3350, 4.2647, 4.6378, 4.3968, 4.1119, 4.3157, 4.7577, 4.8330])
+median:  tensor([7.7211, 6.5044, 5.7342, 6.4147, 5.2019, 5.6808, 7.8380, 6.5527])
+5%:      tensor([ 2.0518,  0.4878, -1.8416,  0.1996, -2.0148, -1.0938,  2.3629, -0.0491])
+95%:     tensor([18.6214, 14.1064, 13.1661, 14.5029, 11.3792, 12.8829, 17.5121, 15.2860])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bins</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">theta_samples</span><span class="p">[:,</span> <span class="n">s</span><span class="p">],</span> <span class="n">bins</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">S</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\theta_s$&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p(\theta_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; \mid \mathbf</span><span class="si">{X}</span><span class="s2">, \mathbf{\eta})$&quot;</span><span class="p">,</span>
+                      <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;School </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;theta_samples.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/3a5812bf8f20a4712d946de09261d7f78cfb6e15a3ad62dea2c3e2ae670b76d4.png" src="../_images/3a5812bf8f20a4712d946de09261d7f78cfb6e15a3ad62dea2c3e2ae670b76d4.png" />
+</div>
+</div>
+</section>
+<section id="recap">
+<h2>Recap<a class="headerlink" href="#recap" title="Permalink to this heading">#</a></h2>
+<p>The hierarchical Gaussian model is about the most complicated model for which we can still perform “exact” inference. Even here though, we had to use numerical integration to compute the posterior over the global variance, <span class="math notranslate nohighlight">\(\tau^2\)</span>. We could do so because it’s only a 1D variable.</p>
+<section id="questions">
+<h3>Questions<a class="headerlink" href="#questions" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>How sensitive is the posterior to the choice of prior <span class="math notranslate nohighlight">\(p(\mu, \tau^2)\)</span>? How would you measure this sensitivity?</p></li>
+<li><p>How could you determine “reasonable” values for this prior?</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_mvn.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The Multivariate Normal Distribution</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../lectures/99_references.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">References</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-test-scores-across-schools">Modeling Test Scores across Schools</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eight-schools-example">Eight Schools Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-the-marginal-posterior-over-the-global-variance">Compute the marginal posterior over the global variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-the-posterior-of-the-global-mean-given-the-global-variance">Compute the posterior of the global mean given the global variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-the-posterior-of-the-per-school-effect">Compute the posterior of the per-school effect</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-the-posterior-distribution-of-the-per-school-effect-given-the-global-variance">Compute the posterior distribution of the per-school effect given the global variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#draw-samples-from-the-posterior-distribution">Draw samples from the posterior distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap">Recap</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#questions">Questions</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
