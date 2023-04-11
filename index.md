@@ -33,8 +33,8 @@ You may also find these texts helpful
 
 | Date   | Topic | Reading |
 | ------ | ----- | ------- |
-| Apr 4  | Bayesian Analysis of the Normal Distribution <br> {Download}`[slides]<slides/lecture01-bayes_normal.pdf>` [[notebook]](notebooks/01_bayes_normal.ipynb) | Ch 2.3, 3.4.3 |
-| Apr 6  | Multivariate Normal Distribution <br> {Download}`[slides]<slides/lecture02-mvn.pdf>` [[notebook]](notebooks/02_mvn.ipynb)| Ch 2,3, 3.4.4 |
+| Apr 4  | Bayesian Analysis of the Normal Distribution <br> {Download}`[slides]<slides/annotated/lecture01-bayes_normal.pdf>` [[notebook]](notebooks/01_bayes_normal.ipynb) | Ch 2.3, 3.4.3 |
+| Apr 6  | Multivariate Normal Distribution <br> {Download}`[slides]<slides/annotated/lecture02-mvn.pdf>` [[notebook]](notebooks/02_mvn.ipynb)| Ch 2,3, 3.4.4 |
 | Apr 11 | Probabilistic Graphical Models <br> {Download}`[slides]<slides/lecture03_pgms.pdf>` [[notebook]](notebooks/03_hier_gauss.ipynb) | Ch 3.6.2, 4.2 |
 | Apr 13 | Markov Chain Monte Carlo | Ch 11.1-11.2, 12.1-12.3 |
 | Apr 18 | Probabilistic PCA and Factor Analysis | Ch 28.3 |
