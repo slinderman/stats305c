@@ -12,6 +12,7 @@ parts:
     - file: notebooks/01_bayes_normal.ipynb
     - file: notebooks/02_mvn.ipynb
     - file: notebooks/03_hier_gauss.ipynb
+    - file: notebooks/04_mcmc.ipynb
 
   - caption: References
     chapters:
