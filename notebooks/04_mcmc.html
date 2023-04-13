@@ -1,0 +1,2079 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Markov Chain Monte Carlo &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/04_mcmc';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="References" href="../lectures/99_references.html" />
+    <link rel="prev" title="Hierarchical Gaussian Models" href="03_hier_gauss.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_mvn.html">The Multivariate Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_hier_gauss.html">Hierarchical Gaussian Models</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Markov Chain Monte Carlo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/notebooks/04_mcmc.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/04_mcmc.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Markov Chain Monte Carlo</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-inference-with-mcmc-in-the-hierarchical-gaussian-model">Bayesian inference with MCMC in the hierarchical Gaussian model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-synthetic-data">Sample synthetic data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gibbs-sampling">Gibbs Sampling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-the-log-joint-probability">Calculate the log joint probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gibbs-update-for-theta-s">Gibbs update for <span class="math notranslate nohighlight">\(\theta_s\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gibbs-update-for-sigma-s-2">Gibbs update for <span class="math notranslate nohighlight">\(\sigma_s^2\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gibbs-update-for-mu">Gibbs update for <span class="math notranslate nohighlight">\(\mu\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gibbs-update-for-tau-2">Gibbs update for <span class="math notranslate nohighlight">\(\tau^2\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#put-it-all-together">Put it all together</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-summaries-of-the-mcmc-samples">Plot summaries of the MCMC samples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mcmc-diagnostics">MCMC Diagnostics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap">Recap</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="markov-chain-monte-carlo">
+<h1>Markov Chain Monte Carlo<a class="headerlink" href="#markov-chain-monte-carlo" title="Permalink to this heading">#</a></h1>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
+<p>We’ll use some utilities from Pyro, a probabilistic programming language that wraps PyTorch. Pyro requires PyTorch 1.11 so this <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> command will take a little time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>-q<span class="w"> </span>pyro-ppl<span class="w"> </span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="bayesian-inference-with-mcmc-in-the-hierarchical-gaussian-model">
+<h2>Bayesian inference with MCMC in the hierarchical Gaussian model<a class="headerlink" href="#bayesian-inference-with-mcmc-in-the-hierarchical-gaussian-model" title="Permalink to this heading">#</a></h2>
+<p>Let’s return to the “8 Schools” example from Lecture 3. To recap: we have test scores from <span class="math notranslate nohighlight">\(S\)</span> schools. Let <span class="math notranslate nohighlight">\(N_s\)</span> denote the number of students from school <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(x_{s,n} \in \mathbb{R}\)</span> denote the score of the <span class="math notranslate nohighlight">\(n\)</span>-th student from the <span class="math notranslate nohighlight">\(s\)</span>-th school.</p>
+<p>We model the collection of scores using a <strong>hierarchical model</strong>. Unlike last time, now we will add a prior on the per-school variance as well.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    \tau^2 &amp;\sim \chi^{-2}(\nu_0, \tau_0^2) \\
+    \mu &amp;\sim \mathcal{N}(\mu_0, \tau^2 / \kappa_0) \\
+    \theta_s &amp;\sim \mathcal{N}(\mu, \tau^2) &amp; \text{for } s&amp;=1,\ldots,S \\
+    \sigma_s^2 &amp;\sim \chi^{-2}(\alpha_0, \sigma_0^2) &amp; \text{for } s&amp;=1,\ldots,S \\
+    x_{s,n} &amp;\sim \mathcal{N}(\theta_s, \sigma_s^2) &amp; \text{for } n&amp;=1,\ldots,N_s \text{ and } s=1,\ldots,S
+\end{align*}
+\end{split}\]</div>
+<p>Each school has its own mean <span class="math notranslate nohighlight">\(\theta_s\)</span> and variance <span class="math notranslate nohighlight">\(\sigma_s^2\)</span>. The means are linked via a hierarchical prior: they are conditionally independent given the global mean <span class="math notranslate nohighlight">\(\mu\)</span> and variance <span class="math notranslate nohighlight">\(\tau^2\)</span></p>
+<p>We will use MCMC to draw approximate samples from the posterior distribution <span class="math notranslate nohighlight">\(p(\tau^2, \mu, \{\theta_s, \sigma_s^2\}_{s=1}^S \mid \{\{x_{s,n}\}_{n=1}^{N_s}\}_{s=1}^S, \eta)\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">Categorical</span><span class="p">,</span> \
+    <span class="n">TransformedDistribution</span>
+<span class="kn">from</span> <span class="nn">torch.distributions.transforms</span> <span class="kn">import</span> <span class="n">PowerTransform</span>
+
+<span class="kn">from</span> <span class="nn">pyro.ops.stats</span> <span class="kn">import</span> <span class="n">effective_sample_size</span><span class="p">,</span> <span class="n">autocorrelation</span>
+
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">trange</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.cm</span> <span class="kn">import</span> <span class="n">Blues</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ScaledInvChiSq</span><span class="p">(</span><span class="n">TransformedDistribution</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of the scaled inverse \chi^2 distribution defined in class.</span>
+<span class="sd">    We will implement it as a transformation of a gamma distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">Gamma</span><span class="p">(</span><span class="n">dof</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dof</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PowerTransform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">TransformedDistribution</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">transforms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dof</span> <span class="o">=</span> <span class="n">dof</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sample-synthetic-data">
+<h2>Sample synthetic data<a class="headerlink" href="#sample-synthetic-data" title="Permalink to this heading">#</a></h2>
+<p>We will modify the data from the 8 shcools example of Gelman et al (2013). Specifically, we’ll sample 20 scores so that they have the same mean and the specified standard deviation.</p>
+<p>Remember that <span class="math notranslate nohighlight">\(\bar{\sigma}_s = \sigma_s / \sqrt{N_s}\)</span> in our notation from Lecture 3.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hyper parameters</span>
+<span class="n">S</span> <span class="o">=</span> <span class="mi">8</span>                   <span class="c1"># number of schools</span>
+<span class="n">N_s</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># number of students per school</span>
+<span class="n">mu_0</span> <span class="o">=</span> <span class="mf">0.0</span>              <span class="c1"># prior mean of the global effect</span>
+<span class="n">kappa_0</span> <span class="o">=</span> <span class="mf">0.1</span>           <span class="c1"># prior concentration in the NIX prior</span>
+<span class="n">nu_0</span> <span class="o">=</span> <span class="mf">0.1</span>              <span class="c1"># degrees of freedom for the prior on \tau^2</span>
+<span class="n">tausq_0</span> <span class="o">=</span> <span class="mf">100.0</span>         <span class="c1"># prior mean of the variance \tau^2</span>
+<span class="n">alpha_0</span> <span class="o">=</span> <span class="mf">0.1</span>           <span class="c1"># degrees of freedom for the prior on \sigma_s^2</span>
+<span class="n">sigmasq_0</span> <span class="o">=</span> <span class="mf">10.0</span>        <span class="c1"># scale of the prior on \sigma_s^2</span>
+
+<span class="c1"># Sample data</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span><span class="p">)</span>
+<span class="n">x_bars</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">28.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">7.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">18.</span><span class="p">,</span> <span class="mf">12.</span><span class="p">])</span>  
+<span class="n">sigma_bars</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">15.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">,</span> <span class="mf">11.</span><span class="p">,</span> <span class="mf">9.</span><span class="p">,</span> <span class="mf">11.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">18.</span><span class="p">])</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">x_bars</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N_s</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma_bars</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">N_s</span><span class="p">,))</span>    
+
+<span class="c1"># z-score the samples</span>
+<span class="n">zs</span> <span class="o">=</span> <span class="p">(</span><span class="n">xs</span> <span class="o">-</span> <span class="n">xs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">xs</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Rescale so they have the desired variance</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">x_bars</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N_s</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma_bars</span> <span class="o">*</span> <span class="n">zs</span>
+
+<span class="c1"># Note: xs.shape == (N_s, S)</span>
+<span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">x_bars</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N_s</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma_bars</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gibbs-sampling">
+<h2>Gibbs Sampling<a class="headerlink" href="#gibbs-sampling" title="Permalink to this heading">#</a></h2>
+<p>We will use Gibbs sampling to draw approximate samples from the posterior distribution. The idea is to cycle between each latent variable and sample from its conditional distribution given the current settings of the remaining variables. In models like this one, the conditional distributions often have simple closed forms. We will derive and implement the updates one at a time.</p>
+</section>
+<section id="calculate-the-log-joint-probability">
+<h2>Calculate the log joint probability<a class="headerlink" href="#calculate-the-log-joint-probability" title="Permalink to this heading">#</a></h2>
+<p>First, we will write a function to compute the log joint probability.
+This will be useful for tracking the Gibbs sampler’s progress over iterations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">log_probability</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span>
+                    <span class="n">tausq_0</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the log joint probability of the model parameters and data given the </span>
+<span class="sd">    hyperparameters of the model. </span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    tausq:      a scalar \tau^2 value</span>
+<span class="sd">    mu:         a scalar mu value</span>
+<span class="sd">    thetas:     a shape (S,) tensor of \theta values</span>
+<span class="sd">    sigmasqs:   a shape (S,) tensor of \sigma_s^2 values</span>
+<span class="sd">    xs:         a shape (S, N_s) tensor of data points</span>
+<span class="sd">    tausq_0:    scale of prior on \tau^2</span>
+<span class="sd">    nu_0:       degrees of freedom of prior on \tau^2</span>
+<span class="sd">    mu_0:       mean of prior on \mu</span>
+<span class="sd">    kappa_0:    precision of prior on \mu</span>
+<span class="sd">    alpha_0:    degrees of freedom of prior on \sigma_s^2</span>
+<span class="sd">    sigmasq_0:  scale of prior on \sigma_s^2</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+
+<span class="sd">    Log joint probability.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lp</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu_0</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">)</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">tausq</span><span class="p">)</span>
+    <span class="n">lp</span> <span class="o">+=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu_0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tausq</span> <span class="o">/</span> <span class="n">kappa_0</span><span class="p">))</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
+    <span class="n">lp</span> <span class="o">+=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tausq</span><span class="p">))</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">thetas</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">lp</span> <span class="o">+=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">)</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">sigmasqs</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">lp</span> <span class="o">+=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">thetas</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasqs</span><span class="p">))</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">lp</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gibbs-update-for-theta-s">
+<h2>Gibbs update for <span class="math notranslate nohighlight">\(\theta_s\)</span><a class="headerlink" href="#gibbs-update-for-theta-s" title="Permalink to this heading">#</a></h2>
+<p>We have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    p(\theta_s \mid \mu, \tau^2, \sigma_s^2, \mathbf{X}, \boldsymbol{\eta})
+    &amp;\propto \mathcal{N}(\theta_s \mid \mu, \tau^2) \prod_{n=1}^{N_s} \mathcal{N}(x_{s,n} \mid \theta_s, \sigma_s^2) \\
+    &amp;\propto \prod_{s=1}^S \mathcal{N}(\theta_s \mid \hat{\theta}_s, v_s)
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+    v_s &amp;= \left(\frac{N_s}{\sigma_s^2} + \frac{1}{\tau^2} \right)^{-1} &amp;
+    \hat{\theta}_s &amp;= v_s \left(\sum_{n=1}^{N_s}\frac{x_{s,n}}{\sigma_s^2} + \frac{\mu}{\tau^2} \right)
+\end{align*}
+\]</div>
+<p>I.e. the conditional means are precision-weighted averages of the prior and sample means.</p>
+<p><strong>Note:</strong> all of the <span class="math notranslate nohighlight">\(\theta_s\)</span> parameters are conditionally independent given the remaining variables. That means we can sample them all in parallel using a <strong>blocked Gibbs update</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gibbs_sample_thetas</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">xs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample the conditional distribution of \theta_s given all the other </span>
+<span class="sd">    variables. Since the \theta_s parameters are conditionally independent given </span>
+<span class="sd">    everything else, we can sample them in parallel as a blocked Gibbs step. </span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    tausq:      a scalar \tau^2 value</span>
+<span class="sd">    mu:         a scala mu value</span>
+<span class="sd">    sigmasqs:   a shape (S,) tensor of \sigma_s^2 values</span>
+<span class="sd">    xs:         a shape (S, N_s) tensor of data points</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    A shape (S,) tensor of \theta_s values drawn from their complete conditional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N_s</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">v_theta</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">((</span><span class="n">N_s</span> <span class="o">/</span> <span class="n">sigmasqs</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">tausq</span><span class="p">))</span>
+    <span class="n">theta_hat</span> <span class="o">=</span> <span class="n">v_theta</span> <span class="o">*</span> <span class="p">((</span><span class="n">xs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigmasqs</span><span class="p">)</span> <span class="o">+</span> <span class="n">mu</span> <span class="o">/</span> <span class="n">tausq</span><span class="p">)</span>
+    <span class="n">thetas</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">theta_hat</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v_theta</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">thetas</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gibbs-update-for-sigma-s-2">
+<h2>Gibbs update for <span class="math notranslate nohighlight">\(\sigma_s^2\)</span><a class="headerlink" href="#gibbs-update-for-sigma-s-2" title="Permalink to this heading">#</a></h2>
+<p>The conditional distribution of <span class="math notranslate nohighlight">\(\sigma_s^2\)</span> given all the other variables is,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+p(\sigma_s^2 \mid \theta_s, \{x_{s,n}\}_{n=1}^{N_s}, \alpha_0, \sigma_0^2) &amp;\propto 
+\chi^{-2}(\sigma_s^2 \mid \alpha_0, \sigma_0^2) \prod_{n=1}^{N_s} \mathcal{N}(x_{s,n} \mid \theta_s, \sigma_s^2) \\
+&amp;\propto \chi^{-2}(\sigma_s^2 \mid \alpha_N, \sigma_N^2) 
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\alpha_N &amp;= \alpha_0 + N_s \\
+\sigma_N^2 &amp;= \frac{1}{\alpha_N} \left(\alpha_0 \sigma_0^2 + \sum_{n=1}^{N_s} (x_{s,n} - \theta_s)^2 \right) 
+\end{align*}
+\end{split}\]</div>
+<p><strong>Note:</strong> Recall Lecture 1 on a normal model with unknown variance. Same thing here.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gibbs_sample_sigmasq</span><span class="p">(</span><span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">xs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample the conditional distribution of \sigma_s^2 given all the other </span>
+<span class="sd">    variables. Since the \sigma_s^2 parameters are conditionally independent </span>
+<span class="sd">    given everything else, we can sample them in parallel as a blocked Gibbs </span>
+<span class="sd">    step. </span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    alpha_0:    degrees of freedom of prior on \sigma_s^2</span>
+<span class="sd">    sigmasq_0:  scale of prior on \sigma_s^2</span>
+<span class="sd">    thetas:     a shape (S,) tensor of \theta_s values</span>
+<span class="sd">    xs:         a shape (S, N_s) tensor of data points</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    A shape (S,) tensor of \sigma_s^2 values drawn from their complete </span>
+<span class="sd">    conditional distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N_s</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">alpha_N</span> <span class="o">=</span> <span class="n">alpha_0</span> <span class="o">+</span> <span class="n">N_s</span>
+    <span class="n">sigmasq_N</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">alpha_N</span> <span class="o">*</span> <span class="p">(</span><span class="n">alpha_0</span> <span class="o">*</span> <span class="n">sigmasq_0</span> 
+                               <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">xs</span> <span class="o">-</span> <span class="n">thetas</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">alpha_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gibbs-update-for-mu">
+<h2>Gibbs update for <span class="math notranslate nohighlight">\(\mu\)</span><a class="headerlink" href="#gibbs-update-for-mu" title="Permalink to this heading">#</a></h2>
+<p>The conditional distribution of <span class="math notranslate nohighlight">\(\mu\)</span> given everything else is,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+p(\mu \mid \{\theta_s\}_{s=1}^S, \tau^2, \mu_0, \kappa_0) 
+&amp;\propto \mathcal{N}(\mu \mid \mu_0, \tau^2 / \kappa_0) \prod_{s=1}^S \mathcal{N}(\theta_s \mid \mu, \tau^2) \\
+&amp;\propto \mathcal{N}(\mu \mid \hat{\mu}, v_\mu) 
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<p>$$
+\begin{align*}
+v_\mu &amp;= \frac{1}{\frac{\kappa_0}{\tau^2} + \frac{S}{\tau^2}} = \frac{\tau^2}{\kappa_0 + S} \
+\hat{\mu} &amp;= v_\mu \left( \frac{\mu_0 \kappa_0}{\tau^2} + \sum_{s=1}^S \frac{\theta_s}{\tau^2} \right) = \frac{\mu_0 \kappa_0 + \sum_{s=1}^S \theta_s }{\kappa_0 + S}
+\end{align*}</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gibbs_sample_mu</span><span class="p">(</span><span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">tausq</span><span class="p">,</span> <span class="n">thetas</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample the conditional distribution of \mu given all the other </span>
+<span class="sd">    variables. </span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    mu_0:       mean of prior on \mu</span>
+<span class="sd">    kappa_0:    precision of prior on \mu</span>
+<span class="sd">    tausq:      sample of the global variance, \tau^2</span>
+<span class="sd">    thetas:     a shape (S,) tensor of \theta_s values</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    Scalar sample of \mu from its complete conditional distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">thetas</span><span class="p">)</span>
+    <span class="n">v_mu</span> <span class="o">=</span> <span class="n">tausq</span> <span class="o">/</span> <span class="p">(</span><span class="n">kappa_0</span> <span class="o">+</span> <span class="n">S</span><span class="p">)</span>
+    <span class="n">mu_hat</span> <span class="o">=</span> <span class="p">(</span><span class="n">mu_0</span> <span class="o">*</span> <span class="n">kappa_0</span> <span class="o">+</span> <span class="n">thetas</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">kappa_0</span> <span class="o">+</span> <span class="n">S</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu_hat</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v_mu</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gibbs-update-for-tau-2">
+<h2>Gibbs update for <span class="math notranslate nohighlight">\(\tau^2\)</span><a class="headerlink" href="#gibbs-update-for-tau-2" title="Permalink to this heading">#</a></h2>
+<p>The conditional distribution of <span class="math notranslate nohighlight">\(\tau^2\)</span> given everything else is,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+p(\tau^2 \mid \mu, \{\theta_s\}_{s=1}^S, \nu_0, \tau_0^2) 
+&amp;\propto \chi^{-2}(\tau^2 \mid \nu_0, \tau_0^2) \mathcal{N}(\mu \mid \mu_0, \tau^2 / \kappa_0) \prod_{s=1}^S \mathcal{N}(\theta_s \mid \mu, \tau^2) \\
+&amp;\propto \chi^{-2}(\tau^2 \mid \nu_N, \tau_N^2) 
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\nu_N &amp;= \nu_0 + S + 1 \\
+\tau_N^2 &amp;= \frac{1}{\nu_N} \left( \nu_0 \tau_0^2 + \kappa_0 (\mu - \mu_0)^2 + \sum_{s=1}^S (\theta_s - \mu)^2 \right)
+\end{align*}
+\end{split}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gibbs_sample_tausq</span><span class="p">(</span><span class="n">nu_0</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">thetas</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample the conditional distribution of \mu given all the other </span>
+<span class="sd">    variables. </span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    nu_0:       degrees of freedom of prior on \tau^2</span>
+<span class="sd">    tausq_0:    scale of prior on \tau^2</span>
+<span class="sd">    mu_0:       mean of prior on \mu</span>
+<span class="sd">    kappa_0:    precision of prior on \mu</span>
+<span class="sd">    mu:         sample of the global mean, \mu</span>
+<span class="sd">    thetas:     a shape (S,) tensor of \theta_s values</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    Scalar sample of \tau^2 from its complete conditional distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">thetas</span><span class="p">)</span>
+    <span class="n">nu_N</span> <span class="o">=</span> <span class="n">nu_0</span> <span class="o">+</span> <span class="n">S</span> <span class="o">+</span> <span class="mi">1</span> 
+    <span class="n">tausq_N</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">nu_N</span> <span class="o">*</span> <span class="p">(</span><span class="n">nu_0</span> <span class="o">*</span> <span class="n">tausq_0</span> <span class="o">+</span> <span class="n">kappa_0</span> <span class="o">*</span> <span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">mu_0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+                        <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">thetas</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu_N</span><span class="p">,</span> <span class="n">tausq_N</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="put-it-all-together">
+<h2>Put it all together<a class="headerlink" href="#put-it-all-together" title="Permalink to this heading">#</a></h2>
+<p>That’s all the updates! All that is left is a simple function to cycle through these updates one at a time. After each iteration, we will compute and save the log joint probability.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gibbs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">,</span> <span class="n">N_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run the Gibbs sampler.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    xs:         a shape (S, N_s) tensor of data points</span>
+<span class="sd">    tausq_0:    scale of prior on \tau^2</span>
+<span class="sd">    nu_0:       degrees of freedom of prior on \tau^2</span>
+<span class="sd">    mu_0:       mean of prior on \mu</span>
+<span class="sd">    kappa_0:    precision of prior on \mu</span>
+<span class="sd">    alpha_0:    degrees of freedom of prior on \sigma_s^2</span>
+<span class="sd">    sigmasq_0:  scale of prior on \sigma_s^2</span>
+<span class="sd">    N_samples:  number of Gibbs iterations to run</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+
+<span class="sd">    Dictionary with samples of the parameters tausq, mu, thetas, sigmasqs, and </span>
+<span class="sd">    the log joint probability at each iteration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N_s</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c1"># Initialize the Gibbs sampler with a draw from the prior</span>
+    <span class="n">tausq</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu_0</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu_0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tausq</span> <span class="o">/</span> <span class="n">kappa_0</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="n">thetas</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tausq</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">S</span><span class="p">,))</span>
+    <span class="n">sigmasqs</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">S</span><span class="p">,))</span>
+
+    <span class="c1"># Compute the initial log probability</span>
+    <span class="n">lp</span> <span class="o">=</span> <span class="n">log_probability</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span>
+                         <span class="n">tausq_0</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">)</span>
+    
+    <span class="c1"># Initialize the output</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">lp</span><span class="p">)]</span>
+
+    <span class="c1"># Run the Gibbs sampler</span>
+    <span class="k">for</span> <span class="n">itr</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">N_samples</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># Cycle through each update </span>
+        <span class="n">tausq</span> <span class="o">=</span> <span class="n">gibbs_sample_tausq</span><span class="p">(</span><span class="n">nu_0</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">thetas</span><span class="p">)</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">gibbs_sample_mu</span><span class="p">(</span><span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">tausq</span><span class="p">,</span> <span class="n">thetas</span><span class="p">)</span>
+        <span class="n">thetas</span> <span class="o">=</span> <span class="n">gibbs_sample_thetas</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">xs</span><span class="p">)</span>
+        <span class="n">sigmasqs</span> <span class="o">=</span> <span class="n">gibbs_sample_sigmasq</span><span class="p">(</span><span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">xs</span><span class="p">)</span>
+
+        <span class="c1"># Compute the log probability</span>
+        <span class="n">lp</span> <span class="o">=</span> <span class="n">log_probability</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span>
+                             <span class="n">tausq_0</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">)</span>
+        
+        <span class="c1"># Update the sample list</span>
+        <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">lp</span><span class="p">))</span>
+
+    <span class="c1"># Combine the output into a dictionary with a cool python zip trick</span>
+    <span class="n">samples_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tausq&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="s2">&quot;thetas&quot;</span><span class="p">,</span> <span class="s2">&quot;sigmasqs&quot;</span><span class="p">,</span> <span class="s2">&quot;lps&quot;</span><span class="p">]</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">samples</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="n">samples_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">samples_dict</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N_samples</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">gibbs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/9999 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 35/9999 [00:00&lt;00:29, 342.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  1%|          | 70/9999 [00:00&lt;00:31, 319.79it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  1%|          | 103/9999 [00:00&lt;00:34, 288.66it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  1%|▏         | 136/9999 [00:00&lt;00:32, 303.04it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  2%|▏         | 169/9999 [00:00&lt;00:31, 309.68it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  2%|▏         | 203/9999 [00:00&lt;00:30, 316.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  2%|▏         | 235/9999 [00:00&lt;00:30, 316.76it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  3%|▎         | 269/9999 [00:00&lt;00:30, 321.76it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  3%|▎         | 303/9999 [00:00&lt;00:29, 325.63it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  3%|▎         | 337/9999 [00:01&lt;00:29, 328.91it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  4%|▎         | 371/9999 [00:01&lt;00:29, 330.66it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  4%|▍         | 405/9999 [00:01&lt;00:28, 331.62it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  4%|▍         | 439/9999 [00:01&lt;00:28, 333.88it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  5%|▍         | 473/9999 [00:01&lt;00:28, 334.29it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  5%|▌         | 507/9999 [00:01&lt;00:28, 334.88it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  5%|▌         | 542/9999 [00:01&lt;00:28, 337.27it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  6%|▌         | 576/9999 [00:01&lt;00:28, 336.36it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  6%|▌         | 610/9999 [00:01&lt;00:27, 335.35it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  6%|▋         | 646/9999 [00:01&lt;00:27, 340.35it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  7%|▋         | 682/9999 [00:02&lt;00:27, 344.73it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  7%|▋         | 718/9999 [00:02&lt;00:26, 348.69it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  8%|▊         | 753/9999 [00:02&lt;00:26, 348.89it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  8%|▊         | 789/9999 [00:02&lt;00:26, 349.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  8%|▊         | 825/9999 [00:02&lt;00:26, 349.98it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  9%|▊         | 860/9999 [00:02&lt;00:26, 346.59it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  9%|▉         | 895/9999 [00:02&lt;00:26, 343.13it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  9%|▉         | 930/9999 [00:02&lt;00:26, 343.47it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 10%|▉         | 965/9999 [00:02&lt;00:26, 342.04it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 10%|█         | 1000/9999 [00:02&lt;00:26, 338.41it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 10%|█         | 1036/9999 [00:03&lt;00:26, 344.17it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 11%|█         | 1072/9999 [00:03&lt;00:25, 347.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 11%|█         | 1108/9999 [00:03&lt;00:25, 350.50it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 11%|█▏        | 1144/9999 [00:03&lt;00:25, 352.86it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 12%|█▏        | 1180/9999 [00:03&lt;00:25, 351.35it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 12%|█▏        | 1216/9999 [00:03&lt;00:25, 349.19it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 13%|█▎        | 1251/9999 [00:03&lt;00:25, 349.03it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 13%|█▎        | 1286/9999 [00:03&lt;00:24, 348.86it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 13%|█▎        | 1322/9999 [00:03&lt;00:24, 349.61it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 14%|█▎        | 1357/9999 [00:04&lt;00:24, 348.48it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 14%|█▍        | 1393/9999 [00:04&lt;00:24, 350.79it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 14%|█▍        | 1429/9999 [00:04&lt;00:24, 350.73it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 15%|█▍        | 1465/9999 [00:04&lt;00:24, 352.43it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 15%|█▌        | 1501/9999 [00:04&lt;00:25, 338.51it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 15%|█▌        | 1535/9999 [00:04&lt;00:25, 335.79it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 16%|█▌        | 1570/9999 [00:04&lt;00:24, 337.42it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 16%|█▌        | 1604/9999 [00:04&lt;00:25, 334.14it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 16%|█▋        | 1639/9999 [00:04&lt;00:24, 336.91it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 17%|█▋        | 1674/9999 [00:04&lt;00:24, 339.09it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 17%|█▋        | 1708/9999 [00:05&lt;00:24, 338.14it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 17%|█▋        | 1742/9999 [00:05&lt;00:24, 338.16it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 18%|█▊        | 1777/9999 [00:05&lt;00:24, 339.49it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 18%|█▊        | 1812/9999 [00:05&lt;00:23, 341.45it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 18%|█▊        | 1848/9999 [00:05&lt;00:23, 345.93it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 19%|█▉        | 1883/9999 [00:05&lt;00:23, 344.85it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 19%|█▉        | 1918/9999 [00:05&lt;00:23, 340.85it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 20%|█▉        | 1953/9999 [00:05&lt;00:23, 342.58it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 20%|█▉        | 1988/9999 [00:05&lt;00:23, 343.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 20%|██        | 2023/9999 [00:05&lt;00:23, 343.15it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 21%|██        | 2058/9999 [00:06&lt;00:23, 343.94it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 21%|██        | 2093/9999 [00:06&lt;00:23, 342.21it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 21%|██▏       | 2128/9999 [00:06&lt;00:23, 340.63it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 22%|██▏       | 2163/9999 [00:06&lt;00:22, 343.08it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 22%|██▏       | 2198/9999 [00:06&lt;00:22, 342.94it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 22%|██▏       | 2233/9999 [00:06&lt;00:22, 342.89it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 23%|██▎       | 2268/9999 [00:06&lt;00:22, 344.49it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 23%|██▎       | 2303/9999 [00:06&lt;00:22, 343.98it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 23%|██▎       | 2338/9999 [00:06&lt;00:22, 341.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 24%|██▎       | 2373/9999 [00:06&lt;00:22, 340.87it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 24%|██▍       | 2408/9999 [00:07&lt;00:22, 342.25it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 24%|██▍       | 2444/9999 [00:07&lt;00:21, 344.52it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▍       | 2480/9999 [00:07&lt;00:21, 347.79it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 25%|██▌       | 2515/9999 [00:07&lt;00:21, 347.42it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 26%|██▌       | 2551/9999 [00:07&lt;00:21, 348.85it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 26%|██▌       | 2586/9999 [00:07&lt;00:21, 349.00it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 26%|██▌       | 2621/9999 [00:07&lt;00:21, 348.75it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 27%|██▋       | 2656/9999 [00:07&lt;00:21, 345.61it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 27%|██▋       | 2691/9999 [00:07&lt;00:21, 345.11it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 27%|██▋       | 2726/9999 [00:08&lt;00:21, 340.57it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 28%|██▊       | 2761/9999 [00:08&lt;00:21, 337.50it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 28%|██▊       | 2795/9999 [00:08&lt;00:21, 336.87it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 28%|██▊       | 2829/9999 [00:08&lt;00:21, 337.41it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 29%|██▊       | 2863/9999 [00:08&lt;00:21, 336.45it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 29%|██▉       | 2897/9999 [00:08&lt;00:21, 336.88it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 29%|██▉       | 2931/9999 [00:08&lt;00:20, 336.73it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 30%|██▉       | 2965/9999 [00:08&lt;00:21, 334.48it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 30%|██▉       | 2999/9999 [00:08&lt;00:29, 234.93it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 30%|███       | 3031/9999 [00:09&lt;00:27, 250.95it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 31%|███       | 3067/9999 [00:09&lt;00:25, 276.24it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 31%|███       | 3102/9999 [00:09&lt;00:23, 294.26it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 31%|███▏      | 3137/9999 [00:09&lt;00:22, 307.77it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 32%|███▏      | 3172/9999 [00:09&lt;00:21, 317.34it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 32%|███▏      | 3207/9999 [00:09&lt;00:20, 324.19it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 32%|███▏      | 3242/9999 [00:09&lt;00:20, 329.84it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 33%|███▎      | 3276/9999 [00:09&lt;00:20, 332.45it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 33%|███▎      | 3311/9999 [00:09&lt;00:19, 336.77it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 33%|███▎      | 3346/9999 [00:09&lt;00:19, 338.80it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 34%|███▍      | 3381/9999 [00:10&lt;00:19, 334.70it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 34%|███▍      | 3417/9999 [00:10&lt;00:19, 340.17it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 35%|███▍      | 3453/9999 [00:10&lt;00:19, 343.70it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 35%|███▍      | 3488/9999 [00:10&lt;00:19, 339.58it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 35%|███▌      | 3523/9999 [00:10&lt;00:18, 341.09it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 36%|███▌      | 3558/9999 [00:10&lt;00:19, 338.45it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 36%|███▌      | 3592/9999 [00:10&lt;00:19, 336.31it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 36%|███▋      | 3626/9999 [00:10&lt;00:18, 336.65it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 37%|███▋      | 3661/9999 [00:10&lt;00:18, 337.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 37%|███▋      | 3695/9999 [00:11&lt;00:19, 331.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 37%|███▋      | 3730/9999 [00:11&lt;00:18, 334.75it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 38%|███▊      | 3764/9999 [00:11&lt;00:18, 335.94it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 38%|███▊      | 3798/9999 [00:11&lt;00:18, 332.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 38%|███▊      | 3833/9999 [00:11&lt;00:18, 336.73it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 39%|███▊      | 3868/9999 [00:11&lt;00:18, 338.59it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 39%|███▉      | 3903/9999 [00:11&lt;00:17, 340.40it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 39%|███▉      | 3938/9999 [00:11&lt;00:17, 340.65it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 40%|███▉      | 3973/9999 [00:11&lt;00:17, 340.43it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 40%|████      | 4008/9999 [00:11&lt;00:17, 339.96it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 40%|████      | 4042/9999 [00:12&lt;00:17, 339.44it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 41%|████      | 4077/9999 [00:12&lt;00:17, 339.71it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 41%|████      | 4111/9999 [00:12&lt;00:17, 339.10it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 41%|████▏     | 4146/9999 [00:12&lt;00:17, 340.02it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 42%|████▏     | 4181/9999 [00:12&lt;00:17, 341.91it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 42%|████▏     | 4216/9999 [00:12&lt;00:17, 340.08it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 43%|████▎     | 4251/9999 [00:12&lt;00:16, 340.37it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 43%|████▎     | 4286/9999 [00:12&lt;00:16, 342.04it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 43%|████▎     | 4321/9999 [00:12&lt;00:16, 342.68it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 44%|████▎     | 4356/9999 [00:12&lt;00:16, 338.39it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 44%|████▍     | 4391/9999 [00:13&lt;00:16, 340.53it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 44%|████▍     | 4426/9999 [00:13&lt;00:16, 338.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 45%|████▍     | 4461/9999 [00:13&lt;00:16, 339.88it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 45%|████▍     | 4496/9999 [00:13&lt;00:16, 341.28it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 45%|████▌     | 4531/9999 [00:13&lt;00:15, 342.12it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 46%|████▌     | 4566/9999 [00:13&lt;00:15, 341.55it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 46%|████▌     | 4601/9999 [00:13&lt;00:15, 341.38it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 46%|████▋     | 4636/9999 [00:13&lt;00:15, 341.02it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 47%|████▋     | 4671/9999 [00:13&lt;00:15, 340.36it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 47%|████▋     | 4706/9999 [00:13&lt;00:15, 337.90it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 47%|████▋     | 4740/9999 [00:14&lt;00:15, 336.26it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 48%|████▊     | 4774/9999 [00:14&lt;00:15, 336.63it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 48%|████▊     | 4808/9999 [00:14&lt;00:15, 335.15it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 48%|████▊     | 4843/9999 [00:14&lt;00:15, 338.78it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 49%|████▉     | 4878/9999 [00:14&lt;00:15, 341.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 49%|████▉     | 4913/9999 [00:14&lt;00:14, 343.67it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 49%|████▉     | 4948/9999 [00:14&lt;00:14, 338.97it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|████▉     | 4983/9999 [00:14&lt;00:14, 339.54it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 50%|█████     | 5017/9999 [00:14&lt;00:14, 337.01it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 51%|█████     | 5053/9999 [00:15&lt;00:14, 342.59it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 51%|█████     | 5088/9999 [00:15&lt;00:14, 335.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 51%|█████     | 5124/9999 [00:15&lt;00:14, 340.24it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 52%|█████▏    | 5159/9999 [00:15&lt;00:14, 341.55it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 52%|█████▏    | 5194/9999 [00:15&lt;00:14, 340.12it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 52%|█████▏    | 5229/9999 [00:15&lt;00:14, 338.63it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 53%|█████▎    | 5264/9999 [00:15&lt;00:13, 339.39it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 53%|█████▎    | 5298/9999 [00:15&lt;00:13, 337.11it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 53%|█████▎    | 5332/9999 [00:15&lt;00:14, 331.81it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 54%|█████▎    | 5366/9999 [00:15&lt;00:15, 308.32it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 54%|█████▍    | 5398/9999 [00:16&lt;00:15, 293.90it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 54%|█████▍    | 5428/9999 [00:16&lt;00:15, 287.13it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 55%|█████▍    | 5457/9999 [00:16&lt;00:16, 283.52it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 55%|█████▍    | 5486/9999 [00:16&lt;00:16, 280.70it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 55%|█████▌    | 5515/9999 [00:16&lt;00:16, 278.36it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 55%|█████▌    | 5543/9999 [00:16&lt;00:16, 277.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 56%|█████▌    | 5571/9999 [00:16&lt;00:15, 277.37it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 56%|█████▌    | 5599/9999 [00:16&lt;00:15, 276.07it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 56%|█████▋    | 5627/9999 [00:16&lt;00:15, 275.38it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 57%|█████▋    | 5655/9999 [00:17&lt;00:15, 272.76it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 57%|█████▋    | 5691/9999 [00:17&lt;00:14, 297.53it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 57%|█████▋    | 5726/9999 [00:17&lt;00:13, 312.68it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 58%|█████▊    | 5761/9999 [00:17&lt;00:13, 321.62it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 58%|█████▊    | 5797/9999 [00:17&lt;00:12, 331.90it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 58%|█████▊    | 5832/9999 [00:17&lt;00:12, 336.51it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 59%|█████▊    | 5867/9999 [00:17&lt;00:12, 339.49it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 59%|█████▉    | 5902/9999 [00:17&lt;00:12, 340.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 59%|█████▉    | 5937/9999 [00:17&lt;00:11, 341.69it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 60%|█████▉    | 5972/9999 [00:17&lt;00:11, 341.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 60%|██████    | 6007/9999 [00:18&lt;00:11, 342.21it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 60%|██████    | 6042/9999 [00:18&lt;00:11, 341.26it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 61%|██████    | 6077/9999 [00:18&lt;00:11, 341.15it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 61%|██████    | 6113/9999 [00:18&lt;00:11, 344.01it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 61%|██████▏   | 6148/9999 [00:18&lt;00:11, 343.81it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 62%|██████▏   | 6183/9999 [00:18&lt;00:11, 343.82it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 62%|██████▏   | 6220/9999 [00:18&lt;00:10, 350.01it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 63%|██████▎   | 6257/9999 [00:18&lt;00:10, 352.80it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 63%|██████▎   | 6293/9999 [00:18&lt;00:10, 346.40it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 63%|██████▎   | 6329/9999 [00:18&lt;00:10, 349.40it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 64%|██████▎   | 6365/9999 [00:19&lt;00:10, 352.13it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 64%|██████▍   | 6401/9999 [00:19&lt;00:10, 349.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 64%|██████▍   | 6436/9999 [00:19&lt;00:10, 344.13it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 65%|██████▍   | 6471/9999 [00:19&lt;00:10, 344.30it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 65%|██████▌   | 6506/9999 [00:19&lt;00:10, 338.43it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 65%|██████▌   | 6540/9999 [00:19&lt;00:10, 338.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 66%|██████▌   | 6575/9999 [00:19&lt;00:10, 340.32it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 66%|██████▌   | 6610/9999 [00:19&lt;00:09, 339.60it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 66%|██████▋   | 6644/9999 [00:19&lt;00:09, 338.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 67%|██████▋   | 6678/9999 [00:20&lt;00:09, 335.71it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 67%|██████▋   | 6713/9999 [00:20&lt;00:09, 337.84it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 67%|██████▋   | 6747/9999 [00:20&lt;00:09, 337.98it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 68%|██████▊   | 6782/9999 [00:20&lt;00:09, 339.00it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 68%|██████▊   | 6817/9999 [00:20&lt;00:09, 339.20it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 69%|██████▊   | 6851/9999 [00:20&lt;00:09, 336.45it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 69%|██████▉   | 6886/9999 [00:20&lt;00:09, 339.32it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 69%|██████▉   | 6921/9999 [00:20&lt;00:09, 339.85it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 70%|██████▉   | 6955/9999 [00:20&lt;00:09, 338.14it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 70%|██████▉   | 6989/9999 [00:20&lt;00:09, 333.18it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 70%|███████   | 7023/9999 [00:21&lt;00:09, 320.61it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 71%|███████   | 7056/9999 [00:21&lt;00:09, 320.90it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 71%|███████   | 7089/9999 [00:21&lt;00:09, 304.36it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 71%|███████   | 7120/9999 [00:21&lt;00:09, 294.70it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 72%|███████▏  | 7150/9999 [00:21&lt;00:09, 287.08it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 72%|███████▏  | 7180/9999 [00:21&lt;00:09, 289.40it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 72%|███████▏  | 7215/9999 [00:21&lt;00:09, 304.70it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 73%|███████▎  | 7250/9999 [00:21&lt;00:08, 315.71it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 73%|███████▎  | 7282/9999 [00:21&lt;00:08, 315.32it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 73%|███████▎  | 7314/9999 [00:22&lt;00:08, 304.97it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 73%|███████▎  | 7346/9999 [00:22&lt;00:08, 307.51it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 74%|███████▍  | 7382/9999 [00:22&lt;00:08, 321.92it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 74%|███████▍  | 7419/9999 [00:22&lt;00:07, 333.55it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▍  | 7456/9999 [00:22&lt;00:07, 342.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▍  | 7491/9999 [00:22&lt;00:07, 342.80it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 75%|███████▌  | 7526/9999 [00:22&lt;00:07, 318.15it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 76%|███████▌  | 7559/9999 [00:22&lt;00:08, 303.32it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 76%|███████▌  | 7590/9999 [00:22&lt;00:08, 294.46it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 76%|███████▌  | 7620/9999 [00:23&lt;00:08, 288.46it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 77%|███████▋  | 7650/9999 [00:23&lt;00:08, 283.91it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 77%|███████▋  | 7679/9999 [00:23&lt;00:08, 281.62it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 77%|███████▋  | 7713/9999 [00:23&lt;00:07, 295.93it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 77%|███████▋  | 7743/9999 [00:23&lt;00:07, 294.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 78%|███████▊  | 7773/9999 [00:23&lt;00:07, 288.63it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 78%|███████▊  | 7810/9999 [00:23&lt;00:07, 310.39it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 78%|███████▊  | 7842/9999 [00:23&lt;00:06, 311.21it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 79%|███████▊  | 7874/9999 [00:23&lt;00:07, 300.15it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 79%|███████▉  | 7905/9999 [00:23&lt;00:06, 301.07it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 79%|███████▉  | 7940/9999 [00:24&lt;00:06, 314.25it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 80%|███████▉  | 7976/9999 [00:24&lt;00:06, 326.92it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 80%|████████  | 8012/9999 [00:24&lt;00:05, 334.65it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 80%|████████  | 8047/9999 [00:24&lt;00:05, 338.90it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 81%|████████  | 8081/9999 [00:24&lt;00:06, 312.93it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 81%|████████  | 8113/9999 [00:24&lt;00:06, 300.19it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 81%|████████▏ | 8144/9999 [00:24&lt;00:06, 296.19it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 82%|████████▏ | 8179/9999 [00:24&lt;00:05, 307.61it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 82%|████████▏ | 8210/9999 [00:24&lt;00:05, 300.89it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 82%|████████▏ | 8241/9999 [00:25&lt;00:05, 293.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 83%|████████▎ | 8271/9999 [00:25&lt;00:06, 287.10it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 83%|████████▎ | 8300/9999 [00:25&lt;00:06, 279.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 83%|████████▎ | 8329/9999 [00:25&lt;00:06, 277.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 84%|████████▎ | 8363/9999 [00:25&lt;00:05, 293.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 84%|████████▍ | 8398/9999 [00:25&lt;00:05, 307.30it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 84%|████████▍ | 8432/9999 [00:25&lt;00:04, 316.28it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 85%|████████▍ | 8466/9999 [00:25&lt;00:04, 322.50it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 85%|████████▌ | 8501/9999 [00:25&lt;00:04, 328.53it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 85%|████████▌ | 8535/9999 [00:25&lt;00:04, 331.75it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 86%|████████▌ | 8569/9999 [00:26&lt;00:04, 311.36it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 86%|████████▌ | 8601/9999 [00:26&lt;00:04, 295.04it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 86%|████████▋ | 8631/9999 [00:26&lt;00:04, 288.30it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 87%|████████▋ | 8662/9999 [00:26&lt;00:04, 291.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 87%|████████▋ | 8692/9999 [00:26&lt;00:04, 283.88it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 87%|████████▋ | 8721/9999 [00:26&lt;00:04, 275.49it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 87%|████████▋ | 8749/9999 [00:26&lt;00:04, 260.86it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 88%|████████▊ | 8783/9999 [00:26&lt;00:04, 280.71it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 88%|████████▊ | 8818/9999 [00:26&lt;00:03, 298.16it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 89%|████████▊ | 8854/9999 [00:27&lt;00:03, 315.35it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 89%|████████▉ | 8886/9999 [00:27&lt;00:03, 314.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 89%|████████▉ | 8918/9999 [00:27&lt;00:03, 302.58it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 89%|████████▉ | 8949/9999 [00:27&lt;00:03, 294.18it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 90%|████████▉ | 8979/9999 [00:27&lt;00:03, 288.58it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 90%|█████████ | 9011/9999 [00:27&lt;00:03, 295.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 90%|█████████ | 9047/9999 [00:27&lt;00:03, 312.58it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 91%|█████████ | 9083/9999 [00:27&lt;00:02, 324.68it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 91%|█████████ | 9116/9999 [00:27&lt;00:02, 304.49it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 91%|█████████▏| 9149/9999 [00:28&lt;00:02, 310.00it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 92%|█████████▏| 9183/9999 [00:28&lt;00:02, 318.05it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 92%|█████████▏| 9218/9999 [00:28&lt;00:02, 325.78it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 93%|█████████▎| 9252/9999 [00:28&lt;00:02, 328.81it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 93%|█████████▎| 9286/9999 [00:28&lt;00:02, 317.15it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 93%|█████████▎| 9318/9999 [00:28&lt;00:02, 304.12it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 93%|█████████▎| 9349/9999 [00:28&lt;00:02, 295.66it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 94%|█████████▍| 9379/9999 [00:28&lt;00:02, 288.29it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 94%|█████████▍| 9408/9999 [00:28&lt;00:02, 282.81it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 94%|█████████▍| 9444/9999 [00:29&lt;00:01, 303.04it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 95%|█████████▍| 9478/9999 [00:29&lt;00:01, 311.39it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 95%|█████████▌| 9510/9999 [00:29&lt;00:01, 304.27it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 95%|█████████▌| 9542/9999 [00:29&lt;00:01, 307.37it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 96%|█████████▌| 9573/9999 [00:29&lt;00:01, 305.42it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 96%|█████████▌| 9604/9999 [00:29&lt;00:01, 294.73it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 96%|█████████▋| 9634/9999 [00:29&lt;00:01, 287.59it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 97%|█████████▋| 9663/9999 [00:29&lt;00:01, 282.05it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 97%|█████████▋| 9692/9999 [00:29&lt;00:01, 277.81it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 97%|█████████▋| 9715/9999 [00:29&lt;00:00, 324.16it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">N_samples</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">samples</span> <span class="o">=</span> <span class="n">gibbs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">)</span>
+
+<span class="nn">Cell In[10], line 45,</span> in <span class="ni">gibbs</span><span class="nt">(xs, tausq_0, nu_0, mu_0, kappa_0, alpha_0, sigmasq_0, N_samples)</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span> <span class="n">sigmasqs</span> <span class="o">=</span> <span class="n">gibbs_sample_sigmasq</span><span class="p">(</span><span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">xs</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">44</span> <span class="c1"># Compute the log probability</span>
+<span class="ne">---&gt; </span><span class="mi">45</span> <span class="n">lp</span> <span class="o">=</span> <span class="n">log_probability</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span>                      <span class="n">tausq_0</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">48</span> <span class="c1"># Update the sample list</span>
+<span class="g g-Whitespace">     </span><span class="mi">49</span> <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">lp</span><span class="p">))</span>
+
+<span class="nn">Cell In[5], line 25,</span> in <span class="ni">log_probability</span><span class="nt">(tausq, mu, thetas, sigmasqs, xs, tausq_0, nu_0, mu_0, kappa_0, alpha_0, sigmasq_0)</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">def</span> <span class="nf">log_probability</span><span class="p">(</span><span class="n">tausq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>                     <span class="n">tausq_0</span><span class="p">,</span> <span class="n">nu_0</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">kappa_0</span><span class="p">,</span> <span class="n">alpha_0</span><span class="p">,</span> <span class="n">sigmasq_0</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="sd">     Compute the log joint probability of the model parameters and data given the </span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span><span class="sd">     hyperparameters of the model. </span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">     </span><span class="mi">23</span><span class="sd">     Log joint probability.</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">---&gt; </span><span class="mi">25</span>     <span class="n">lp</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu_0</span><span class="p">,</span> <span class="n">tausq_0</span><span class="p">)</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">tausq</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span>     <span class="n">lp</span> <span class="o">+=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu_0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tausq</span> <span class="o">/</span> <span class="n">kappa_0</span><span class="p">))</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span>     <span class="n">lp</span> <span class="o">+=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tausq</span><span class="p">))</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">thetas</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="nn">Cell In[3], line 7,</span> in <span class="ni">ScaledInvChiSq.__init__</span><span class="nt">(self, dof, scale)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+<span class="ne">----&gt; </span><span class="mi">7</span>     <span class="n">base</span> <span class="o">=</span> <span class="n">Gamma</span><span class="p">(</span><span class="n">dof</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dof</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PowerTransform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="n">TransformedDistribution</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">transforms</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/torch/distributions/gamma.py:54,</span> in <span class="ni">Gamma.__init__</span><span class="nt">(self, concentration, rate, validate_args)</span>
+<span class="g g-Whitespace">     </span><span class="mi">52</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">53</span>     <span class="n">batch_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">concentration</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<span class="ne">---&gt; </span><span class="mi">54</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">batch_shape</span><span class="p">,</span> <span class="n">validate_args</span><span class="o">=</span><span class="n">validate_args</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/torch/distributions/distribution.py:61,</span> in <span class="ni">Distribution.__init__</span><span class="nt">(self, batch_shape, event_shape, validate_args)</span>
+<span class="g g-Whitespace">     </span><span class="mi">59</span>         <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">60</span>         <span class="n">valid</span> <span class="o">=</span> <span class="n">constraint</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">61</span>         <span class="k">if</span> <span class="ow">not</span> <span class="n">valid</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span>             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span>                 <span class="sa">f</span><span class="s2">&quot;Expected parameter </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2"> &quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">64</span>                 <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> of shape </span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s2">) &quot;</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span>                 <span class="sa">f</span><span class="s2">&quot;but found invalid values:</span><span class="se">\n</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">68</span>             <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">69</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-summaries-of-the-mcmc-samples">
+<h2>Plot summaries of the MCMC samples<a class="headerlink" href="#plot-summaries-of-the-mcmc-samples" title="Permalink to this heading">#</a></h2>
+<p>First, let’s look at a trace of the log joint probability over iterations</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_samples</span><span class="p">),</span> <span class="n">samples</span><span class="p">[</span><span class="s2">&quot;lps&quot;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Log Joint Probability&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;lps1.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d7e874090dfbf7449bd18b6be19659df3b07f0ba2f1bba2fbd5e0488e8173e47.png" src="../_images/d7e874090dfbf7449bd18b6be19659df3b07f0ba2f1bba2fbd5e0488e8173e47.png" />
+</div>
+</div>
+<p>We see that the first few iterations are simply <strong>burning in</strong> the chain. We will discard these iterations in our subsequent analyses.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">burnin</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">burnin</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">),</span> <span class="n">samples</span><span class="p">[</span><span class="s2">&quot;lps&quot;</span><span class="p">][</span><span class="n">burnin</span><span class="p">:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Log Joint Probability&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;lps2.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/5acca7b28ca4384dc6605f14c8dc503d843a9933f76fedec50f82a57c3f7b319.png" src="../_images/5acca7b28ca4384dc6605f14c8dc503d843a9933f76fedec50f82a57c3f7b319.png" />
+</div>
+</div>
+<p>The trace from iteration 100 onward looks much more stable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">burnin</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">),</span> 
+            <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;tausq&quot;</span><span class="p">][</span><span class="n">burnin</span><span class="p">:]))</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\tau$ samples&quot;</span><span class="p">)</span>
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;tausq&quot;</span><span class="p">][</span><span class="n">burnin</span><span class="p">:]),</span> <span class="mi">50</span><span class="p">,</span> 
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\tau$&quot;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p(\tau \mid \mathbf</span><span class="si">{X}</span><span class="s2">, \mathbf{\eta})$&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;tau_samples.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/982b53751ae6a935942b3368ade324c4c4215c90d26961bd4e9b3e77b76163ad.png" src="../_images/982b53751ae6a935942b3368ade324c4c4215c90d26961bd4e9b3e77b76163ad.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">burnin</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">),</span> <span class="n">samples</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="n">burnin</span><span class="p">:])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mu$ samples&quot;</span><span class="p">)</span>
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="n">burnin</span><span class="p">:],</span> <span class="mi">50</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mu$&quot;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p(\mu \mid \mathbf</span><span class="si">{X}</span><span class="s2">, \mathbf{\eta})$&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;mu_samples.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7f478f12b28e4a0a0f752b6c23af5d109315003b657255db4e0b202df561ccb0.png" src="../_images/7f478f12b28e4a0a0f752b6c23af5d109315003b657255db4e0b202df561ccb0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">burnin</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">),</span> <span class="n">samples</span><span class="p">[</span><span class="s2">&quot;thetas&quot;</span><span class="p">][</span><span class="n">burnin</span><span class="p">:,</span> <span class="n">s</span><span class="p">])</span>
+    
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">S</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\theta_</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;School </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;theta_samples1.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/0ab48b79e8bab8d3991fc37e11ac859258866f5921d07b3d4b36621f73f9d80b.png" src="../_images/0ab48b79e8bab8d3991fc37e11ac859258866f5921d07b3d4b36621f73f9d80b.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bins</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;thetas&quot;</span><span class="p">][:,</span> <span class="n">s</span><span class="p">],</span> <span class="n">bins</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> 
+                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># axs[s].plot([x_bars[s], x_bars[s]], [0, 0.05], &#39;-r&#39;)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">xs</span><span class="p">[:,</span> <span class="n">s</span><span class="p">])</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span> <span class="s1">&#39;-r&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">S</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\theta_s$&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p(\theta_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> \
+                      <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; \mid \mathbf</span><span class="si">{X}</span><span class="s2">, \mathbf{\eta})$&quot;</span><span class="p">,</span>
+                      <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;School </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;theta_samples2.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8a6fdda01a889cf61ec3b29e4fc7d81b892a1db69def6be394ce4a083ee866d5.png" src="../_images/8a6fdda01a889cf61ec3b29e4fc7d81b892a1db69def6be394ce4a083ee866d5.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">burnin</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">),</span> 
+                <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;sigmasqs&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">N_s</span><span class="p">)[</span><span class="n">burnin</span><span class="p">:,</span> <span class="n">s</span><span class="p">])</span>
+    
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">S</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\bar{{\sigma}}_</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;School </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">)</span>
+    <span class="c1"># axs[s].set_ylim(-30, 30)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;sigma_samples1.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c9cfea31a7ed54b29d4d565bbdf18c0cf32a804020b3edf0a18129492e4c4537.png" src="../_images/c9cfea31a7ed54b29d4d565bbdf18c0cf32a804020b3edf0a18129492e4c4537.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bins</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;sigmasqs&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">N_s</span><span class="p">)[:,</span> <span class="n">s</span><span class="p">],</span> <span class="n">bins</span><span class="p">,</span> 
+                <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># axs[s].plot([x_bars[s], x_bars[s]], [0, 0.05], &#39;-r&#39;)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sigma_bars</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span> <span class="s1">&#39;-r&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">S</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\bar{\sigma}_s$&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p(\bar{\sigma}_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
+                      <span class="sa">r</span><span class="s2">&quot; \mid \mathbf</span><span class="si">{X}</span><span class="s2">, \mathbf{\eta})$&quot;</span><span class="p">,</span>
+                      <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;School </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;sigma_samples2.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c91be8c15243bf295c73ad853f124b3f9a466d83b04988154982c8c5761857ae.png" src="../_images/c91be8c15243bf295c73ad853f124b3f9a466d83b04988154982c8c5761857ae.png" />
+</div>
+</div>
+</section>
+<section id="mcmc-diagnostics">
+<h2>MCMC Diagnostics<a class="headerlink" href="#mcmc-diagnostics" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">acf_tausq</span> <span class="o">=</span> <span class="n">autocorrelation</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;tausq&quot;</span><span class="p">][</span><span class="n">burnin</span><span class="p">:]))</span>
+<span class="n">acf_mu</span> <span class="o">=</span> <span class="n">autocorrelation</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="n">burnin</span><span class="p">:])</span>
+<span class="n">acf_theta1</span> <span class="o">=</span> <span class="n">autocorrelation</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;thetas&quot;</span><span class="p">][</span><span class="n">burnin</span><span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">acf_sigma1</span> <span class="o">=</span> <span class="n">autocorrelation</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;sigmasqs&quot;</span><span class="p">])[</span><span class="n">burnin</span><span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">acf_tausq</span><span class="p">[:</span><span class="mi">250</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\tau$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">acf_mu</span><span class="p">[:</span><span class="mi">250</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\mu$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">acf_theta1</span><span class="p">[:</span><span class="mi">250</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\theta_1$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">acf_sigma1</span><span class="p">[:</span><span class="mi">250</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\sigma_1$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;lag&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;autocorrelation&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;acf.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/aad8f68c3285d933db3e5ea5b06517d1aecfcdbe6dffdfda5ea50db40381e533.png" src="../_images/aad8f68c3285d933db3e5ea5b06517d1aecfcdbe6dffdfda5ea50db40381e533.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Effective sample sizes:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;tausq:    &quot;</span><span class="p">,</span> <span class="n">effective_sample_size</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;tausq&quot;</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="n">burnin</span><span class="p">:]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mu:       &quot;</span><span class="p">,</span> <span class="n">effective_sample_size</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="n">burnin</span><span class="p">:]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;theta1:   &quot;</span><span class="p">,</span> <span class="n">effective_sample_size</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;thetas&quot;</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="n">burnin</span><span class="p">:,</span> <span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sigamsq1: &quot;</span><span class="p">,</span> <span class="n">effective_sample_size</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;sigmasqs&quot;</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="n">burnin</span><span class="p">:,</span> <span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Effective sample sizes:
+tausq:     tensor(1563.3734)
+mu:        tensor(625.2454)
+theta1:    tensor(1027.9817)
+sigamsq1:  tensor(8996.0518)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="recap">
+<h2>Recap<a class="headerlink" href="#recap" title="Permalink to this heading">#</a></h2>
+<p>This notebook implemented a Gibbs sampler for the hierarchical Gaussian model from Lecture 3. We showed:</p>
+<ul class="simple">
+<li><p>How to derive the <strong>complte conditional</strong> distributions for each variable and sample from them.</p></li>
+<li><p>A <strong>blocked Gibbs update</strong> for the per-school means and variances, since those parameters are conditionally independent given the rest.</p></li>
+<li><p>Monitoring the algorithm’s performance by plotting the log joint probability over iterations.</p></li>
+<li><p>Visualizing of the <strong>posterior marginal probabilities</strong> for each variable by simply taking a histogram of samples (after discarding a few burnin samples).</p></li>
+<li><p>MCMC diagnostics like the <strong>autocorrelation function</strong> and the <strong>effective sample size.</strong></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="03_hier_gauss.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Hierarchical Gaussian Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../lectures/99_references.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">References</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-inference-with-mcmc-in-the-hierarchical-gaussian-model">Bayesian inference with MCMC in the hierarchical Gaussian model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-synthetic-data">Sample synthetic data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gibbs-sampling">Gibbs Sampling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-the-log-joint-probability">Calculate the log joint probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gibbs-update-for-theta-s">Gibbs update for <span class="math notranslate nohighlight">\(\theta_s\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gibbs-update-for-sigma-s-2">Gibbs update for <span class="math notranslate nohighlight">\(\sigma_s^2\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gibbs-update-for-mu">Gibbs update for <span class="math notranslate nohighlight">\(\mu\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gibbs-update-for-tau-2">Gibbs update for <span class="math notranslate nohighlight">\(\tau^2\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#put-it-all-together">Put it all together</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-summaries-of-the-mcmc-samples">Plot summaries of the MCMC samples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mcmc-diagnostics">MCMC Diagnostics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap">Recap</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

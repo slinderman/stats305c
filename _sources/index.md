@@ -36,7 +36,7 @@ You may also find these texts helpful
 | Apr 4  | Bayesian Analysis of the Normal Distribution <br> {Download}`[slides]<slides/annotated/lecture01-bayes_normal.pdf>` [[notebook]](notebooks/01_bayes_normal.ipynb) | Ch 2.3, 3.4.3 |
 | Apr 6  | Multivariate Normal Distribution <br> {Download}`[slides]<slides/annotated/lecture02-mvn.pdf>` [[notebook]](notebooks/02_mvn.ipynb)| Ch 2,3, 3.4.4 |
 | Apr 11 | Probabilistic Graphical Models <br> {Download}`[slides]<slides/annotated/lecture03_pgms.pdf>` [[notebook]](notebooks/03_hier_gauss.ipynb) | Ch 3.6.2, 4.2 |
-| Apr 13 | Markov Chain Monte Carlo | Ch 11.1-11.2, 12.1-12.3 |
+| Apr 13 | Markov Chain Monte Carlo <br> {Download}`[slides]<slides/lecture04_mcmc.pdf>` [[notebook]](notebooks/04_mcmc.ipynb) | Ch 11.1-11.2, 12.1-12.3 |
 | Apr 18 | Probabilistic PCA and Factor Analysis | Ch 28.3 |
 | Apr 20 | Hamiltonian Monte Carlo | [Neal, 2012](https://arxiv.org/abs/1206.1901), Ch 12.5 |
 | Apr 25 | Mixture Models | Ch 28.2 |
