@@ -6,6 +6,7 @@ parts:
     chapters:
     - file: assignments/hw0/hw0.ipynb
     - file: assignments/hw1/hw1.ipynb
+    - file: assignments/hw2/hw2.ipynb
 
   - caption: Notebooks
     chapters:
