@@ -1,0 +1,993 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>HW2: Gibbs Sampling and Metropolis-Hastings &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'assignments/hw2/hw2';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Bayesian Analysis of the Normal Distribution" href="../../notebooks/01_bayes_normal.html" />
+    <link rel="prev" title="HW1: Bayesian Linear Regression" href="../hw1/hw1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">HW2: Gibbs Sampling and Metropolis-Hastings</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/02_mvn.html">The Multivariate Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/03_hier_gauss.html">Hierarchical Gaussian Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/04_mcmc.html">Markov Chain Monte Carlo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/assignments/hw2/hw2.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/assignments/hw2/hw2.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>HW2: Gibbs Sampling and Metropolis-Hastings</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#polling-data">Polling Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hierarchical-model">Hierarchical Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-math-derive-the-complete-conditional-for-rho">Problem 1 [Math]: Derive the complete conditional for <span class="math notranslate nohighlight">\(\rho\)</span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-a-demonstrate-conditional-independence-of-rho-i">Part (a): Demonstrate conditional independence of <span class="math notranslate nohighlight">\(\{\rho_i\}\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-b">Part (b):</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-write-code-to-sample-from-the-complete-conditional-for-rho">Problem 2: Write code to sample from the complete conditional for <span class="math notranslate nohighlight">\(\rho\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3-derive-and-implement-the-complete-conditional-for-alpha">Problem 3: Derive and implement the complete conditional for <span class="math notranslate nohighlight">\(\alpha\)</span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-a-derive-the-complete-conditional">Part (a): Derive the complete conditional</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-b-write-code-evaluating-the-unnormalized-log-probability">Part (b): Write code evaluating the unnormalized log probability</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4-derive-and-implement-the-complete-conditional-for-beta">Problem 4: Derive and implement the complete conditional for <span class="math notranslate nohighlight">\(\beta\)</span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Part (a): Derive the complete conditional</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Part (b): Write code evaluating the unnormalized log probability</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-5-write-code-to-sample-from-the-complete-conditionals-for-alpha-and-beta">Problem 5: Write code to sample from the complete conditionals for <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6-implement-a-gibbs-sampler">Problem 6: Implement a Gibbs sampler</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-7-model-diagnostics">Problem 7: Model Diagnostics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-a">Part (a):</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Part (b):</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-8-reflections">Problem 8: Reflections</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Part (a):</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Part (b):</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission Instructions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hw2-gibbs-sampling-and-metropolis-hastings">
+<h1>HW2: Gibbs Sampling and Metropolis-Hastings<a class="headerlink" href="#hw2-gibbs-sampling-and-metropolis-hastings" title="Permalink to this heading">#</a></h1>
+<hr class="docutils" />
+<p><strong>Name:</strong></p>
+<p><strong>Collaborators:</strong></p>
+<hr class="docutils" />
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this heading">#</a></h2>
+<p>In this homework assignment, we will investigate a hierarchical Bayesian model of polling data. To perform inference, we will implement a hybrid Gibbs/Metropolis-Hastings sampler.</p>
+<section id="polling-data">
+<h3>Polling Data<a class="headerlink" href="#polling-data" title="Permalink to this heading">#</a></h3>
+<p>The 2004 election between George W. Bush and John Kerry was closely contested. Both campaigns focused heavily on the swing state of Ohio, worth 20 votes in the electoral college. CNN/USA Today/Gallup conducted several Ohio polls in the months leading up to the election on November 4th, and obtained the following raw results:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>Kerry</p></th>
+<th class="head text-left"><p>Bush</p></th>
+<th class="head text-left"><p>Total</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Sept. 4-7</p></td>
+<td class="text-left"><p>284</p></td>
+<td class="text-left"><p>344</p></td>
+<td class="text-left"><p>628</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Sept. 25-28</p></td>
+<td class="text-left"><p>312</p></td>
+<td class="text-left"><p>325</p></td>
+<td class="text-left"><p>637</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Oct. 17-20</p></td>
+<td class="text-left"><p>346</p></td>
+<td class="text-left"><p>339</p></td>
+<td class="text-left"><p>685</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Oct. 28-31</p></td>
+<td class="text-left"><p>556</p></td>
+<td class="text-left"><p>511</p></td>
+<td class="text-left"><p>1067</p></td>
+</tr>
+</tbody>
+</table>
+<p>The polling data can be found <a class="reference external" href="http://www.cnn.com/ELECTION/2004/special/president/showdown/OH/">here</a> (although there are some dead links on the page).</p>
+<p>We will let <span class="math notranslate nohighlight">\(\{x_i\}_{i = 1}^4\)</span> denote the number of votes for Kerry in each poll, and let <span class="math notranslate nohighlight">\(\{n_i\}_{i = 1}^4\)</span> denote the total number surveyed in each poll. We will represent these quantities in code using integer PyTorch tensors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">Beta</span><span class="p">,</span> <span class="n">Binomial</span><span class="p">,</span> <span class="n">Normal</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.cm</span> <span class="kn">import</span> <span class="n">Blues</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">284</span><span class="p">,</span> <span class="mi">312</span><span class="p">,</span> <span class="mi">346</span><span class="p">,</span> <span class="mi">556</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">ns</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">628</span><span class="p">,</span> <span class="mi">637</span><span class="p">,</span> <span class="mi">685</span><span class="p">,</span> <span class="mi">1067</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="hierarchical-model">
+<h3>Hierarchical Model<a class="headerlink" href="#hierarchical-model" title="Permalink to this heading">#</a></h3>
+<p>It is reasonable to model each voter’s support as a draw from a Bernoulli distribution, with some poll-specific probability <span class="math notranslate nohighlight">\(\rho_i\)</span> of supporting Kerry. We believe each poll has a different probability since the polls are conducted at different times and may reach different subpopulations of voters (e.g. if one is conducted over telephone and another is an internet survey). However, these <span class="math notranslate nohighlight">\(\rho_i\)</span> are likely highly correlated due to a base level of support for Kerry in the general population. We will therefore use the following model:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\rho_i &amp;\sim \mathrm{Beta}(\alpha, \beta) \quad  \text{for } i =1, \ldots, 4 \\ 
+x_i \mid \rho_i &amp;\sim \mathrm{Bin}(\rho_i, n_i) \quad  \text{for } i =1, \ldots, 4
+\end{align*}
+\end{split}\]</div>
+<p>Note that the <a class="reference external" href="https://en.wikipedia.org/wiki/Beta_distribution">beta distribution</a> is a conjugate prior for the <a class="reference external" href="https://en.wikipedia.org/wiki/Binomial_distribution">binomial distribution</a>. (See also, Bishop Ch. 2.1.)</p>
+<p>Following a Bayesian approach, we introduce priors over the parameters <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span>. Unfortunately, the parameters of the beta distribution do not have a simple conjugate prior. Instead, we will assume <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> follow gamma distributions, resulting in the following Bayesian hierarchical model.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\alpha &amp;\sim \mathrm{Ga}(c_\alpha, d_\alpha) \\
+\beta &amp;\sim \mathrm{Ga}(c_\beta, d_\beta) \\
+\rho_i \mid \alpha, \beta &amp;\sim \mathrm{Beta}(\alpha, \beta) \quad  \text{for } i =1, \ldots, 4 \\ 
+x_i \mid \rho_i &amp;\sim \mathrm{Bin}(\rho_i, n_i) \quad  \text{for } i =1, \ldots, 4
+\end{align*}
+\end{split}\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(c_\alpha, d_\alpha, c_\beta, d_\beta\)</span> are fixed hyperparameters for the “hyper-priors” on <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> and we use the shape-rate parametrization of the gamma distribution.</p>
+<p>How should we interpret these hyperparameters? Recall that in a beta-Bernoulli model we can interpret the parameters of the beta as pseudo-observations. That is, we can view <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> as results from a prior poll that resulted in <span class="math notranslate nohighlight">\(\alpha\)</span> voters for Kerry and <span class="math notranslate nohighlight">\(\beta\)</span> voters for Bush. Thus, we can interpret the mean of <span class="math notranslate nohighlight">\(\alpha\)</span> as previously observed supporters for Kerry and its standard deviation as a measure of uncertainty in this number of previous voters.</p>
+<p>Since the mean of <span class="math notranslate nohighlight">\(\alpha\)</span> is <span class="math notranslate nohighlight">\(\frac{c_\alpha}{d_\alpha}\)</span> and the standard deviation is <span class="math notranslate nohighlight">\(\sqrt{\frac{c_\alpha}{d_\alpha^2}}\)</span>, and similarly for <span class="math notranslate nohighlight">\(\beta\)</span>, we can adjust the hyperparameters to accord with our prior belief on Kerry/Bush’s level of support.</p>
+</section>
+</section>
+<section id="problem-1-math-derive-the-complete-conditional-for-rho">
+<h2>Problem 1 [Math]: Derive the complete conditional for <span class="math notranslate nohighlight">\(\rho\)</span><a class="headerlink" href="#problem-1-math-derive-the-complete-conditional-for-rho" title="Permalink to this heading">#</a></h2>
+<p>In order to implement a Gibbs sampler, we must be able to sample from the complete conditional of each of the unobserved variables in our model. We will sample the variables <span class="math notranslate nohighlight">\(\rho = (\rho_1, \dots, \rho_4)\)</span> simultaneously as part of a <a class="reference external" href="https://en.wikipedia.org/wiki/Gibbs_sampling#Blocked_Gibbs_sampler"><em>block Gibbs update</em></a>.</p>
+<section id="part-a-demonstrate-conditional-independence-of-rho-i">
+<h3>Part (a): Demonstrate conditional independence of <span class="math notranslate nohighlight">\(\{\rho_i\}\)</span><a class="headerlink" href="#part-a-demonstrate-conditional-independence-of-rho-i" title="Permalink to this heading">#</a></h3>
+<p>First, show that we have:</p>
+<div class="math notranslate nohighlight">
+\[
+p(\rho \mid \alpha, \beta, \{x_i\}) = \prod_{i=1}^4 p(\rho_i \mid \alpha, \beta, x_i)
+\]</div>
+<hr class="docutils" />
+<p><em>Your answer here</em>.</p>
+</section>
+<hr class="docutils" />
+<section id="part-b">
+<h3>Part (b):<a class="headerlink" href="#part-b" title="Permalink to this heading">#</a></h3>
+<p>Fixing <span class="math notranslate nohighlight">\(i\)</span>, derive the conditional density of <span class="math notranslate nohighlight">\(\rho_i\)</span> given <span class="math notranslate nohighlight">\(\alpha, \beta, x_i\)</span>, that is, compute:</p>
+<div class="math notranslate nohighlight">
+\[p(\rho_i \mid \alpha, \beta, x_i)\]</div>
+<p>Hint: Remember that this conditional density is proportional to the joint density of all the variables. The density should simplify nicely to a known density.</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="problem-2-write-code-to-sample-from-the-complete-conditional-for-rho">
+<h2>Problem 2: Write code to sample from the complete conditional for <span class="math notranslate nohighlight">\(\rho\)</span><a class="headerlink" href="#problem-2-write-code-to-sample-from-the-complete-conditional-for-rho" title="Permalink to this heading">#</a></h2>
+<p>Write a function which generates a sample from the conditional distribution for <span class="math notranslate nohighlight">\(\rho\)</span> given <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>, and <span class="math notranslate nohighlight">\(\{x_i, n_i\}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Beta</span>
+
+<span class="k">def</span> <span class="nf">gibbs_sample_rhos</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ns</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a sample from the complete conditional of \{\rho_i\} given alpha, </span>
+<span class="sd">    beta, and \{x_i, n_i\}.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        alpha: scalar value &gt; 0</span>
+<span class="sd">        beta: scalar value &gt; 0</span>
+<span class="sd">        xs, ns: the data</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        rhos: torch.tensor of length 4 with values in [0,1]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">rhos</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-3-derive-and-implement-the-complete-conditional-for-alpha">
+<h2>Problem 3: Derive and implement the complete conditional for <span class="math notranslate nohighlight">\(\alpha\)</span><a class="headerlink" href="#problem-3-derive-and-implement-the-complete-conditional-for-alpha" title="Permalink to this heading">#</a></h2>
+<section id="part-a-derive-the-complete-conditional">
+<h3>Part (a): Derive the complete conditional<a class="headerlink" href="#part-a-derive-the-complete-conditional" title="Permalink to this heading">#</a></h3>
+<p>Next, we need to derive the complete conditional for the global variables <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span>. We will first find the complete conditional of <span class="math notranslate nohighlight">\(\alpha\)</span>. As usual, you should use that the conditional density is proportional to the joint density to find this conditional. However, unlike earlier, the conditional density is not of a simple, known form. Instead, you should find an expression for the conditional density up to an unknown normalizing constant, i.e. an expression that the conditional density is proportional to, up to a constant.</p>
+<hr class="docutils" />
+<p><em>Your answer here</em>.</p>
+</section>
+<hr class="docutils" />
+<section id="part-b-write-code-evaluating-the-unnormalized-log-probability">
+<h3>Part (b): Write code evaluating the unnormalized log probability<a class="headerlink" href="#part-b-write-code-evaluating-the-unnormalized-log-probability" title="Permalink to this heading">#</a></h3>
+<p>By taking the logarithm of your answer above, we have an expression for the log conditional density, up to an additive constant. Implement this expression below in code.</p>
+<p>Hint: You may find the Pytorch function <code class="docutils literal notranslate"><span class="pre">lgamma</span></code> useful.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">alpha_log_cond</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">rhos</span><span class="p">,</span> <span class="n">c_alpha</span><span class="p">,</span> <span class="n">d_alpha</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns log p(\alpha \mid \beta, \{\rho_i\}, \{x_i\})</span>
+<span class="sd">    Args:</span>
+<span class="sd">        alpha: scalar value &gt; 0</span>
+<span class="sd">        beta: scalar value &gt; 0</span>
+<span class="sd">        rhos: torch.tensor of length 4 with values in [0,1]</span>
+<span class="sd">        c_alpha: scalar value &gt; 0</span>
+<span class="sd">        d_alpha: scalar value &gt; 0</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        log_cond: scalar, conditional log probability of alpha</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">log_cond</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-4-derive-and-implement-the-complete-conditional-for-beta">
+<h2>Problem 4: Derive and implement the complete conditional for <span class="math notranslate nohighlight">\(\beta\)</span><a class="headerlink" href="#problem-4-derive-and-implement-the-complete-conditional-for-beta" title="Permalink to this heading">#</a></h2>
+<section id="id1">
+<h3>Part (a): Derive the complete conditional<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p>Write down an expression for the complete conditional density of <span class="math notranslate nohighlight">\(\beta\)</span>, up to a normalizing constant. Your expression should be very similar to the expression for <span class="math notranslate nohighlight">\(\alpha\)</span> in problem 3(a). You do not need to show your work.</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h3>Part (b): Write code evaluating the unnormalized log probability<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<p>As in 3(b), write a function which evaluates the log complete conditional for <span class="math notranslate nohighlight">\(\beta\)</span>, up to an additive constant. This should be very similar to your function from 3(b).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">beta_log_cond</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">rhos</span><span class="p">,</span> <span class="n">c_beta</span><span class="p">,</span> <span class="n">d_beta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns log p(\beta \mid \alpha, \{\rho_i\}, \{x_i\})</span>
+<span class="sd">    Args:</span>
+<span class="sd">        alpha: scalar value &gt; 0</span>
+<span class="sd">        beta: scalar value &gt; 0</span>
+<span class="sd">        rhos: torch.tensor of length 4 with values in [0,1]</span>
+<span class="sd">        c_beta: scalar value &gt; 0</span>
+<span class="sd">        d_beta: scalar value &gt; 0</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        log_cond: scalar, conditional log probability of beta</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">log_cond</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-5-write-code-to-sample-from-the-complete-conditionals-for-alpha-and-beta">
+<h2>Problem 5: Write code to sample from the complete conditionals for <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span><a class="headerlink" href="#problem-5-write-code-to-sample-from-the-complete-conditionals-for-alpha-and-beta" title="Permalink to this heading">#</a></h2>
+<p>Because we only know the complete conditionals for <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> up to a normalizing constant, we will use the Metropolis-Hastings algorithm to sample from them. We will use a normal distribution centered at our current point as the proposal distribution. We will use the same standard deviation for the proposals of <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span>. Thus, the proposal distributions will be:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+q(\alpha \mid \alpha') &amp;= \mathcal{N}(\alpha ; \alpha', l^2) \\
+q(\beta \mid \beta') &amp;= \mathcal{N}(\beta ; \beta', l^2)
+\end{align*}
+\end{split}\]</div>
+<p>for some <span class="math notranslate nohighlight">\(l &gt; 0\)</span>.</p>
+<p>Note that we require <span class="math notranslate nohighlight">\(\alpha &gt; 0\)</span> and <span class="math notranslate nohighlight">\(\beta &gt; 0\)</span>, so we may make a proposal which lies outside the support of the complete conditional. You should convince yourself that there is zero probability of accepting such a proposal in the Metropolis algorithm.</p>
+<p>Implement a step of the Metropolis-Hastings algorithm for both <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> in the function below. You will have to use <code class="docutils literal notranslate"><span class="pre">alpha_log_cond</span></code> and <code class="docutils literal notranslate"><span class="pre">beta_log_cond</span></code> which you implemented above.</p>
+<p><em>Hint</em>: You may find <code class="docutils literal notranslate"><span class="pre">torch.rand</span></code> useful for simulating uniform random variables, or <code class="docutils literal notranslate"><span class="pre">torch.distributions.Bernoulli</span></code> for sampling binary random variables with specified probabilities.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mh_step_alpha_beta</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">rhos</span><span class="p">,</span> <span class="n">c_alpha</span><span class="p">,</span> <span class="n">d_alpha</span><span class="p">,</span> <span class="n">c_beta</span><span class="p">,</span> <span class="n">d_beta</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mf">20.</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs a MH step for both alpha and beta.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        alpha, beta, rhos: current values of these random variables</span>
+<span class="sd">        c_alpha, d_alpha, c_beta, d_beta: hyperparameters</span>
+<span class="sd">        l: standard deviation of proposal distribution</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        new_alpha, new_beta: new values of alpha and beta after MH step</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_alpha</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+    <span class="c1"># If proposal is negative, we can reject immediately.</span>
+    <span class="k">if</span> <span class="n">new_alpha</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">new_alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+    <span class="c1"># Otherwise, we must check the accept-reject condition.</span>
+    <span class="k">else</span><span class="p">:</span>
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    
+    <span class="n">new_beta</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="c1"># If proposal is negative, we can reject immediately.</span>
+    <span class="k">if</span> <span class="n">new_beta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">new_beta</span> <span class="o">=</span> <span class="n">beta</span>
+    <span class="c1"># Otherwise, we must check the accept-reject condition.</span>
+    <span class="k">else</span><span class="p">:</span>
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+
+    <span class="k">return</span> <span class="n">new_alpha</span><span class="p">,</span> <span class="n">new_beta</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-6-implement-a-gibbs-sampler">
+<h2>Problem 6: Implement a Gibbs sampler<a class="headerlink" href="#problem-6-implement-a-gibbs-sampler" title="Permalink to this heading">#</a></h2>
+<p>Using <code class="docutils literal notranslate"><span class="pre">mh_step_alpha_beta</span></code> and <code class="docutils literal notranslate"><span class="pre">sample_rhos</span></code>, implement a Gibbs sampler for the proposed model.</p>
+<p>Using the generated samples, we will estimate the posterior mean and standard deviation of <span class="math notranslate nohighlight">\(\rho_1, \dots, \rho_4\)</span>, and <span class="math notranslate nohighlight">\(\frac{\alpha}{\alpha + \beta}\)</span>. The latter quantity represents the base level of support for Kerry in the broader population, and is of particular interest for who will win the election.</p>
+<p>We will also track the joint log-probability of our sample throughout the iterations of the sampler. This will be useful as a diagnostic tool to check whether our sampler is correctly implemented. To easily evaluate the joint probability in code, we recommend making use of the <code class="docutils literal notranslate"><span class="pre">torch.distributions</span></code> imported above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rhos_0</span> <span class="o">=</span> <span class="n">xs</span> <span class="o">/</span> <span class="n">ns</span>
+<span class="k">def</span> <span class="nf">gibbs</span><span class="p">(</span><span class="n">n_iter</span><span class="p">,</span>
+          <span class="n">xs</span><span class="p">,</span>
+          <span class="n">ns</span><span class="p">,</span>
+          <span class="n">alpha</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">10.</span><span class="p">),</span>
+          <span class="n">beta</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">10.</span><span class="p">),</span>
+          <span class="n">rhos</span><span class="o">=</span><span class="n">rhos_0</span><span class="p">,</span>
+          <span class="n">c_alpha</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">6.25</span><span class="p">),</span> 
+          <span class="n">d_alpha</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.025</span><span class="p">),</span>
+          <span class="n">c_beta</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">6.25</span><span class="p">),</span>
+          <span class="n">d_beta</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.025</span><span class="p">),</span>
+          <span class="n">burn_in</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs Gibbs sampling in the Bayesian hierarchical model of polling data.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        n_iter: number of iterations of Gibbs sampling</span>
+<span class="sd">        xs, ns: the data</span>
+<span class="sd">        alpha, beta, rhos: initial values of these random variables</span>
+<span class="sd">        c_alpha, d_alpha, c_beta, d_beta: hyperparameters</span>
+<span class="sd">        burn_in: fraction of samples to discard before computing expectations</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        rhos_mean, rhos_std: posterior mean and standard deviation of rhos</span>
+<span class="sd">        prob_mean, prob_std: posterior mean and standard deviation of alpha/(alpha+beta)</span>
+<span class="sd">        lps: torch tensor of size &#39;n_iter&#39; containing log joint probabilities.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rhos_samples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">prob_samples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">lps</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_iter</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_iter</span><span class="p">):</span>
+        <span class="c1"># Resample alpha, beta using a single Metropolis-Hastings step.</span>
+        <span class="c1">##</span>
+        <span class="c1"># YOUR CODE HERE</span>
+        <span class="c1"># alpha, beta = ...</span>
+        <span class="c1">##        </span>
+
+        <span class="c1"># Resample rhos using the complete conditional.</span>
+        <span class="c1">##</span>
+        <span class="c1"># YOUR CODE HERE</span>
+        <span class="c1"># rhos = ...</span>
+        <span class="c1">##</span>
+
+        <span class="k">if</span> <span class="n">it</span> <span class="o">&gt;</span> <span class="n">n_iter</span> <span class="o">*</span> <span class="n">burn_in</span><span class="p">:</span>
+            <span class="n">rhos_samples</span> <span class="o">+=</span> <span class="p">[</span><span class="n">rhos</span><span class="p">]</span>
+            <span class="n">prob_samples</span> <span class="o">+=</span> <span class="p">[</span><span class="n">alpha</span> <span class="o">/</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">beta</span><span class="p">)]</span>
+
+        <span class="c1"># Evaluate log-joint probability at current sample</span>
+        <span class="c1">##</span>
+        <span class="c1"># YOUR CODE HERE</span>
+        <span class="c1">#</span>
+        <span class="c1">##</span>
+
+    <span class="n">rhos_samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">rhos_samples</span><span class="p">)</span>
+    <span class="n">prob_samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">prob_samples</span><span class="p">)</span>
+    <span class="n">rhos_mean</span><span class="p">,</span> <span class="n">rhos_std</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rhos_samples</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">rhos_samples</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">prob_mean</span><span class="p">,</span> <span class="n">prob_std</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">prob_samples</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">prob_samples</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rhos_mean</span><span class="p">,</span> <span class="n">rhos_std</span><span class="p">,</span> <span class="n">prob_mean</span><span class="p">,</span> <span class="n">prob_std</span><span class="p">,</span> <span class="n">lps</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-7-model-diagnostics">
+<h2>Problem 7: Model Diagnostics<a class="headerlink" href="#problem-7-model-diagnostics" title="Permalink to this heading">#</a></h2>
+<p>Run Gibbs sampling for 10000 iterations (this should take about 15 seconds to run). Use the default values provided in the function signature. Plot the evolution of the joint-log-probability over iterations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run Gibbs sampling for 10000 iterations</span>
+<span class="c1">##</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="c1">#</span>
+<span class="c1">##</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the joint-log probability over iterations</span>
+<span class="c1">##</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="c1">#</span>
+<span class="c1">##</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="part-a">
+<h3>Part (a):<a class="headerlink" href="#part-a" title="Permalink to this heading">#</a></h3>
+<p>What are the posterior means and standard deviations for <span class="math notranslate nohighlight">\(\rho_1, ..., \rho_4\)</span> and <span class="math notranslate nohighlight">\(\frac{\alpha}{\alpha + \beta}\)</span>? Do these results seem reasonable to you?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print the posterior means and standard deviations.</span>
+<span class="c1">##</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="c1">#</span>
+<span class="c1">##</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+<hr class="docutils" />
+<section id="id3">
+<h3>Part (b):<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<p>Find a setting of the hyperparameters <span class="math notranslate nohighlight">\(c_\alpha, d_\alpha, c_\beta, d_\beta\)</span> which will result in a prior that heavily favors Kerry. Re-run the Gibbs sampler with these settings. What is the new mean and standard deviation for <span class="math notranslate nohighlight">\(\frac{\alpha}{\alpha + \beta}\)</span>?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run Gibbs sampling with new hyperparameters and print the posterior mean and </span>
+<span class="c1"># standard deviation.</span>
+<span class="c1">##</span>
+<span class="c1"># YOUR CODE HERE</span>
+<span class="c1"># </span>
+<span class="c1">##</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="problem-8-reflections">
+<h2>Problem 8: Reflections<a class="headerlink" href="#problem-8-reflections" title="Permalink to this heading">#</a></h2>
+<section id="id4">
+<h3>Part (a):<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<p>Describe a setting in which a Gibbs sampler will be slow to mix. Why might our parametrization of the beta distribution in terms of <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span> slow down the Gibbs sampler? Can you think of a different parametrization which would work better?</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h3>Part (b):<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
+<p>Describe one way in which a Markov Chain using a Metropolis-Hastings adjusted transition may be slow to mix. Which variable in the code above could be tuned in order to speed up convergence?</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="submission-instructions">
+<h2>Submission Instructions<a class="headerlink" href="#submission-instructions" title="Permalink to this heading">#</a></h2>
+<p><strong>Formatting:</strong> check that your code does not exceed 80 characters in line width. You can set <em>Tools → Settings → Editor → Vertical ruler column</em> to 80 to see when you’ve exceeded the limit.</p>
+<p>Download your notebook in .ipynb format.  Then run the following command to convert to a PDF:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">pdf</span> <span class="o">&lt;</span><span class="n">yourname</span><span class="o">&gt;</span><span class="n">_hw1</span><span class="o">.</span><span class="n">ipynb</span>
+</pre></div>
+</div>
+<p><strong>Installing nbconvert:</strong></p>
+<p>If you’re using Anaconda for package management,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">anaconda</span> <span class="n">nbconvert</span>
+</pre></div>
+</div>
+<p><strong>Back up option</strong></p>
+<p>If you can’t get nbconvert to work, you can save it as a PDF from the browser. Just make sure that your code and figures are not cut off.</p>
+<p><strong>Upload</strong> your .pdf files to Gradescope.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./assignments/hw2"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../hw1/hw1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">HW1: Bayesian Linear Regression</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../notebooks/01_bayes_normal.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Bayesian Analysis of the Normal Distribution</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#polling-data">Polling Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hierarchical-model">Hierarchical Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-math-derive-the-complete-conditional-for-rho">Problem 1 [Math]: Derive the complete conditional for <span class="math notranslate nohighlight">\(\rho\)</span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-a-demonstrate-conditional-independence-of-rho-i">Part (a): Demonstrate conditional independence of <span class="math notranslate nohighlight">\(\{\rho_i\}\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-b">Part (b):</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-write-code-to-sample-from-the-complete-conditional-for-rho">Problem 2: Write code to sample from the complete conditional for <span class="math notranslate nohighlight">\(\rho\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3-derive-and-implement-the-complete-conditional-for-alpha">Problem 3: Derive and implement the complete conditional for <span class="math notranslate nohighlight">\(\alpha\)</span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-a-derive-the-complete-conditional">Part (a): Derive the complete conditional</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-b-write-code-evaluating-the-unnormalized-log-probability">Part (b): Write code evaluating the unnormalized log probability</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4-derive-and-implement-the-complete-conditional-for-beta">Problem 4: Derive and implement the complete conditional for <span class="math notranslate nohighlight">\(\beta\)</span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Part (a): Derive the complete conditional</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Part (b): Write code evaluating the unnormalized log probability</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-5-write-code-to-sample-from-the-complete-conditionals-for-alpha-and-beta">Problem 5: Write code to sample from the complete conditionals for <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-6-implement-a-gibbs-sampler">Problem 6: Implement a Gibbs sampler</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-7-model-diagnostics">Problem 7: Model Diagnostics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#part-a">Part (a):</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Part (b):</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-8-reflections">Problem 8: Reflections</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Part (a):</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Part (b):</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission Instructions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
