@@ -1,0 +1,1434 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>HW3: Continuous Latent Variable Models &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'assignments/hw3/hw3';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Bayesian Analysis of the Normal Distribution" href="../../notebooks/01_bayes_normal.html" />
+    <link rel="prev" title="HW2: Gibbs Sampling and Metropolis-Hastings" href="../hw2/hw2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw2/hw2.html">HW2: Gibbs Sampling and Metropolis-Hastings</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">HW3: Continuous Latent Variable Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/02_mvn.html">The Multivariate Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/03_hier_gauss.html">Hierarchical Gaussian Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/04_mcmc.html">Markov Chain Monte Carlo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/assignments/hw3/hw3.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/assignments/hw3/hw3.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>HW3: Continuous Latent Variable Models</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#download-the-mnist-dataset">Download the MNIST dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-simple-functions-to-mask-off-some-of-the-data">Write simple functions to mask off some of the data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-masks-and-apply-them-to-each-data-point">Make masks and apply them to each data point</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-the-masks-and-the-masked-data">Plot the masks and the masked data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flatten-the-data-and-masks-into-2d-tensors">Flatten the data and masks into 2D tensors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-principal-components-analysis-and-the-svd">Part 1: Principal Components Analysis and the SVD</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1a-code-run-pca-on-directly-on-the-masked-data">Problem 1a [Code]: Run PCA on directly on the masked data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1b-short-answer-why-does-pca-on-the-masked-data-need-so-many-more-components">Problem 1b [Short Answer]: Why does PCA on the masked data need so many more components?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-gibbs-sampling-for-factor-analysis-with-missing-data">Part 2: Gibbs Sampling for Factor Analysis with Missing Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2a-math-derive-the-complete-conditional-distributions-for-the-gibbs-sampler">Problem 2a [Math]: Derive the complete conditional distributions for the Gibbs sampler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2b-short-answer-which-gibbs-steps-can-be-performed-in-parallel">Problem 2b [Short answer]: Which Gibbs steps can be performed in parallel?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2c-code-implement-the-gibbs-sampler">Problem 2c [Code]: Implement the Gibbs sampler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-gibbs-sampler-provided">Run the Gibbs Sampler [Provided]</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-your-results-provided">Plot your results [Provided]</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2d-short-answer-discussion">Problem 2d [Short answer]: Discussion</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bonus-the-matrix-normal-distribution">Bonus: The matrix normal distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bonus-problem-math-derive-the-conditional-distribution-of-the-factor-analysis-weights-under-a-matrix-normal-prior">Bonus Problem [Math]: Derive the conditional distribution of the factor analysis weights under a matrix normal prior</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission Instructions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hw3-continuous-latent-variable-models">
+<h1>HW3: Continuous Latent Variable Models<a class="headerlink" href="#hw3-continuous-latent-variable-models" title="Permalink to this heading">#</a></h1>
+<hr class="docutils" />
+<p><strong>Name:</strong></p>
+<p><strong>Collaborators:</strong></p>
+<hr class="docutils" />
+<p>This homework explores continuous latent variable models like PCA and factor analysis. We will work with a synthetic dataset (MNIST digits) where we artificially mask out some pixels. Then we’ll see how well we can reconstruct the images by performing Bayesian inference in a factor analysis model with missing data.</p>
+<p>This application may seem a bit contrived – who cares about MNIST digits? – but it has real-world applications. For example, <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0092867418305129">Markowitz et al (2018)</a> used this technique to find a low-dimensional embedding of images of partially occluded mice.</p>
+<p>Along the way, we’ll build some intuition for PCA, hone our Gibbs sampling skills, and as a bonus, you can learn about multivariate Gaussian distribution for matrices called the matrix normal distribution.</p>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torchvision.datasets.mnist</span> <span class="kn">import</span> <span class="n">MNIST</span>
+<span class="kn">import</span> <span class="nn">torchvision.transforms</span> <span class="k">as</span> <span class="nn">transforms</span>
+
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">Bernoulli</span><span class="p">,</span> <span class="n">MultivariateNormal</span><span class="p">,</span> \
+    <span class="n">TransformedDistribution</span>
+<span class="kn">from</span> <span class="nn">torch.distributions.transforms</span> <span class="kn">import</span> <span class="n">PowerTransform</span>
+
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">trange</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.cm</span> <span class="kn">import</span> <span class="n">Blues</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ScaledInvChiSq</span><span class="p">(</span><span class="n">TransformedDistribution</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of the scaled inverse \chi^2 distribution defined in class.</span>
+<span class="sd">    We will implement it as a transformation of a gamma distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">Gamma</span><span class="p">(</span><span class="n">dof</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dof</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PowerTransform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">TransformedDistribution</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">transforms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dof</span> <span class="o">=</span> <span class="n">dof</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="download-the-mnist-dataset">
+<h3>Download the MNIST dataset<a class="headerlink" href="#download-the-mnist-dataset" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download MNIST training data and convert to float32</span>
+<span class="c1"># Only use a subset of the images</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">X3d_true</span> <span class="o">=</span> <span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+<span class="n">X3d_true</span> <span class="o">=</span> <span class="n">X3d_true</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">X3d_true</span> <span class="o">=</span> <span class="n">X3d_true</span><span class="p">[:</span><span class="n">N</span><span class="p">]</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">X3d_true</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="c1"># Add some noise to the images so they are not strictly integers</span>
+<span class="c1"># Otherwise we get weird numerical bugs in the Gibbs sampling code!</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span><span class="p">)</span>
+<span class="n">X3d_true</span> <span class="o">+=</span> <span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">X3d_true</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="write-simple-functions-to-mask-off-some-of-the-data">
+<h3>Write simple functions to mask off some of the data<a class="headerlink" href="#write-simple-functions-to-mask-off-some-of-the-data" title="Permalink to this heading">#</a></h3>
+<p>We’ll make three types of masks:</p>
+<ul class="simple">
+<li><p>Lines through the center of the image</p></li>
+<li><p>Circles of random radius</p></li>
+<li><p>Speckle, where each pixel is missing at random</p></li>
+</ul>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">random_line_mask</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> 
+                     <span class="n">mask_size</span><span class="o">=</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span> 
+                     <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a mask from a line through the center of the image.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num_samples: number of masks to generate</span>
+<span class="sd">        mask_size: pixels by pixels</span>
+<span class="sd">        lw: line width in pixels</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        masks: (num_samples,) + mask_size array of binary masks</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sample random orientations for each line</span>
+    <span class="n">us</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">us</span> <span class="o">/=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">us</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Get distance of each xy coordinate to the line</span>
+    <span class="c1"># this is the norm of (x, y) - (xp, yph) where (xp, yp)</span>
+    <span class="c1"># is the projection onto the line</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">mask_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> 
+                          <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">mask_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">xy</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">Y</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+    <span class="n">xy</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">mask_size</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+    
+    <span class="c1"># Project onto the line</span>
+    <span class="c1"># xpyp.shape == (num_samples, num_points, 2)</span>
+    <span class="n">xpyp</span> <span class="o">=</span> <span class="p">(</span><span class="n">us</span> <span class="o">@</span> <span class="n">xy</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">us</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">xy</span> <span class="o">-</span> <span class="n">xpyp</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Make masks based on a distance threshold</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">dist</span> <span class="o">&lt;</span> <span class="n">lw</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">num_samples</span><span class="p">,)</span> <span class="o">+</span> <span class="n">mask_size</span><span class="p">)</span>
+    
+
+<span class="k">def</span> <span class="nf">random_circle_mask</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> 
+                       <span class="n">mask_size</span><span class="o">=</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span>
+                       <span class="n">std_origin</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span>
+                       <span class="n">mean_radius</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span>
+                       <span class="n">df_radius</span><span class="o">=</span><span class="mf">7.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample random circular masks.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num_samples: number of masks to generate</span>
+<span class="sd">        mask_size: mask size in pixels</span>
+<span class="sd">        std_origin: standard deviation of the origin in pixels</span>
+<span class="sd">        mean_radius: mean radius of the circular masks</span>
+<span class="sd">        df_radius: degrees of freedom of a chi^2 distribution on radii.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        masks: (num_samples,) + mask_size array of binary masks</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">centers</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">std_origin</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">radii</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="n">Gamma</span><span class="p">(</span><span class="n">df_radius</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                      <span class="n">df_radius</span> <span class="o">/</span> <span class="n">mean_radius</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">num_samples</span><span class="p">,))</span>
+
+    <span class="c1"># Determine whether each point is inside the corresponding circle</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">mask_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                          <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">mask_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="n">mask_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">2.0</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span> <span class="o">-</span> <span class="n">mask_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mf">2.0</span>
+    <span class="n">xy</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">Y</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span> <span class="c1"># (num_points, 2)</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">centers</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">xy</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span>  <span class="p">(</span><span class="n">dist</span> <span class="o">&lt;</span> <span class="n">radii</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">num_samples</span><span class="p">,)</span> <span class="o">+</span> <span class="n">mask_size</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">random_speckle_mask</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span>
+                        <span class="n">mask_size</span><span class="o">=</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span>
+                        <span class="n">p_missing</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample a random speckle mask where each pissing is missing with equal </span>
+<span class="sd">    probability.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num_samples: number of masks to sample</span>
+<span class="sd">        p_speckle: probability that a pixel is missing</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        masks: (num_samples,) + mask_size binary array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">masks</span> <span class="o">=</span> <span class="n">Bernoulli</span><span class="p">(</span><span class="n">p_missing</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">num_samples</span><span class="p">,)</span> <span class="o">+</span> <span class="n">mask_size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">masks</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">BoolTensor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
+<section id="make-masks-and-apply-them-to-each-data-point">
+<h3>Make masks and apply them to each data point<a class="headerlink" href="#make-masks-and-apply-them-to-each-data-point" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make masks for each data point</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span><span class="p">)</span>
+<span class="n">line_masks</span> <span class="o">=</span> <span class="n">random_line_mask</span><span class="p">(</span><span class="n">N</span> <span class="o">//</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">circ_masks</span> <span class="o">=</span> <span class="n">random_circle_mask</span><span class="p">(</span><span class="n">N</span> <span class="o">//</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">spck_masks</span> <span class="o">=</span> <span class="n">random_speckle_mask</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">line_masks</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">circ_masks</span><span class="p">))</span>
+<span class="n">mask3d</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">line_masks</span><span class="p">,</span> <span class="n">circ_masks</span><span class="p">,</span> <span class="n">spck_masks</span><span class="p">])[</span><span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+
+<span class="c1"># Make the training data by substituting 255 (the max value of a uint8) </span>
+<span class="c1"># for each missing pixel</span>
+<span class="n">X3d</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">X3d_true</span><span class="p">)</span>
+<span class="n">X3d</span><span class="p">[</span><span class="n">mask3d</span><span class="p">]</span> <span class="o">=</span> <span class="mf">255.0</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-the-masks-and-the-masked-data">
+<h3>Plot the masks and the masked data<a class="headerlink" href="#plot-the-masks-and-the-masked-data" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot a few masks</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mask3d</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">j</span><span class="p">],</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Random Masks&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot a few masked data points</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">X3d</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">j</span><span class="p">],</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Masked Data&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="flatten-the-data-and-masks-into-2d-tensors">
+<h3>Flatten the data and masks into 2D tensors<a class="headerlink" href="#flatten-the-data-and-masks-into-2d-tensors" title="Permalink to this heading">#</a></h3>
+<p>The masked data is now stored in the tensor <code class="docutils literal notranslate"><span class="pre">X3d</span></code>, which has shape <code class="docutils literal notranslate"><span class="pre">(60000,</span> <span class="pre">28,</span> <span class="pre">28)</span></code>. We will flatten the tensor into <code class="docutils literal notranslate"><span class="pre">X</span></code>, which has shape <code class="docutils literal notranslate"><span class="pre">(60000,</span> <span class="pre">784)</span></code>, and consider each row to be a vector-valued observation. We’ll do the same for the masks.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_true</span> <span class="o">=</span> <span class="n">X3d_true</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X3d</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">mask3d</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Note:</strong> From here on out, you should only need <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">mask</span></code> in your code algorithm. <code class="docutils literal notranslate"><span class="pre">X_true</span></code> is reserved for validation purposes.</p>
+</section>
+</section>
+<section id="part-1-principal-components-analysis-and-the-svd">
+<h2>Part 1: Principal Components Analysis and the SVD<a class="headerlink" href="#part-1-principal-components-analysis-and-the-svd" title="Permalink to this heading">#</a></h2>
+<section id="problem-1a-code-run-pca-on-directly-on-the-masked-data">
+<h3>Problem 1a [Code]: Run PCA on directly on the masked data<a class="headerlink" href="#problem-1a-code-run-pca-on-directly-on-the-masked-data" title="Permalink to this heading">#</a></h3>
+<p>In this problem, you’ll investigate what happens if you run PCA on <code class="docutils literal notranslate"><span class="pre">X</span></code> directly.</p>
+<p>Implement PCA by taking the SVD of the centered and rescaled data matrix. Plot the first 25 principal components.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pca</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the principal components and the fraction of variance explained </span>
+<span class="sd">    using the SVD of the scaled and centered data matrix. </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X: a shape (N, D) tensor</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pcs: a shape (D, D) tensor whose columns are the full set of D principal</span>
+<span class="sd">            components. This matrix should be orthogonal.</span>
+
+<span class="sd">        var_explained: a shape (D,) tensor whose entries are the variance </span>
+<span class="sd">            explained by each corresponding principal component.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">## </span>
+    <span class="c1"># Your code below.</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">pcs</span><span class="p">,</span> <span class="n">var_explained</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We have provided some code below to run your code and plot the results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_pca</span><span class="p">(</span><span class="n">pcs</span><span class="p">,</span> <span class="n">var_explained</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function to plot the principal components and the variance explained,</span>
+<span class="sd">    aka scree plot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Plot the first 25 principal components</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">pcs</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)),</span> 
+                            <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+            <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PC </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="c1"># Make the scree plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">var_explained</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Number of PCs&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">784</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Fraction of Variance Explained&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the pca results for X, the flattened, masked data</span>
+<span class="n">plot_pca</span><span class="p">(</span><span class="o">*</span><span class="n">pca</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare the results to PCA on the X_true, the flattened true data</span>
+<span class="n">plot_pca</span><span class="p">(</span><span class="o">*</span><span class="n">pca</span><span class="p">(</span><span class="n">X_true</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-1b-short-answer-why-does-pca-on-the-masked-data-need-so-many-more-components">
+<h3>Problem 1b [Short Answer]: Why does PCA on the masked data need so many more components?<a class="headerlink" href="#problem-1b-short-answer-why-does-pca-on-the-masked-data-need-so-many-more-components" title="Permalink to this heading">#</a></h3>
+<p>PCA needs far fewer components to reach 90% variance explained on the real data (<code class="docutils literal notranslate"><span class="pre">X_true</span></code>) than it does on the masked data (<code class="docutils literal notranslate"><span class="pre">X</span></code>). Intuitively, why is that?</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-2-gibbs-sampling-for-factor-analysis-with-missing-data">
+<h2>Part 2: Gibbs Sampling for Factor Analysis with Missing Data<a class="headerlink" href="#part-2-gibbs-sampling-for-factor-analysis-with-missing-data" title="Permalink to this heading">#</a></h2>
+<p>Now we will try to fit a continuous latent variable model to the masked data by treating the masked pixels as missing data. As in lecture, we will assume a conjugate prior of the form,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\sigma_d^2 &amp;\sim \chi^{-2}(\nu_0, \sigma_0^2) \\
+\mathbf{w}_d &amp;\sim \mathcal{N}(\mathbf{0}, \tfrac{\sigma_d^2}{\kappa_0} \mathbf{I}) \\
+\mu_d &amp;\sim \mathcal{N}(0, \tfrac{\sigma_d^2}{\lambda_0})
+\end{align*}
+\end{split}\]</div>
+<p>The only thing we’ve added is a prior on the mean, which we previously assumed to be fixed at zero.</p>
+<p>Given the parameters, the distribution on latent variables and data is,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathbf{z}_n &amp;\sim \mathcal{N}(\mathbf{0}, \mathbf{I}) \\
+\mathbf{x}_n &amp;\sim \mathcal{N}(\mathbf{W} \mathbf{z}_n + \boldsymbol{\mu}, \mathrm{diag}(\boldsymbol{\sigma}^2))
+\end{align*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{W} \in \mathbb{R}^{D \times M}\)</span> is a matrix with rows <span class="math notranslate nohighlight">\(\mathbf{w}_d\)</span>, <span class="math notranslate nohighlight">\(\boldsymbol{\mu} = [\mu_1, \ldots, \mu_D]^\top\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{\sigma}^2 = [\sigma_1^2, \ldots, \sigma_D^2]^\top\)</span>.</p>
+<p>The graphical model (omitting the hyperparameters) looks like this:</p>
+<img src="https://dl.dropbox.com/s/xwojsl2jfkolxj3/fa_missing_data2.png?dl=0" alt="Factor Analysis with Missing Data Graphical Model" width="600"/>
+<p>Here, the <span class="math notranslate nohighlight">\(d\)</span>th coordinate is missing from the <span class="math notranslate nohighlight">\(n\)</span>-th data point. On other data points, other subsets of coordinates may be missing.</p>
+<p>To formalize the problem, let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathbf{X}_{\mathsf{obs}} &amp;= \{x_{n,d}: x_{n,d} \text{ is observed}\} \\
+\mathbf{X}_{\mathsf{miss}} &amp;= \{x_{n,d}: x_{n,d} \text{ is missing}\}
+\end{align*}
+\end{split}\]</div>
+<p>denote the observed and missing data, respectively.</p>
+<p><strong>Our goal</strong> is to infer the posterior distribution over parameters and latent variables and <em>missing</em> data given only the <em>observed</em> data and hyperparamters,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(\mathbf{W}, \boldsymbol{\mu}, \boldsymbol{\sigma^2}, \mathbf{Z}, \mathbf{X}_{\mathsf{miss}} \mid \mathbf{X}_{\mathsf{obs}}, \boldsymbol{\eta}),
+\end{align*}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{\eta} = (\nu_0, \sigma_0^2, \kappa_0, \lambda_0)\)</span> are the hyperparameters.</p>
+<p>To do so, we will implement a Gibbs sampling algorithm that alternates between updating the parameters <span class="math notranslate nohighlight">\(\mathbf{W}\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{\sigma^2}\)</span> and the latent variables <span class="math notranslate nohighlight">\(\mathbf{z}_n\)</span> for each data point, and then we’ll add one more step: sampling new values for the missing data <span class="math notranslate nohighlight">\(\mathbf{X}_{\mathsf{miss}}\)</span> from their conditional distribution. With samples of <span class="math notranslate nohighlight">\(\mathbf{X}_{\mathsf{miss}}\)</span>, for example, we can approximate the posterior distribution over the masked regions of the image.</p>
+<section id="problem-2a-math-derive-the-complete-conditional-distributions-for-the-gibbs-sampler">
+<h3>Problem 2a [Math]: Derive the complete conditional distributions for the Gibbs sampler<a class="headerlink" href="#problem-2a-math-derive-the-complete-conditional-distributions-for-the-gibbs-sampler" title="Permalink to this heading">#</a></h3>
+<p>Specifically, derive closed form expressions for the following conditional distributions:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p(\mathbf{w_d} \mid \{\mathbf{w}_i\}_{i \neq d}, \boldsymbol{\mu}, \boldsymbol{\sigma}^2, \mathbf{Z}, \mathbf{X}_{\mathsf{miss}}, \mathbf{X}_{\mathsf{obs}}, \boldsymbol{\eta})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(p(\mu_d \mid \{\mu_i\}_{i \neq d}, \mathbf{W}, \boldsymbol{\sigma}^2, \mathbf{Z}, \mathbf{X}_{\mathsf{miss}}, \mathbf{X}_{\mathsf{obs}}, \boldsymbol{\eta})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(p(\sigma_d^2 \mid \{\sigma_i^2\}_{i \neq d}, \mathbf{W}, \boldsymbol{\mu}, \mathbf{Z}, \mathbf{X}_{\mathsf{miss}}, \mathbf{X}_{\mathsf{obs}}, \boldsymbol{\eta})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(p(\mathbf{z}_n \mid \mathbf{W}, \boldsymbol{\mu}, \boldsymbol{\sigma}^2, \{\mathbf{z}_i\}_{i\neq n}, \mathbf{X}_{\mathsf{miss}}, \mathbf{X}_{\mathsf{obs}}, \boldsymbol{\eta})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(p(x_{n,d} \mid \mathbf{W}, \boldsymbol{\mu}, \boldsymbol{\sigma}^2, \mathbf{Z}, \mathbf{X}_{\mathsf{obs}}, \boldsymbol{\eta})\)</span>  for each missing entry <span class="math notranslate nohighlight">\(x_{n,d}\)</span></p></li>
+</ul>
+<p><em>Hint: Your expressions may not depend on all of the conditioned upon variables.</em></p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-2b-short-answer-which-gibbs-steps-can-be-performed-in-parallel">
+<h3>Problem 2b [Short answer]: Which Gibbs steps can be performed in parallel?<a class="headerlink" href="#problem-2b-short-answer-which-gibbs-steps-can-be-performed-in-parallel" title="Permalink to this heading">#</a></h3>
+<p>As in Assignment 2, some of these updates can be performed in parallel using a blocked Gibbs udpate. Which ones?</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-2c-code-implement-the-gibbs-sampler">
+<h3>Problem 2c [Code]: Implement the Gibbs sampler<a class="headerlink" href="#problem-2c-code-implement-the-gibbs-sampler" title="Permalink to this heading">#</a></h3>
+<p>Finish the functions below to implement the udpates you derived above. We have provided some function headers to help you organize your solutions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">log_probability</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">lambda0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate the log joint probability of the _complete_ data and all the </span>
+<span class="sd">    latent variables and parameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X: shape (N,D) tensor with the complete data (current samples of the </span>
+<span class="sd">            missing data are filled in)</span>
+<span class="sd">        Z: shape (N,M) tensor with the latent variables</span>
+<span class="sd">        W: shape (D,M) tensor of weights</span>
+<span class="sd">        mu: shape (D,) tensor with the mean parameter</span>
+<span class="sd">        sigmasq: shape (D,) tensor with the variance parameters</span>
+<span class="sd">        nu0, sigmasq0: scalar hyperparameters for the prior on variance</span>
+<span class="sd">        kappa0: scalar hyperparameter for the prior on weights</span>
+<span class="sd">        lambda0: scalar hyperparameter for the prior on mean</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">###</span>
+    <span class="c1"># Your code here.</span>
+    <span class="c1">#</span>
+    <span class="c1"># Hint: Take advantage of Pytorch distributions&#39; support for broadcasting</span>
+    <span class="c1"># to evaluate many log probabilities at once.</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">lp</span>
+
+
+<span class="k">def</span> <span class="nf">gibbs_sample_latents</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample new weights W given the other parameters, latent variables, and </span>
+<span class="sd">    hyperparameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        W: shape (D,M) tensor of weights</span>
+<span class="sd">        mu: shape (D,) tensor with the mean </span>
+<span class="sd">        sigmasq: shape (D,) tensor with variance parameters</span>
+<span class="sd">        X: shape (N,D) tensor with the complete data (current samples of the </span>
+<span class="sd">            missing data are filled in)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Z: shape (N,M) tensor with latent variables sampled from their </span>
+<span class="sd">            conditional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">###</span>
+    <span class="c1"># Your code here.</span>
+    <span class="c1"># </span>
+    <span class="c1"># Hint: use the MultivariateNormal distribution object and take advantage</span>
+    <span class="c1"># of its broadcasting capabilities to sample the rows of Z in parallel.</span>
+    <span class="c1">#</span>
+    <span class="c1"># Hint: `torch.linalg.solve(J, h.unsqueeze(2))` will broadcast a solve of a</span>
+    <span class="c1"># a shape (M, M) tensor `J` with a shape (N, M) tensor `h`. It gives a </span>
+    <span class="c1"># tensor of shape (N, M, 1). If you&#39;re not careful with broadcasting, you </span>
+    <span class="c1"># can get out of memory issues and crash the kernel.</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">Z</span>
+
+
+<span class="k">def</span> <span class="nf">gibbs_sample_weights</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample new weights W given the other parameters, latent variables, and </span>
+<span class="sd">    hyperparameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mu: shape (D,) tensor with the mean parameter</span>
+<span class="sd">        sigmasq: shape (D,) tensor with the variance parameters</span>
+<span class="sd">        Z: shape (N,M) tensor with the latent variables</span>
+<span class="sd">        X: shape (N,D) tensor with the complete data (current samples of the </span>
+<span class="sd">            missing data are filled in)</span>
+<span class="sd">        kappa0: scalar hyperparameter for the prior on weights</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        W: shape (D,M) tensor of weights sampled from its conditional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">###</span>
+    <span class="c1"># Your code here.</span>
+    <span class="c1"># </span>
+    <span class="c1"># Hint: you can use the MultivariateNormal distribution object and take </span>
+    <span class="c1"># advantage of its broadcasting capabilities to sample many rows of W in </span>
+    <span class="c1"># parallel.</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">W</span>
+
+
+<span class="k">def</span> <span class="nf">gibbs_sample_mean</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">lambda0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample new weights W given the other parameters, latent variables, and </span>
+<span class="sd">    hyperparameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        W: shape (D,M) tensor of weights</span>
+<span class="sd">        sigmasq: shape (D,) tensor with the variance parameters</span>
+<span class="sd">        Z: shape (N,M) tensor with the latent variables</span>
+<span class="sd">        X: shape (N,D) tensor with the complete data (current samples of the </span>
+<span class="sd">            missing data are filled in)</span>
+<span class="sd">        lambda0: scalar hyperparameter for the prior on mean</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        mu: shape (D,) tensor with the mean sampled from its conditional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">###</span>
+    <span class="c1"># Your code here.</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">mu</span>
+
+
+<span class="k">def</span> <span class="nf">gibbs_sample_variance</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">lambda0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample new weights W given the other parameters, latent variables, and </span>
+<span class="sd">    hyperparameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        W: shape (D,M) tensor of weights</span>
+<span class="sd">        mu: shape (D,) tensor with the mean </span>
+<span class="sd">        Z: shape (N,M) tensor with the latent variables</span>
+<span class="sd">        X: shape (N,D) tensor with the complete data (current samples of the </span>
+<span class="sd">            missing data are filled in)</span>
+<span class="sd">        nu0, sigmasq0: scalar hyperparameters for the prior on variance</span>
+<span class="sd">        kappa0: scalar hyperparameter for the prior on weights</span>
+<span class="sd">        lambda0: scalar hyperparameter for the prior on mean</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        sigmasq: shape (D,) tensor with variance sampled from its conditional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">###</span>
+    <span class="c1"># Your code here.</span>
+    <span class="c1"># </span>
+    <span class="c1"># Hint: You may use the ScaledInvChiSq distribution provide above. It also</span>
+    <span class="c1"># supports broadcasting.</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">sigmasq</span>
+
+
+<span class="k">def</span> <span class="nf">gibbs_sample_missing_data</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample new weights W given the other parameters, latent variables, and </span>
+<span class="sd">    hyperparameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        W: shape (D,M) tensor of weights</span>
+<span class="sd">        mu: shape (D,) tensor with the mean </span>
+<span class="sd">        sigmasq: shape (D,) tensor with variance parameters</span>
+<span class="sd">        Z: shape (N,M) tensor with the latent variables</span>
+<span class="sd">        X: shape (N,D) tensor with the complete data (current samples of the </span>
+<span class="sd">            missing data are filled in)</span>
+<span class="sd">        mask: shape (N,D) boolean tensor where 1 (True) specifies that the </span>
+<span class="sd">            corresponding entry in X is missing and needs to be resampled.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        X: shape (N,D) tensor which is the same as the given X in entries where</span>
+<span class="sd">            mask == 0 (False), but which has new values sampled from their </span>
+<span class="sd">            conditional distribution in entries where mask == 1 (True).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">###</span>
+    <span class="c1"># Your code here.</span>
+    <span class="c1"># </span>
+    <span class="c1"># Hint: Pytorch supports the same sorts of indexing tricks as numpy. </span>
+    <span class="c1"># See: https://pytorch.org/cppdocs/notes/tensor_indexing.html</span>
+    <span class="c1"># For example, you can use `X[mask] = vals` to set only the entries where </span>
+    <span class="c1"># the boolean mask is 1 (True). In this expression, `vals` is a 1d tensor</span>
+    <span class="c1"># whose length equals the number of missing values, </span>
+    <span class="c1"># i.e. `len(vals) = mask.sum()`. </span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">X</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="run-the-gibbs-sampler-provided">
+<h3>Run the Gibbs Sampler [Provided]<a class="headerlink" href="#run-the-gibbs-sampler-provided" title="Permalink to this heading">#</a></h3>
+<p>We have provided a simple function to run your Gibbs sampling code on the masked data from above. Collecting 200 Gibbs samples takes about 5 minutes with my implementation (on a Colab notebook, not using the GPU).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gibbs</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> 
+          <span class="n">mask</span><span class="p">,</span> 
+          <span class="n">M</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+          <span class="n">nu0</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> 
+          <span class="n">sigmasq0</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> 
+          <span class="n">kappa0</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> 
+          <span class="n">lambda0</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> 
+          <span class="n">N_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run the Gibbs sampler.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">        X: shape (N,D) tensor with the complete data (current samples of the </span>
+<span class="sd">            missing data are filled in)</span>
+<span class="sd">        mask: shape (N,D) boolean tensor where 1 (True) specifies that the </span>
+<span class="sd">            corresponding entry in X is missing and needs to be resampled.</span>
+<span class="sd">        M: the dimension of the continuous latent variables</span>
+<span class="sd">        nu0, sigmasq0: scalar hyperparameters for the prior on variance</span>
+<span class="sd">        kappa0: scalar hyperparameter for the prior on weights</span>
+<span class="sd">        lambda0: scalar hyperparameter for the prior on mean</span>
+<span class="sd">        N_samples:  number of Gibbs iterations to run</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+
+<span class="sd">    Dictionary with samples of the parameters tausq, mu, thetas, sigmasqs, and </span>
+<span class="sd">    the log joint probability at each iteration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c1"># We will be updating X in place each time we sample missing data.</span>
+    <span class="c1"># Rather than overwriting the data that&#39;s passed in, we&#39;ll make a clone </span>
+    <span class="c1"># and update that instead.</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+    <span class="c1"># Similarly, all the missing data is currently set to 255 (the high value).</span>
+    <span class="c1"># Let&#39;s initialize the missing data with the mean of the observed data.</span>
+    <span class="n">fmask</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">N_obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">fmask</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">X_mean</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">fmask</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">N_obs</span>
+    <span class="n">X</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">X_mean</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="c1"># Initialize the mean \mu to the sample mean and the variance \sigmasq to</span>
+    <span class="c1"># the sample variance of the observed data. Initialize the weights and the </span>
+    <span class="c1"># latent variables randomly.</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">X_mean</span>
+    <span class="n">sigmasq</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="n">X_mean</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">fmask</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">N_obs</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span>
+
+    <span class="c1"># Compute the initial log probability</span>
+    <span class="n">lp</span> <span class="o">=</span> <span class="n">log_probability</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">lambda0</span><span class="p">)</span>
+    
+    <span class="c1"># Initialize the output</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[(</span><span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">mask</span><span class="p">]),</span> <span class="n">Z</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">lp</span><span class="p">)]</span>
+
+    <span class="c1"># Run the Gibbs sampler</span>
+    <span class="k">for</span> <span class="n">itr</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">N_samples</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># Cycle through each update </span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">gibbs_sample_latents</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">gibbs_sample_weights</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">)</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">gibbs_sample_mean</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">lambda0</span><span class="p">)</span>
+        <span class="n">sigmasq</span> <span class="o">=</span> <span class="n">gibbs_sample_variance</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> 
+                                        <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">lambda0</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">gibbs_sample_missing_data</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+
+        <span class="c1"># Compute the log probability</span>
+        <span class="n">lp</span> <span class="o">=</span> <span class="n">log_probability</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> 
+                             <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">lambda0</span><span class="p">)</span>
+                
+        <span class="c1"># Update the sample list</span>
+        <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">mask</span><span class="p">]),</span> <span class="n">Z</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigmasq</span><span class="p">,</span> <span class="n">lp</span><span class="p">))</span>
+
+    <span class="c1"># Combine the output into a dictionary with a cool python zip trick</span>
+    <span class="n">samples_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;X_miss&quot;</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="s2">&quot;sigmasq&quot;</span><span class="p">,</span> <span class="s2">&quot;lps&quot;</span><span class="p">]</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">samples</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="n">samples_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">samples_dict</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This takes about 5-6 min with my code. For debugging purposes, you may want</span>
+<span class="c1"># to reduce N_samples, but please reset it to 200 for your final analysis.</span>
+<span class="n">N_samples</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">gibbs</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">N_samples</span><span class="o">=</span><span class="n">N_samples</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-your-results-provided">
+<h3>Plot your results [Provided]<a class="headerlink" href="#plot-your-results-provided" title="Permalink to this heading">#</a></h3>
+<p>The code below generates the following plots:</p>
+<ul class="simple">
+<li><p>Trace of the log joint probability</p></li>
+<li><p>The first 25 data points with their missing values filled in with the average of <span class="math notranslate nohighlight">\(\mathbf{X}_{\mathsf{miss}}\)</span> from the last half of the Gibbs samples. - 25 factors from the final Gibbs sample arranged into a 5x5 grid where each factor is shown as a 28x28 pixel image.</p></li>
+<li><p>The root mean squared error of the reconstructed image over iterations.</p></li>
+<li><p>Plot of the mean <span class="math notranslate nohighlight">\(\boldsymbol{\mu}\)</span> averaged over the last half of the Gibbs samples, shown as a 28x28 pixel image</p></li>
+<li><p>Plot of the variance <span class="math notranslate nohighlight">\(\boldsymbol{\sigma}^2\)</span> averaged over the last half of the Gibbs samples, shown as a 28x28 pixel image</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">offset</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">N_samples</span><span class="p">),</span> <span class="n">samples</span><span class="p">[</span><span class="s2">&quot;lps&quot;</span><span class="p">][</span><span class="n">offset</span><span class="p">:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Log Joint Probability&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the masked and reconstructed data, using the mean of X_miss samples</span>
+<span class="n">X_miss</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;X_miss&#39;</span><span class="p">][</span><span class="n">N_samples</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">X_recon</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">X_recon</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">X_miss</span>
+
+<span class="c1"># Plot a few masked data points</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span>
+                                 <span class="n">X_recon</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)])</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Masked and Reconstructed Data&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the reconstruction error across Gibbs iterations</span>
+<span class="n">rmse</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">samples</span><span class="p">[</span><span class="s1">&#39;X_miss&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">X_true</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rmse</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;RMSE&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the first 25 principal components</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s1">&#39;W&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">W</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)),</span> 
+                        <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Factor </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the posterior mean of $\mu$</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">][</span><span class="n">N_samples</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Mean Image&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the posterior mean of $\sigma^2$</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">&quot;sigmasq&quot;</span><span class="p">][</span><span class="n">N_samples</span><span class="o">//</span><span class="mi">2</span><span class="p">:])</span>\
+           <span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Per-Pixel Variance&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-2d-short-answer-discussion">
+<h3>Problem 2d [Short answer]: Discussion<a class="headerlink" href="#problem-2d-short-answer-discussion" title="Permalink to this heading">#</a></h3>
+<p>Were you surprised at how well (or poorly) you were able to reconstruct the masked images using factor analysis? Could you imagine alternative approaches that might perform better, and why?</p>
+<hr class="docutils" />
+<p><em>Your answer here</em></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="bonus-the-matrix-normal-distribution">
+<h2>Bonus: The matrix normal distribution<a class="headerlink" href="#bonus-the-matrix-normal-distribution" title="Permalink to this heading">#</a></h2>
+<p>In the model above, we put a prior on the weights <span class="math notranslate nohighlight">\(\mathbf{W} \in \mathbb{R}^{D \times M}\)</span> by assuming each row to be an independent multivariate normal vector,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(\mathbf{W}) &amp;= \prod_{d=1}^D \mathcal{N}(\mathbf{w}_d \mid \mathbf{0}, \tfrac{\sigma_d^2}{\kappa_0} \mathbf{I}).
+\end{align*}
+\]</div>
+<p>However, in class we noted that it’s a bit strange to put a prior on the rows when it’s the columns (i.e. the principal components) that we really care about.</p>
+<p>For this bonus problem, we’ll derive a <strong>matrix normal</strong> prior distribution instead. The matrix normal is a distribution on matrices <span class="math notranslate nohighlight">\(\mathbf{W} \in \mathbb{R}^{D \times M}\)</span> with three parameters: a mean <span class="math notranslate nohighlight">\(\mathbf{M} \in \mathbb{R}^{D \times M}\)</span>, a positive definite covariance among the rows <span class="math notranslate nohighlight">\(\mathbf{\Sigma}_r \in \mathbb{R}_{\succeq 0}^{D \times D}\)</span>, and a positive definite covariance among the columns <span class="math notranslate nohighlight">\(\mathbf{\Sigma}_c \in \mathbb{R}_{\succeq 0}^{M \times M}\)</span>.</p>
+<p>The matrix normal distribution is equivalent to a multivariate distribution on the vectorized (aka flattened or raveled) matrix where the covariance matrix obeys a special, Kronecker-factored form. Specifically,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\mathbf{W} \sim \mathcal{MN}(\mathbf{M}, \mathbf{\Sigma}_r, \mathbf{\Sigma}_c)
+\iff \mathrm{vec}(\mathbf{W}) \sim \mathcal{N}(\mathrm{vec}(\mathbf{M}), \mathbf{\Sigma}_r \otimes \mathbf{\Sigma}_c),
+\end{align*}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathrm{vec}(\cdot)\)</span> is the vectorization operation that ravels a matrix into a vector (here in row-major, i.e. C order) and <span class="math notranslate nohighlight">\(\otimes\)</span> denotes the <a class="reference external" href="https://en.wikipedia.org/wiki/Kronecker_product">Kronecker product</a>.</p>
+<p>For example, suppose</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathbf{M} = \begin{bmatrix} 1 &amp; 2 \\ 3 &amp; 4 \\ 5 &amp; 6 \end{bmatrix}.
+\end{align*}
+\end{split}\]</div>
+<p>Then</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\mathrm{vec}\left( \mathbf{M} \right) = [1, 2, 3, 4, 5, 6]^\top.
+\end{align*}
+\]</div>
+<p>The vectorized matrix is the concatenation of its rows.</p>
+<p>To illustrate the Kronecker product, suppose</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    \mathbf{\Sigma}_r = \begin{bmatrix} 
+    1 &amp; 0 &amp; 0 \\ 
+    0 &amp; 1 &amp; 0 \\
+    0 &amp; 0 &amp; 1 
+    \end{bmatrix}, \quad
+    \mathbf{\Sigma}_c = 
+    \begin{bmatrix} 1 &amp; -1 \\ -1 &amp; 2 \end{bmatrix}
+\end{align*}
+\end{split}\]</div>
+<p>Then,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+    \mathbf{\Sigma}_r \otimes \mathbf{\Sigma}_c =
+    \begin{bmatrix} 
+    1 &amp; -1 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\ 
+    -1 &amp; 2 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
+    0 &amp; 0 &amp; 1 &amp; -1 &amp; 0 &amp; 0 \\
+    0 &amp; 0 &amp; -1 &amp; 2 &amp; 0 &amp; 0 \\
+    0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; -1 \\
+    0 &amp; 0 &amp; 0 &amp; 0 &amp; -1 &amp; 2
+    \end{bmatrix}
+\end{align*}
+\end{split}\]</div>
+<p>Since <span class="math notranslate nohighlight">\(\mathbf{\Sigma}_r\)</span> is the identity matrix, each row <span class="math notranslate nohighlight">\(\mathbf{w}_d \in \mathbb{R}^2\)</span> is an independent multivariate normal random variable with covariance <span class="math notranslate nohighlight">\(\mathbf{\Sigma}_c\)</span>. With this example in mind, we now see that the prior we used in Part 2 was really a special case of the matrix normal distribution with <span class="math notranslate nohighlight">\(\mathbf{M} = \mathbf{0}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{\Sigma}_r = \mathrm{diag}([\sigma_1^2, \ldots, \sigma_D^2])\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{\Sigma}_c = \kappa_0^{-1} \mathbf{I}\)</span>.</p>
+<p>We can derive the matrix normal density by starting from the multivariate normal density on the vectorized matrix,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+p(\mathbf{W} \mid \mathbf{M}, \mathbf{\Sigma}_r, \mathbf{\Sigma}_c)
+&amp;= (2 \pi)^{-\frac{DM}{2}} |\mathbf{\Sigma}_r \otimes \mathbf{\Sigma}_c | 
+\exp \left\{ -\frac{1}{2} \mathrm{vec}(\mathbf{W} - \mathbf{M})^\top (\mathbf{\Sigma}_r \otimes \mathbf{\Sigma}_c)^{-1} \mathrm{vec}(\mathbf{W} - \mathbf{M}) \right\} \\
+&amp;= (2 \pi)^{-\frac{DM}{2}} |\mathbf{\Sigma}_r|^M |\mathbf{\Sigma}_c|^D  
+\exp \left\{ -\frac{1}{2} \mathrm{vec}(\mathbf{W} - \mathbf{M})^\top (\mathbf{\Sigma}_r^{-1} \otimes \mathbf{\Sigma}_c^{-1}) \mathrm{vec}(\mathbf{W} - \mathbf{M}) \right\} \\
+&amp;= (2 \pi)^{-\frac{DM}{2}} |\mathbf{\Sigma}_r|^M |\mathbf{\Sigma}_c|^D  
+\exp \left\{ -\frac{1}{2} \mathrm{vec}(\mathbf{W} - \mathbf{M})^\top \mathrm{vec}(\mathbf{\Sigma}_r^{-1}(\mathbf{W} - \mathbf{M}) \mathbf{\Sigma}_c^{-1}) \right\} \\
+&amp;= (2 \pi)^{-\frac{DM}{2}} |\mathbf{\Sigma}_r|^M |\mathbf{\Sigma}_c|^D  
+\exp \left\{ -\frac{1}{2}\mathrm{Tr} \left[ \mathbf{\Sigma}_c^{-1} (\mathbf{W} - \mathbf{M})^\top \mathbf{\Sigma}_r^{-1} (\mathbf{W} - \mathbf{M}) \right] \right\} \\
+&amp;\propto \exp \left\{ -\frac{1}{2}\mathrm{Tr} \left[ \mathbf{\Sigma}_c^{-1} \mathbf{W}^\top \mathbf{\Sigma}_r^{-1} \mathbf{W} \right] + \mathrm{Tr} \left[\mathbf{\Sigma}_c^{-1} \mathbf{M}^\top \mathbf{\Sigma}_r^{-1} \mathbf{W} \right] \right\}
+\end{align*}
+\end{split}\]</div>
+<p><em>Note: the definitions given here are appropriate for Python/PyTorch, where vectorization is performed in row-major order. This is in contrast to the definition on <a class="reference external" href="https://en.wikipedia.org/wiki/Matrix_normal_distribution">Wikipedia</a>, which assumes column-major order, as in Matlab or R. The only difference is ther order of the Kronecker product is flipped.</em></p>
+<section id="bonus-problem-math-derive-the-conditional-distribution-of-the-factor-analysis-weights-under-a-matrix-normal-prior">
+<h3>Bonus Problem [Math]: Derive the conditional distribution of the factor analysis weights under a matrix normal prior<a class="headerlink" href="#bonus-problem-math-derive-the-conditional-distribution-of-the-factor-analysis-weights-under-a-matrix-normal-prior" title="Permalink to this heading">#</a></h3>
+<p>Now consider the factor analysis model,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathbf{z}_n &amp;\sim \mathcal{N}(\mathbf{0}, \mathbf{I}) \\
+\mathbf{x}_n &amp;\sim \mathcal{N}(\mathbf{W} \mathbf{z}_n + \boldsymbol{\mu}, \mathrm{diag}(\boldsymbol{\sigma}^2))
+\end{align*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{\mu} = [\mu_1, \ldots, \mu_D]^\top\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{\sigma}^2 = [\sigma_1^2, \ldots, \sigma_D^2]^\top\)</span>.</p>
+<p>Suppose we put the following matrix normal prior on the weights and variances,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\sigma_d^2 &amp;\sim \chi^{-2}(\nu_0, \sigma_0^2) \\
+\boldsymbol{\mu} &amp;\sim \mathcal{N}(\mathbf{0}, \mathrm{diag}(\boldsymbol{\sigma}^2) / \lambda_0) \\
+\mathbf{W} &amp;\sim \mathcal{MN}(\mathbf{0}, \mathrm{diag}(\boldsymbol{\sigma}^2), \mathbf{\Sigma}_c)
+\end{align*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{\Sigma}_c\)</span> is the prior covariance among the columns.</p>
+<p>Derive the complete conditional distribution of the weights,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(\mathbf{W} \mid \{\mathbf{z}_n, \mathbf{x}_n\}_{n=1}^N, \boldsymbol{\mu}, \boldsymbol{\sigma}^2, \mathbf{\Sigma}_c) 
+\end{align*}
+\]</div>
+<p>Finally, let <span class="math notranslate nohighlight">\(\mathbf{\Sigma}_c^{-1} \to \mathbf{0}\)</span>. What does the conditional mean of <span class="math notranslate nohighlight">\(\mathbf{W}\)</span> converge to? Does this expression look familiar?</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="submission-instructions">
+<h2>Submission Instructions<a class="headerlink" href="#submission-instructions" title="Permalink to this heading">#</a></h2>
+<p><strong>Formatting:</strong> check that your code does not exceed 80 characters in line width. You can set <em>Tools → Settings → Editor → Vertical ruler column</em> to 80 to see when you’ve exceeded the limit.</p>
+<p>Download your notebook in .ipynb format and remove the Open in Colab button.  Then run the following command to convert to a PDF:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">pdf</span> <span class="o">&lt;</span><span class="n">yourname</span><span class="o">&gt;</span><span class="n">_hw3</span><span class="o">.</span><span class="n">ipynb</span>
+</pre></div>
+</div>
+<p><strong>Installing nbconvert:</strong></p>
+<p>If you’re using Anaconda for package management,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">anaconda</span> <span class="n">nbconvert</span>
+</pre></div>
+</div>
+<p>If you can’t get <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> to work, you may print to PDF using your browswer, but please make sure that none of your code, text, or math is cut off.</p>
+<p><strong>Upload</strong> your .pdf files to Gradescope.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./assignments/hw3"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../hw2/hw2.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">HW2: Gibbs Sampling and Metropolis-Hastings</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../notebooks/01_bayes_normal.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Bayesian Analysis of the Normal Distribution</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#download-the-mnist-dataset">Download the MNIST dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-simple-functions-to-mask-off-some-of-the-data">Write simple functions to mask off some of the data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-masks-and-apply-them-to-each-data-point">Make masks and apply them to each data point</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-the-masks-and-the-masked-data">Plot the masks and the masked data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flatten-the-data-and-masks-into-2d-tensors">Flatten the data and masks into 2D tensors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-principal-components-analysis-and-the-svd">Part 1: Principal Components Analysis and the SVD</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1a-code-run-pca-on-directly-on-the-masked-data">Problem 1a [Code]: Run PCA on directly on the masked data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1b-short-answer-why-does-pca-on-the-masked-data-need-so-many-more-components">Problem 1b [Short Answer]: Why does PCA on the masked data need so many more components?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-gibbs-sampling-for-factor-analysis-with-missing-data">Part 2: Gibbs Sampling for Factor Analysis with Missing Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2a-math-derive-the-complete-conditional-distributions-for-the-gibbs-sampler">Problem 2a [Math]: Derive the complete conditional distributions for the Gibbs sampler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2b-short-answer-which-gibbs-steps-can-be-performed-in-parallel">Problem 2b [Short answer]: Which Gibbs steps can be performed in parallel?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2c-code-implement-the-gibbs-sampler">Problem 2c [Code]: Implement the Gibbs sampler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-gibbs-sampler-provided">Run the Gibbs Sampler [Provided]</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-your-results-provided">Plot your results [Provided]</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2d-short-answer-discussion">Problem 2d [Short answer]: Discussion</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bonus-the-matrix-normal-distribution">Bonus: The matrix normal distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bonus-problem-math-derive-the-conditional-distribution-of-the-factor-analysis-weights-under-a-matrix-normal-prior">Bonus Problem [Math]: Derive the conditional distribution of the factor analysis weights under a matrix normal prior</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission Instructions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -67,7 +67,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The Multivariate Normal Distribution" href="02_mvn.html" />
-    <link rel="prev" title="HW2: Gibbs Sampling and Metropolis-Hastings" href="../assignments/hw2/hw2.html" />
+    <link rel="prev" title="HW3: Continuous Latent Variable Models" href="../assignments/hw3/hw3.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -157,6 +157,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../assignments/hw0/hw0.html">HW0: PyTorch Primer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../assignments/hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../assignments/hw2/hw2.html">HW2: Gibbs Sampling and Metropolis-Hastings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw3/hw3.html">HW3: Continuous Latent Variable Models</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
 <ul class="current nav bd-sidenav">
@@ -439,7 +440,7 @@ x_n \mid \mu, \sigma^2 &amp;\sim \mathcal{N}(\mu, \sigma^2)  \quad  \text{for } 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ff81b1aeca0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fda07857b80&gt;
 </pre></div>
 </div>
 <img alt="../_images/8d9439cb18cda3f2facc7578372738bb665be31554157f89887c9dfaf88eec5f.png" src="../_images/8d9439cb18cda3f2facc7578372738bb665be31554157f89887c9dfaf88eec5f.png" />
@@ -527,7 +528,7 @@ X.mean():  tensor(0.4819)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ff818fdd880&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fda0565f5e0&gt;
 </pre></div>
 </div>
 <img alt="../_images/1d21e568e71634ac2d7925fdf8905c8717f7d34f7bbbfb352e5fb72c372d820d.png" src="../_images/1d21e568e71634ac2d7925fdf8905c8717f7d34f7bbbfb352e5fb72c372d820d.png" />
@@ -608,7 +609,7 @@ p(x \mid \mu, \lambda) &amp;=
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ff8eceed7c0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fda05596790&gt;
 </pre></div>
 </div>
 <img alt="../_images/b8dcfe72fecd0f761c5dc6e272b4b31be6c6c86790a7f655ea8f5784ad66d8f5.png" src="../_images/b8dcfe72fecd0f761c5dc6e272b4b31be6c6c86790a7f655ea8f5784ad66d8f5.png" />
@@ -707,7 +708,7 @@ p(x \mid \mu, \lambda) &amp;=
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ff817e324c0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fda07a60ac0&gt;
 </pre></div>
 </div>
 <img alt="../_images/51d84991530bf2e42e6f34cb6dba11e096cf8ebcdcd0420cb9e929773ef291ed.png" src="../_images/51d84991530bf2e42e6f34cb6dba11e096cf8ebcdcd0420cb9e929773ef291ed.png" />
@@ -736,7 +737,7 @@ p(x \mid \mu, \lambda) &amp;=
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b552d39002e174e29f158a1116faf7b92efbaeca63d77ea16f532fcedc605c0d.png" src="../_images/b552d39002e174e29f158a1116faf7b92efbaeca63d77ea16f532fcedc605c0d.png" />
+<img alt="../_images/6ed6f27d6b842c2bef7bf3d08dcca4eb6aeb95032c60d5bb5cd84daa4f06ce67.png" src="../_images/6ed6f27d6b842c2bef7bf3d08dcca4eb6aeb95032c60d5bb5cd84daa4f06ce67.png" />
 </div>
 </div>
 <section id="exercise-compute-the-posterior-distribution-of-the-variance-given-the-data">
@@ -896,12 +897,12 @@ p(\mu, \sigma^2) &amp;= p(\sigma^2) , p(\mu \mid \sigma^2) \
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../assignments/hw2/hw2.html"
+       href="../assignments/hw3/hw3.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">HW2: Gibbs Sampling and Metropolis-Hastings</p>
+        <p class="prev-next-title">HW3: Continuous Latent Variable Models</p>
       </div>
     </a>
     <a class="right-next"
