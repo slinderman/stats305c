@@ -7,6 +7,7 @@ execute:
     - 'hw0.ipynb'
     - 'hw1.ipynb'
     - 'hw2.ipynb'
+    - 'hw3.ipynb'
 only_build_toc_files: true
 
 # Add a bibtex file so that we can create citations
