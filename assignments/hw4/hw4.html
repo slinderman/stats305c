@@ -1,0 +1,1273 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>HW4: Bayesian Mixture Models &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'assignments/hw4/hw4';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Bayesian Analysis of the Normal Distribution" href="../../notebooks/01_bayes_normal.html" />
+    <link rel="prev" title="HW3: Continuous Latent Variable Models" href="../hw3/hw3.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw2/hw2.html">HW2: Gibbs Sampling and Metropolis-Hastings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw3/hw3.html">HW3: Continuous Latent Variable Models</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">HW4: Bayesian Mixture Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/02_mvn.html">The Multivariate Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/03_hier_gauss.html">Hierarchical Gaussian Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/04_mcmc.html">Markov Chain Monte Carlo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/assignments/hw4/hw4.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/assignments/hw4/hw4.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>HW4: Bayesian Mixture Models</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model">Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-math-em-calculations">Problem 1 [math]: EM calculations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1a-derive-the-posterior-distribution-for-q-n-z-n-p-z-n-x-n-theta">Problem 1a: Derive the posterior distribution for <span class="math notranslate nohighlight">\(q_n(z_n) = p(z_n | x_n, \theta)\)</span>.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1b-derive-the-expected-log-probability">Problem 1b: Derive the expected log probability</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1c-expand-mathcal-l-1-in-exponential-family-form">Problem 1c: Expand <span class="math notranslate nohighlight">\(\mathcal{L}_1\)</span> in exponential family form.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1d-maximize-mathcal-l-1">Problem 1d: Maximize <span class="math notranslate nohighlight">\(\mathcal{L}_1\)</span>.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1e-maximize-mathcal-l-2">Problem 1e: Maximize <span class="math notranslate nohighlight">\(\mathcal{L}_2\)</span>.</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-code-implement-em-for-the-gaussian-mixture-model">Problem 2 [code]: Implement EM for the Gaussian mixture model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#helpers">Helpers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2a-implement-the-log-probability-function">Problem 2a: Implement the <code class="docutils literal notranslate"><span class="pre">log_probability</span></code> function.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2b-implement-the-e-step-function">Problem 2b: Implement the <code class="docutils literal notranslate"><span class="pre">e_step</span></code> function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2c-implement-the-m-step-function">Problem 2c: Implement the <code class="docutils literal notranslate"><span class="pre">m_step</span></code> function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#em-function-given">EM function [given]</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-your-implementation-on-a-toy-dataset">Test your implementation on a toy dataset</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3-short-answer-perform-image-segmentation">Problem 3 [short answer]: Perform image segmentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finally-run-the-segmentation-for-each-image">Finally, run the segmentation for each image</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3a-multiple-restarts">Problem 3a: Multiple restarts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3b-model-improvements">Problem 3b: Model improvements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission Instructions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hw4-bayesian-mixture-models">
+<h1>HW4: Bayesian Mixture Models<a class="headerlink" href="#hw4-bayesian-mixture-models" title="Permalink to this heading">#</a></h1>
+<hr class="docutils" />
+<p><strong>Name:</strong></p>
+<p><strong>Names of any collaborators:</strong></p>
+<hr class="docutils" />
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this heading">#</a></h2>
+<p>In this homework assignment we will investigate image segmentation —specifically, separating the background from the foreground of the image. To do so, you’ll fit Bayesian mixtures of Gaussians using the expectation-maximization (EM) algorithm.</p>
+<p>The figure below shows the original input image and the resulting segmentations into background and foreground. By the end of this assignment, you will have implemented the algorithm to achieve this segmentation.</p>
+<p>Reference on image segmentation: <a class="reference external" href="https://en.wikipedia.org/wiki/Image_segmentation">https://en.wikipedia.org/wiki/Image_segmentation</a></p>
+<img src='https://raw.githubusercontent.com/slinderman/stats305c/main/assignments/hw4/images/fox_seg.png' width=800px>
+<section id="model">
+<h3>Model<a class="headerlink" href="#model" title="Permalink to this heading">#</a></h3>
+<p>We will use a simple mixture model to cluster the pixels (with the number of clusters <span class="math notranslate nohighlight">\(K = 2\)</span> in our image segmentation problem). The likelihood is a mixture of Gaussian distributions.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+x_n \mid z_n, \{\mu_k, \Sigma_k\}_{k=1}^K &amp;\sim \mathcal{N}(\mu_{z_n}, \Sigma_{z_n}) \\
+z_n \mid \pi &amp;\sim \text{Categorical}(\pi)
+\end{align*}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(x_n \in \mathbb{R}^D\)</span> is distributed according to a Gaussian distribution with the specified mean, <span class="math notranslate nohighlight">\(\mu_k\)</span>, and covariance, <span class="math notranslate nohighlight">\(\Sigma_k\)</span>, for its corresponding cluster <span class="math notranslate nohighlight">\(z_n = k\)</span>,
+and <span class="math notranslate nohighlight">\(z_n\)</span> is distributed as a multinomial with hyperparameter <span class="math notranslate nohighlight">\(\pi\)</span>.
+We will represent the images as a set of <span class="math notranslate nohighlight">\(N\)</span> pixels, <span class="math notranslate nohighlight">\(\{x_n\}_{n=1}^N\)</span>, each in <span class="math notranslate nohighlight">\(D=3\)</span> dimensional space, since there are three color channels (red, green, and blue).</p>
+<p>We specify the following priors on <span class="math notranslate nohighlight">\(\mu_k\)</span>, <span class="math notranslate nohighlight">\(\Sigma_k\)</span>, and <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
+<ul class="simple">
+<li><p>Assume a normal-inverse-Wishart prior prior for each cluster mean and covariance.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*} 
+p(\mu_k, \Sigma_k) &amp;= \mathrm{IW}(\Sigma_k \mid \Sigma_0, \nu_0) \, \mathcal{N}(\mu_k \mid \mu_0, \kappa_0^{-1} \Sigma_k)
+\end{align*}
+\]</div>
+<p>Here <span class="math notranslate nohighlight">\(\Sigma_0, \nu_0, \mu_0, \kappa_0\)</span> are hyper-parameters.</p>
+<ul class="simple">
+<li><p>We give a symmetric Dirichlet distribution prior to the mixing proportions, <span class="math notranslate nohighlight">\(\pi\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ 
+p(\pi \mid \alpha) = \text{Dirichlet}(\alpha 1_K)
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(1_K\)</span> is an all-ones vector of length <span class="math notranslate nohighlight">\(K\)</span> and <span class="math notranslate nohighlight">\(\alpha\)</span> is a hyperparameter.</p>
+</section>
+</section>
+<section id="problem-1-math-em-calculations">
+<h2>Problem 1 [math]: EM calculations<a class="headerlink" href="#problem-1-math-em-calculations" title="Permalink to this heading">#</a></h2>
+<p>In this problem, you will derive the EM procedure for our Bayesian model.
+For notational simplicity, let</p>
+<div class="math notranslate nohighlight">
+\[
+\theta = (\{\mu_k, \Sigma_k\}_{k=1}^K, \pi)
+\]</div>
+<p>be the tuple of parameters we wish to estimate via EM.
+Let <span class="math notranslate nohighlight">\(\theta^{(i)}\)</span> be the parameter value at iteration <span class="math notranslate nohighlight">\(i\)</span>.
+Recall the EM procedure is given by two steps:</p>
+<ul class="simple">
+<li><p><strong>Expectation step (E-step)</strong>:
+Compute</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+q_n(z_n)
+&amp;=
+p(z_n \mid x_n, \theta^{(i)})
+\end{align*}
+\]</div>
+<ul class="simple">
+<li><p><strong>Maximization step (M-step)</strong>:
+Find new parameters</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\theta^{(i+1)}
+=
+\underset{\theta}{\operatorname{argmax}} 
+\mathbb{E}_{q}
+[\log p(\mathbf{X}, \mathbf{Z}, \theta)]
+\end{align*}
+\]</div>
+<p>You will need these derivations to be correct for the implementation in Problem 2 to be correct, so we highly recommend taking the time to double-check them.</p>
+<section id="problem-1a-derive-the-posterior-distribution-for-q-n-z-n-p-z-n-x-n-theta">
+<h3>Problem 1a: Derive the posterior distribution for <span class="math notranslate nohighlight">\(q_n(z_n) = p(z_n | x_n, \theta)\)</span>.<a class="headerlink" href="#problem-1a-derive-the-posterior-distribution-for-q-n-z-n-p-z-n-x-n-theta" title="Permalink to this heading">#</a></h3>
+<hr class="docutils" />
+<p><em>Your answer here</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-1b-derive-the-expected-log-probability">
+<h3>Problem 1b: Derive the expected log probability<a class="headerlink" href="#problem-1b-derive-the-expected-log-probability" title="Permalink to this heading">#</a></h3>
+<p>Show that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathbb{E}_q\left[ \log p(X, Z, \theta) \right]
+&amp;= 
+\underbrace{\sum\limits_{k=1}^K
+\left[ 
+\sum\limits_{n=1}^N 
+\left[ 
+\omega_{nk}
+\log \mathcal{N}(x_n \mid \mu_{k}, \Sigma_k)
+\right]
++
+\log p(\mu_k, \Sigma_k)
+\right]}_{\mathcal{L}_1(\mu, \Sigma)}
+\\&amp;\qquad +
+\underbrace{\sum\limits_{k=1}^K
+\left[
+\sum_{n=1}^N
+\left[\omega_{nk} \log \pi_k \right]
++ (\alpha_k-1) \log \pi_k
+\right]}_{\mathcal{L}_2(\pi)}
++
+C
+\end{align*}
+\end{split}\]</div>
+<p>for some constant <span class="math notranslate nohighlight">\(C\)</span>, where <span class="math notranslate nohighlight">\(\omega_{nk} = q_n(z_n =k)\)</span>, and
+where <span class="math notranslate nohighlight">\(\mathcal{L}_1, \mathcal{L}_2\)</span> represent the terms in the expected log probability that depend on <span class="math notranslate nohighlight">\(\{\mu_k, \Sigma_k\}_{k=1}^K\)</span> and <span class="math notranslate nohighlight">\(\pi\)</span>, respectively.</p>
+<hr class="docutils" />
+<p><em>Your answer here</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-1c-expand-mathcal-l-1-in-exponential-family-form">
+<h3>Problem 1c: Expand <span class="math notranslate nohighlight">\(\mathcal{L}_1\)</span> in exponential family form.<a class="headerlink" href="#problem-1c-expand-mathcal-l-1-in-exponential-family-form" title="Permalink to this heading">#</a></h3>
+<p>Show that <span class="math notranslate nohighlight">\(\log p(x_n\mid z_n=k, \mu_k, \Sigma_k)\)</span> and <span class="math notranslate nohighlight">\(\log p(\mu_k, \Sigma_k)\)</span> can be represented as the following:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\log p(x_n\mid z_n=k, \mu_k, \Sigma_k)
+&amp;=
+t(x_n)^\top \eta_k - A(\eta_k) + c
+\\
+\log p(\mu_k, \Sigma_k)
+&amp;=
+\phi^\top \eta_k - \nu A(\eta_k) + c'
+\end{align*}
+\end{split}\]</div>
+<p>for some contants <span class="math notranslate nohighlight">\(c\)</span>, <span class="math notranslate nohighlight">\(c'\)</span>, functions <span class="math notranslate nohighlight">\(t\)</span>, <span class="math notranslate nohighlight">\(A\)</span> (<strong>explicitly find these</strong>), hyperparameters <span class="math notranslate nohighlight">\(\phi\)</span>, <span class="math notranslate nohighlight">\(\nu\)</span> (<strong>explicitly find these</strong>), where,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\eta_k &amp;:= \left(-\frac{1}{2}\log|\Sigma_k|, -\frac{1}{2}\Sigma_k^{-1}, \Sigma_k^{-1} \mu_k, -\frac{1}{2} \mu_k^\top \Sigma_k^{-1} \mu_k \right) \\
+\end{align*}
+\end{split}\]</div>
+<p>Here, inner-product between elements <span class="math notranslate nohighlight">\(a, b\)</span> of the form <span class="math notranslate nohighlight">\(\eta_k\)</span> is defined to be</p>
+<div class="math notranslate nohighlight">
+\[
+\langle a, b \rangle := a_1 b_1 + \mathrm{Tr}(a_2 b_2) + a_3^\top b_3 + a_4 b_4
+\]</div>
+<p>Deduce that <span class="math notranslate nohighlight">\(\mathcal{L}_1\)</span> can be written as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathcal{L}_1(\mu, \Sigma)
+&amp;=
+\sum\limits_{k=1}^K
+\left[
+\sum\limits_{n=1}^N
+\left[
+\omega_{nk}
+(t(x_n)^\top \eta_k - A(\eta_k))
+\right]
++
+\phi^\top \eta_k - \nu A(\eta_k)
+\right] + c
+\\
+&amp;=
+\sum\limits_{k=1}^K
+\left[
+\phi_{k}^\top \eta_k
+- \nu_{k} A(\eta_k)
+\right] + c
+\end{align*}
+\end{split}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\phi_{k}
+&amp;=
+\phi + \sum\limits_{n=1}^N \omega_{n,k} t(x_n)
+\\
+\nu_{k}
+&amp;=
+\nu + \sum\limits_{n=1}^N \omega_{n,k}
+\\
+\omega_{n,k}
+&amp;=
+q_n(z_n=k)
+\end{align*}
+\end{split}\]</div>
+<p>Conclude that each summand of <span class="math notranslate nohighlight">\(\mathcal{L}_1\)</span> is the log-pdf (up to a constant) of some
+Normal-Inverse-Wishart (NIW) distribution of <span class="math notranslate nohighlight">\((\mu_k, \Sigma_k)\)</span>.</p>
+</section>
+<section id="problem-1d-maximize-mathcal-l-1">
+<h3>Problem 1d: Maximize <span class="math notranslate nohighlight">\(\mathcal{L}_1\)</span>.<a class="headerlink" href="#problem-1d-maximize-mathcal-l-1" title="Permalink to this heading">#</a></h3>
+<p>Find the mode of an NIW distribution for <span class="math notranslate nohighlight">\((\mu, \Sigma)\)</span> with parameters
+<span class="math notranslate nohighlight">\((\Sigma_0, \nu_0, \kappa_0, \mu_0)\)</span>.
+Use this result and (c) to find the closed-form solution for maximizing <span class="math notranslate nohighlight">\(\mathcal{L}_1\)</span>
+w.r.t. <span class="math notranslate nohighlight">\(\mu_k, \Sigma_k\)</span>.</p>
+<hr class="docutils" />
+<p><em>Your answer here</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-1e-maximize-mathcal-l-2">
+<h3>Problem 1e: Maximize <span class="math notranslate nohighlight">\(\mathcal{L}_2\)</span>.<a class="headerlink" href="#problem-1e-maximize-mathcal-l-2" title="Permalink to this heading">#</a></h3>
+<p>Find the maximizing solution <span class="math notranslate nohighlight">\(\pi^*\)</span> of <span class="math notranslate nohighlight">\(\mathcal{L}_2\)</span>.</p>
+<hr class="docutils" />
+<p><em>Your answer here</em></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="problem-2-code-implement-em-for-the-gaussian-mixture-model">
+<h2>Problem 2 [code]: Implement EM for the Gaussian mixture model<a class="headerlink" href="#problem-2-code-implement-em-for-the-gaussian-mixture-model" title="Permalink to this heading">#</a></h2>
+<p>We have provided starter code below.
+First, you need to fill it with your own implementation of the EM algorithm. This entails writing three functions:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">log_probability</span></code>, which computes the log probability <span class="math notranslate nohighlight">\(\log p(X, \theta)\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">e_step</span></code>, which computes the posteriors <span class="math notranslate nohighlight">\(q_n(z_n)\)</span> for each data point, fixing the current parameters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">m_Step</span></code>, which returns new parameters, fixing the current posteriors.</p></li>
+</ol>
+<p>Then, you will test your code on a simple example, using the code we have proved.</p>
+<p>You may not rely on external implementations such as those offered by Tensorflow or scikit-learn.</p>
+<section id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">MultivariateNormal</span><span class="p">,</span> <span class="n">Categorical</span><span class="p">,</span> <span class="n">Dirichlet</span>
+
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">trange</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Ellipse</span>
+<span class="kn">import</span> <span class="nn">matplotlib.transforms</span> <span class="k">as</span> <span class="nn">transforms</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="helpers">
+<h3>Helpers<a class="headerlink" href="#helpers" title="Permalink to this heading">#</a></h3>
+<p>We have provided a helper function to compute the inverse Wishart log probability since this is not one of the standard distributions in <code class="docutils literal notranslate"><span class="pre">torch.distributions</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">invwishart_log_prob</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">Sigma0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function to compute the inverse Wishart log probability, since its</span>
+<span class="sd">    not given in torch.distributions.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    Sigma:      (..., D, D) batch of covariance matrices</span>
+<span class="sd">    nu0:        scalar degree of freedom of inverse Wishart distribution</span>
+<span class="sd">    Sigma0:     (D, D) scale matrix for inverse Wishart distribution</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    lp:         (...,) a batch of log probabilities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">Sigma</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">Sigma</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">==</span> <span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">Sigma0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">==</span> <span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+    <span class="n">nu0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">nu0</span><span class="p">)</span>
+
+    <span class="n">lp</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">nu0</span> <span class="o">+</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">logdet</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
+    <span class="n">lp</span> <span class="o">-=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span> <span class="n">Sigma0</span><span class="p">)</span>\
+        <span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">dim1</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dim2</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+    <span class="c1"># log normalizing constant</span>
+    <span class="n">lp</span> <span class="o">+=</span> <span class="n">nu0</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">logdet</span><span class="p">(</span><span class="n">Sigma0</span><span class="p">)</span>
+    <span class="n">lp</span> <span class="o">-=</span> <span class="n">nu0</span> <span class="o">*</span> <span class="n">D</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span><span class="p">))</span>
+    <span class="n">lp</span> <span class="o">-=</span> <span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">multigammaln</span><span class="p">(</span><span class="n">nu0</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lp</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-2a-implement-the-log-probability-function">
+<h3>Problem 2a: Implement the <code class="docutils literal notranslate"><span class="pre">log_probability</span></code> function.<a class="headerlink" href="#problem-2a-implement-the-log-probability-function" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">log_probability</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mus</span><span class="p">,</span> <span class="n">Sigmas</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span>
+                    <span class="n">alpha</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">Sigma0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the log probability \log p(X, \theta), summing over the discrete</span>
+<span class="sd">    cluster assignments.</span>
+
+<span class="sd">    Hint: You may use the invwishart_log_prob function above.</span>
+<span class="sd">    Hint: You may also want to use torch.logsumexp to do the sum over z.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    - X:        (N, D) tensor of data points</span>
+<span class="sd">    - mus:      (K, D) tensor of cluster means</span>
+<span class="sd">    - Sigmas:   (K, D, D) tensor of cluster covariances</span>
+<span class="sd">    - pi:       (K,) tensor of cluster weights</span>
+<span class="sd">    - alpha:    (K,) concentration of the Dirichlet prior</span>
+<span class="sd">    - mu0:      (D,) tensor with the prior mean</span>
+<span class="sd">    - kappa0:   scalar prior precision</span>
+<span class="sd">    - nu0:      scalar prior degrees of freedom</span>
+<span class="sd">    - Sigma0:   (D, D) tensor of prior scale of the covariance</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    - lp:       scalar log probability of the data and parameters, summing over</span>
+<span class="sd">                the discrete latent variables</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lp</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1">###</span>
+    <span class="c1"># Your code here.</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">lp</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-2b-implement-the-e-step-function">
+<h3>Problem 2b: Implement the <code class="docutils literal notranslate"><span class="pre">e_step</span></code> function<a class="headerlink" href="#problem-2b-implement-the-e-step-function" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">e_step</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mus</span><span class="p">,</span> <span class="n">Sigmas</span><span class="p">,</span> <span class="n">pi</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform one E step to compute the posterior </span>
+
+<span class="sd">        q_n(z_n) = p(z_n | x_n, \theta)</span>
+
+<span class="sd">    for each data point. </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    - X:        (N, D) tensor of data points</span>
+<span class="sd">    - mus:      (K, D) tensor of cluster means</span>
+<span class="sd">    - Sigmas:   (K, D, D) tensor of cluster covariances</span>
+<span class="sd">    - pi:       (K,) tensor of cluster weights</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    - Q:        (N, K) tensor of responsibilities; i.e. posterior probabilities. </span>
+<span class="sd">                Each row should be non-negative and sum to one</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">K</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mus</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">))</span>
+
+    <span class="c1">###</span>
+    <span class="c1"># Your code here.</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">q</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-2c-implement-the-m-step-function">
+<h3>Problem 2c: Implement the <code class="docutils literal notranslate"><span class="pre">m_step</span></code> function<a class="headerlink" href="#problem-2c-implement-the-m-step-function" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">m_step</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">Sigma0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform one M-step to find new parameters given the current posterior</span>
+<span class="sd">    and hyperparameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    - X:        (N, D) data matrix</span>
+<span class="sd">    - q:        (N, K) responsibilities; i.e. posterior probabilities</span>
+<span class="sd">    - alpha:    (K,) concentration of the Dirichlet prior</span>
+<span class="sd">    - mu0:      (D,) tensor with the prior mean</span>
+<span class="sd">    - kappa0:   scalar prior precision</span>
+<span class="sd">    - nu0:      scalar prior degrees of freedom</span>
+<span class="sd">    - Sigma0:   (D, D) tensor of prior scale of the covariance</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    - mus:      (K, D) new means for each cluster</span>
+<span class="sd">    - Sigmas:   (K, D, D) new covariances for each cluster</span>
+<span class="sd">    - pi:       (K,) new cluster probabilities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">K</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c1">### </span>
+    <span class="c1"># Your code here.</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">mus</span><span class="p">,</span> <span class="n">Sigmas</span><span class="p">,</span> <span class="n">pi</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="em-function-given">
+<h3>EM function [given]<a class="headerlink" href="#em-function-given" title="Permalink to this heading">#</a></h3>
+<p>We’ve provided an <code class="docutils literal notranslate"><span class="pre">em</span></code> function to run EM on a given dataset with the specified hyperparameters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">em</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> 
+       <span class="n">K</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+       <span class="n">n_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+       <span class="n">alpha</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+       <span class="n">mu0</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+       <span class="n">kappa0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+       <span class="n">nu0</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span>
+       <span class="n">Sigma0</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    EM algorithm.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    - X: Matrix of size (N, D). Each row of X stores one data point</span>
+<span class="sd">    - K: the desired number of clusters in the model. Default: 2</span>
+<span class="sd">    - n_iter: number of iterations of EM. Default: 100</span>
+<span class="sd">    - alpha0: prior concentration of cluster probabilities</span>
+<span class="sd">    - mu0, kappa0, nu0, Sigma0: parameters of normal-inverse-Wishart prior.</span>
+<span class="sd">        Their shapes must be consistent with D, the data dimension.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">    - mus: cluster means</span>
+<span class="sd">    - Sigmas: cluster covariances</span>
+<span class="sd">    - pi: cluster assignment probabilities</span>
+<span class="sd">    - q: posterior probability of Z | X, mus, Sigmas, pi with final params.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">assert</span> <span class="n">alpha</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">K</span><span class="p">,)</span>
+    <span class="k">assert</span> <span class="n">mu0</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">D</span><span class="p">,)</span>
+    <span class="k">assert</span> <span class="n">Sigma0</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+    <span class="n">hypers</span> <span class="o">=</span> <span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">Sigma0</span><span class="p">)</span>
+
+    <span class="c1"># Initialize cluster parameters</span>
+    <span class="n">pi</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">Categorical</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">K</span><span class="p">,))]</span>
+    <span class="n">Sigmas</span> <span class="o">=</span> <span class="n">Sigma0</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Initialize log prob outputs</span>
+    <span class="n">lps</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Run EM</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">n_iter</span><span class="p">):</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">e_step</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mus</span><span class="p">,</span> <span class="n">Sigmas</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
+        <span class="n">lps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">log_probability</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mus</span><span class="p">,</span> <span class="n">Sigmas</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="o">*</span><span class="n">hypers</span><span class="p">))</span>
+        <span class="n">mus</span><span class="p">,</span> <span class="n">Sigmas</span><span class="p">,</span> <span class="n">pi</span> <span class="o">=</span> <span class="n">m_step</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="o">*</span><span class="n">hypers</span><span class="p">)</span>
+        
+    <span class="c1"># Run one last E-step to tighten the bound</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">e_step</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mus</span><span class="p">,</span> <span class="n">Sigmas</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
+    <span class="n">lps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">log_probability</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mus</span><span class="p">,</span> <span class="n">Sigmas</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="o">*</span><span class="n">hypers</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">lps</span><span class="p">),</span> <span class="n">mus</span><span class="p">,</span> <span class="n">Sigmas</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">q</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="test-your-implementation-on-a-toy-dataset">
+<h3>Test your implementation on a toy dataset<a class="headerlink" href="#test-your-implementation-on-a-toy-dataset" title="Permalink to this heading">#</a></h3>
+<p>Test your example on a synthetic data set.</p>
+<p>For example, the ground truth could be two clusters, with means <span class="math notranslate nohighlight">\([5,5]\)</span>
+and <span class="math notranslate nohighlight">\([8,8]\)</span> with identity covariance matrices, respectively.
+You could generate <span class="math notranslate nohighlight">\(100\)</span> points in each cluster.</p>
+<p>Whichever example you choose, be sure to specify it and show that your implementation roughly recovers the ground truth by displaying the cluster means/covariances.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">confidence_ellipse</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">n_std</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Modified from: https://matplotlib.org/3.5.0/gallery/\</span>
+<span class="sd">        statistics/confidence_ellipse.html</span>
+<span class="sd">    Create a plot of the covariance confidence ellipse of *x* and *y*.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mean: vector-like, shape (n,)</span>
+<span class="sd">        Mean vector.</span>
+<span class="sd">        </span>
+<span class="sd">    cov : matrix-like, shape (n, n)</span>
+<span class="sd">        Covariance matrix.</span>
+
+<span class="sd">    ax : matplotlib.axes.Axes</span>
+<span class="sd">        The axes object to draw the ellipse into.</span>
+
+<span class="sd">    n_std : float</span>
+<span class="sd">        The number of standard deviations to determine the ellipse&#39;s radiuses.</span>
+
+<span class="sd">    **kwargs</span>
+<span class="sd">        Forwarded to `~matplotlib.patches.Ellipse`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.patches.Ellipse</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># compute the 2D covariance ellipse</span>
+    <span class="n">pearson</span> <span class="o">=</span> <span class="n">cov</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">ell_radius_x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">pearson</span><span class="p">)</span>
+    <span class="n">ell_radius_y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">pearson</span><span class="p">)</span>
+    <span class="n">ellipse</span> <span class="o">=</span> <span class="n">Ellipse</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> 
+                      <span class="n">width</span><span class="o">=</span><span class="n">ell_radius_x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> 
+                      <span class="n">height</span><span class="o">=</span><span class="n">ell_radius_y</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                      <span class="n">facecolor</span><span class="o">=</span><span class="n">facecolor</span><span class="p">,</span> 
+                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Calculating the standard deviation</span>
+    <span class="c1"># the square root of the variance and multiplying</span>
+    <span class="c1"># with the given number of standard deviations.</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_std</span><span class="p">)</span>
+    
+    <span class="c1"># Transform the ellipse by rotating, scaling, and translating</span>
+    <span class="n">transf</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Affine2D</span><span class="p">()</span> \
+        <span class="o">.</span><span class="n">rotate_deg</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="o">*</span><span class="n">scale</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="o">*</span><span class="n">mean</span><span class="p">)</span>
+    <span class="n">ellipse</span><span class="o">.</span><span class="n">set_transform</span><span class="p">(</span><span class="n">transf</span> <span class="o">+</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="p">)</span>
+
+    <span class="c1"># Add the patch to the axis</span>
+    <span class="k">return</span> <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">ellipse</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_toy</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">305</span><span class="o">+</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">),</span>
+             <span class="n">n_test</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+             <span class="n">mus</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([[</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">]]),</span>
+             <span class="n">covs</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+             <span class="n">K</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+             <span class="n">n_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+             <span class="p">):</span>
+    <span class="n">K</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">mus</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">assert</span> <span class="n">covs</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+    
+    <span class="c1"># Generate n_test random data points from each of K classes and combine</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">mus</span><span class="p">,</span> <span class="n">covs</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">n_test</span><span class="p">,))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+    
+    <span class="c1"># Run the EM algorithm</span>
+    <span class="n">em_results</span> <span class="o">=</span> <span class="n">em</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="n">K</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="n">n_iter</span><span class="p">,</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">K</span><span class="p">),</span>
+                    <span class="n">mu0</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">),</span>
+                    <span class="n">kappa0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                    <span class="n">nu0</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span>
+                    <span class="n">Sigma0</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>
+    
+    <span class="c1"># Return data and results</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">*</span><span class="n">em_results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">K</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">lps</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">probs</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">test_toy</span><span class="p">(</span><span class="n">K</span><span class="o">=</span><span class="n">K</span><span class="p">)</span>
+
+<span class="c1"># display the results  </span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cluster &quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> mu:    &quot;</span><span class="p">,</span> <span class="n">means</span><span class="p">[</span><span class="n">k</span><span class="p">,:])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Sigma: &quot;</span><span class="p">,</span> <span class="n">covs</span><span class="p">[</span><span class="n">k</span><span class="p">,:,:])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> probs: &quot;</span><span class="p">,</span> <span class="n">probs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot the log probabilities over EM iterations</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lps</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;EM iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;log probability&quot;</span><span class="p">)</span>
+
+<span class="c1"># create a second figure to plot the clustered data</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># plot scatter </span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+  <span class="c1"># plot mean as red dots</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+  <span class="c1"># plot covariance ellipses</span>
+  <span class="n">confidence_ellipse</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span> <span class="n">covs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span><span class="p">,</span> <span class="n">n_std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+  <span class="n">confidence_ellipse</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span> <span class="n">covs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span><span class="p">,</span> <span class="n">n_std</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+                     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-3-short-answer-perform-image-segmentation">
+<h2>Problem 3 [short answer]: Perform image segmentation<a class="headerlink" href="#problem-3-short-answer-perform-image-segmentation" title="Permalink to this heading">#</a></h2>
+<p><strong>All you have to do for this part is run the code we’ve provided below to test your EM implementation on a couple image segmentation problems and then answer the discussion questions below.</strong></p>
+<p>Now that you have implemented the EM algorithm, you are ready to perform image segmentation!</p>
+<p>First, we’ll download some test images.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, download the files from the github page</span>
+<span class="o">!</span>wget<span class="w"> </span>-nc<span class="w"> </span>https://raw.githubusercontent.com/slinderman/stats305c/main/assignments/hw4/images/fox.png
+<span class="o">!</span>wget<span class="w"> </span>-nc<span class="w"> </span>https://raw.githubusercontent.com/slinderman/stats305c/main/assignments/hw4/images/cow.png
+<span class="o">!</span>wget<span class="w"> </span>-nc<span class="w"> </span>https://raw.githubusercontent.com/slinderman/stats305c/main/assignments/hw4/images/owl.png
+<span class="o">!</span>wget<span class="w"> </span>-nc<span class="w"> </span>https://raw.githubusercontent.com/slinderman/stats305c/main/assignments/hw4/images/zebra.png
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we’ve written some helper functions to run your EM code to segment the images, print summaries of the results, and make some nice plots.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">load_image</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+    <span class="c1"># get height, width and number of channels</span>
+    <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1"># reshape into pixels, each has 3 channels (RGB)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">H</span> <span class="o">*</span> <span class="n">W</span><span class="p">,</span> <span class="n">C</span><span class="p">))</span> 
+    <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">save_segmentation</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">K</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">K</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;original image&quot;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">im</span><span class="p">[</span><span class="n">assignments</span> <span class="o">!=</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;component </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+    
+    <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">run_segmentation</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> 
+                     <span class="n">K</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+                     <span class="n">seed</span><span class="o">=</span><span class="mi">305</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">),</span>
+                     <span class="n">n_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                     <span class="n">alpha</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="c1"># Load the specified image</span>
+    <span class="n">image</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1"># Run EM on a GMM with K classes</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">lps</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">probs</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">em</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="n">K</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+                                    <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">K</span><span class="p">))</span>
+    <span class="n">assignments</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="c1"># Print the results</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot; results:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cluster &quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> mu:    &quot;</span><span class="p">,</span> <span class="n">means</span><span class="p">[</span><span class="n">k</span><span class="p">,:])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Sigma: &quot;</span><span class="p">,</span> <span class="n">covs</span><span class="p">[</span><span class="n">k</span><span class="p">,:,:])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> probs: &quot;</span><span class="p">,</span> <span class="n">probs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Plot the log probability over iterations</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lps</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;EM iteration&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;log probability&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Save </span>
+    <span class="n">save_segmentation</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_seg.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="finally-run-the-segmentation-for-each-image">
+<h3>Finally, run the segmentation for each image<a class="headerlink" href="#finally-run-the-segmentation-for-each-image" title="Permalink to this heading">#</a></h3>
+<p>Please run all of these cells!
+It should only take a few seconds for each cell to complete. E.g. our reference implementation takes 21 seconds for <code class="docutils literal notranslate"><span class="pre">fox</span></code>, 4 seconds for <code class="docutils literal notranslate"><span class="pre">cow</span></code>, 2 seconds for <code class="docutils literal notranslate"><span class="pre">owl</span></code>, and 12 seconds for <code class="docutils literal notranslate"><span class="pre">zebra</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_segmentation</span><span class="p">(</span><span class="s2">&quot;fox&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_segmentation</span><span class="p">(</span><span class="s2">&quot;cow&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_segmentation</span><span class="p">(</span><span class="s2">&quot;owl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_segmentation</span><span class="p">(</span><span class="s2">&quot;zebra&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-3a-multiple-restarts">
+<h3>Problem 3a: Multiple restarts<a class="headerlink" href="#problem-3a-multiple-restarts" title="Permalink to this heading">#</a></h3>
+<p>Explain why you might need multiple restarts for EM to obtain the best results.</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-3b-model-improvements">
+<h3>Problem 3b: Model improvements<a class="headerlink" href="#problem-3b-model-improvements" title="Permalink to this heading">#</a></h3>
+<p>How could you extend this model – e.g. by building in more prior information about images – to improve the background segmentations?</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="submission-instructions">
+<h2>Submission Instructions<a class="headerlink" href="#submission-instructions" title="Permalink to this heading">#</a></h2>
+<p><strong>Formatting:</strong> check that your code does not exceed 80 characters in line width. If you’re working in Colab, you can set <em>Tools → Settings → Editor → Vertical ruler column</em> to 80 to see when you’ve exceeded the limit.</p>
+<p>Download your notebook in .ipynb format and use the following commands to convert it to PDF:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">pdf</span> <span class="n">hw4_yourname</span><span class="o">.</span><span class="n">ipynb</span>
+</pre></div>
+</div>
+<p><strong>Dependencies:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nbconvert</span></code>: If you’re using Anaconda for package management,</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">anaconda</span> <span class="n">nbconvert</span>
+</pre></div>
+</div>
+<p><strong>Upload</strong> your .pdf files to Gradescope.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./assignments/hw4"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../hw3/hw3.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">HW3: Continuous Latent Variable Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../notebooks/01_bayes_normal.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Bayesian Analysis of the Normal Distribution</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model">Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1-math-em-calculations">Problem 1 [math]: EM calculations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1a-derive-the-posterior-distribution-for-q-n-z-n-p-z-n-x-n-theta">Problem 1a: Derive the posterior distribution for <span class="math notranslate nohighlight">\(q_n(z_n) = p(z_n | x_n, \theta)\)</span>.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1b-derive-the-expected-log-probability">Problem 1b: Derive the expected log probability</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1c-expand-mathcal-l-1-in-exponential-family-form">Problem 1c: Expand <span class="math notranslate nohighlight">\(\mathcal{L}_1\)</span> in exponential family form.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1d-maximize-mathcal-l-1">Problem 1d: Maximize <span class="math notranslate nohighlight">\(\mathcal{L}_1\)</span>.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1e-maximize-mathcal-l-2">Problem 1e: Maximize <span class="math notranslate nohighlight">\(\mathcal{L}_2\)</span>.</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2-code-implement-em-for-the-gaussian-mixture-model">Problem 2 [code]: Implement EM for the Gaussian mixture model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#helpers">Helpers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2a-implement-the-log-probability-function">Problem 2a: Implement the <code class="docutils literal notranslate"><span class="pre">log_probability</span></code> function.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2b-implement-the-e-step-function">Problem 2b: Implement the <code class="docutils literal notranslate"><span class="pre">e_step</span></code> function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2c-implement-the-m-step-function">Problem 2c: Implement the <code class="docutils literal notranslate"><span class="pre">m_step</span></code> function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#em-function-given">EM function [given]</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-your-implementation-on-a-toy-dataset">Test your implementation on a toy dataset</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3-short-answer-perform-image-segmentation">Problem 3 [short answer]: Perform image segmentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finally-run-the-segmentation-for-each-image">Finally, run the segmentation for each image</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3a-multiple-restarts">Problem 3a: Multiple restarts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3b-model-improvements">Problem 3b: Model improvements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-instructions">Submission Instructions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
