@@ -1,0 +1,1326 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Coordinate Ascent Variational Inference for Gaussian Mixture Models &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/09_cavi_gmm';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="References" href="../lectures/99_references.html" />
+    <link rel="prev" title="Markov Chain Monte Carlo" href="04_mcmc.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw2/hw2.html">HW2: Gibbs Sampling and Metropolis-Hastings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw3/hw3.html">HW3: Continuous Latent Variable Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw4/hw4.html">HW4: Bayesian Mixture Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_mvn.html">The Multivariate Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_hier_gauss.html">Hierarchical Gaussian Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_mcmc.html">Markov Chain Monte Carlo</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Coordinate Ascent Variational Inference for Gaussian Mixture Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/notebooks/09_cavi_gmm.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/09_cavi_gmm.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Coordinate Ascent Variational Inference for Gaussian Mixture Models</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generative-model">Generative model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-derive-the-conditional-distributions">Part 1: Derive the conditional distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1a-conditional-distribution-of-the-mixture-means">Problem 1a: Conditional distribution of the mixture means</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1b-conditional-distribution-of-the-mixture-weights">Problem 1b: Conditional distribution of the mixture weights</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1c-conditional-distribution-of-the-mixture-means">Problem 1c: Conditional distribution of the mixture means</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-derive-the-cavi-updates">Part 2: Derive the CAVI updates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2a-derive-the-cavi-update-for-the-mixture-means">Problem 2a: Derive the CAVI update for the mixture means</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2b-derive-the-cavi-update-for-the-mixture-weights">Problem 2b: Derive the CAVI update for the mixture weights</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2c-derive-the-cavi-updates-for-the-mixture-means">Problem 2c: Derive the CAVI updates for the mixture means</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2d-derive-the-gaussian-cross-entropy">Problem 2d: Derive the Gaussian cross entropy</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-derive-the-elbo">Part 3: Derive the ELBO</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3a-break-the-elbo-into-parts">Problem 3a: Break the ELBO into parts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3b-derive-closed-form-expressions-for-each-term-in-the-elbo">Problem 3b: Derive closed form expressions for each term in the ELBO</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-implementation">Part 4: Implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#write-some-helper-fucntions-for-kl-divergences-and-cross-entropies">Write some helper fucntions for KL divergences and cross entropies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4a-implement-cavi-updates">Problem 4a: Implement CAVI updates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4b-implement-the-elbo">Problem 4b: Implement the ELBO</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#put-it-all-together">Put it all together</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-on-synthetic-data">Test on synthetic data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="coordinate-ascent-variational-inference-for-gaussian-mixture-models">
+<h1>Coordinate Ascent Variational Inference for Gaussian Mixture Models<a class="headerlink" href="#coordinate-ascent-variational-inference-for-gaussian-mixture-models" title="Permalink to this heading">#</a></h1>
+<p>In this notebook you’ll practice deriving and implementing coordinate ascent variational inference (CAVI) for a model you now know and love, the Gaussian mixture model. Following Lecture 9, we will focus on the simple case in which the covariances are known for each mixture component, but we’ll give some pointers at the end as to how you could generalize this approach.</p>
+<section id="generative-model">
+<h2>Generative model<a class="headerlink" href="#generative-model" title="Permalink to this heading">#</a></h2>
+<p>Assume each mixture component has identity covariance. Then the generative model is,</p>
+<ol class="arabic simple">
+<li><p>Sample parameters for each mixture component:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mu_k &amp;\sim \mathcal{N}(\nu^{-1} \phi, \nu^{-1} I) \\
+\end{align*}
+\end{split}\]</div>
+<ol class="arabic simple" start="2">
+<li><p>Sample mixture weights,</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\pi &amp;\sim \mathrm{Dir}(\alpha) 
+\end{align*}
+\]</div>
+<ol class="arabic simple" start="3">
+<li><p>Sample mixture assignments for each data point,</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+z_n &amp;\sim \mathrm{Cat}(\pi)
+\end{align*}
+\]</div>
+<ol class="arabic simple" start="4">
+<li><p>Sample data points given parameters and assignments,</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+x_n &amp;\sim \mathcal{N}(\mu_{z_n}, I)
+\end{align*}
+\]</div>
+<p>As we showed in class, you can write the log joint probability as,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+&amp;\log p(X, Z, \{\mu_k\}_{k=1}^K, \pi) = \\
+&amp;\hspace{4em} \sum_{n=1}^N \sum_{k=1}^K \left[ \mathbb{I}[z_n = k] \left(\log \mathcal{N}(x_n \mid \mu_k, I)  + \log \pi_k \right)  \right] \\
+&amp;\hspace{8em}  + \sum_{k=1}^K [\log \mathcal{N}(\mu_k \mid \nu^{-1} \phi , \nu^{-1} I)] + \log \mathrm{Dir}(\pi \mid \alpha) 
+\end{align*}
+\end{split}\]</div>
+<p>where we have used the shorthand <span class="math notranslate nohighlight">\(X = \{x_n\}_{n=1}^N\)</span>, <span class="math notranslate nohighlight">\(Z = \{z_n\}_{n=1}^N\)</span>.</p>
+</section>
+<section id="part-1-derive-the-conditional-distributions">
+<h2>Part 1: Derive the conditional distributions<a class="headerlink" href="#part-1-derive-the-conditional-distributions" title="Permalink to this heading">#</a></h2>
+<p>To speed you along, we’ve given you the answers for this part. Double check that you understand how we arrived at them, then proceed to Part 1 where you’ll derive the corresponding CAVI updates.</p>
+<section id="problem-1a-conditional-distribution-of-the-mixture-means">
+<h3>Problem 1a: Conditional distribution of the mixture means<a class="headerlink" href="#problem-1a-conditional-distribution-of-the-mixture-means" title="Permalink to this heading">#</a></h3>
+<p>Derive <span class="math notranslate nohighlight">\(p(z_n \mid x_n, \pi, \{\mu_k\}_{k=1}^K)\)</span></p>
+<hr class="docutils" />
+<p><strong>Solution:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+p(z_n \mid x_n, \pi, \{\mu_k\}_{k=1}^K) 
+&amp;\propto p(z_n \mid \pi) p(x_n \mid \{\mu_k\}_{k=1}^K, z_n) \\
+&amp;\propto \pi_{z_n} \mathcal{N}(x_n \mid \mu_{z_n}, I)
+\end{align*}
+\end{split}\]</div>
+<p>Normalizing,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(z_n = k \mid x_n, \pi, \{\mu_k\}_{k=1}^K) 
+&amp;= \frac{\pi_{k} \mathcal{N}(x_n \mid \mu_k, I)}{\sum_{j=1}^K \pi_{j} \mathcal{N}(x_n \mid \mu_j, I)}
+\triangleq \omega_{n,k}
+\end{align*}
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="problem-1b-conditional-distribution-of-the-mixture-weights">
+<h3>Problem 1b: Conditional distribution of the mixture weights<a class="headerlink" href="#problem-1b-conditional-distribution-of-the-mixture-weights" title="Permalink to this heading">#</a></h3>
+<p>Derive <span class="math notranslate nohighlight">\(p(\pi \mid \{z_n\}_{n=1}^N, \alpha)\)</span></p>
+<hr class="docutils" />
+<p><strong>Solution:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+p(\pi \mid \{z_n\}_{n=1}^N) 
+&amp;\propto p(\pi) \prod_{n=1}^N p(z_n \mid \pi) \\
+&amp;\propto \mathrm{Dir}(\pi \mid \alpha) \prod_{n=1}^N \prod_{k=1}^K \pi_k^{\mathbb{I}[z_n = k]} \\
+&amp;= \mathrm{Dir}(\pi \mid \widetilde{\alpha})
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\widetilde{\alpha}_k 
+= \alpha_k + \sum_{n=1}^N \mathbb{I}[z_n = k]
+\end{align*}
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="problem-1c-conditional-distribution-of-the-mixture-means">
+<h3>Problem 1c: Conditional distribution of the mixture means<a class="headerlink" href="#problem-1c-conditional-distribution-of-the-mixture-means" title="Permalink to this heading">#</a></h3>
+<p>Derive <span class="math notranslate nohighlight">\(p(\mu_k \mid \{x_n, z_n\}_{n=1}^N, 0, \nu^{-1} I)\)</span></p>
+<hr class="docutils" />
+<p><strong>Solution:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+p(\mu_k \mid \{x_n, z_n\}_{n=1}^N) 
+&amp;\propto p(\mu_k) \prod_{n=1}^N p(x_n \mid \mu_k)^{\mathbb{I}[z_n = k]} \\
+&amp;\propto \mathcal{N}(\mu_k \mid \nu^{-1} \phi, \nu^{-1} I) \prod_{n=1}^N \mathcal{N}(x_n \mid \mu_k, I)^{\mathbb{I}[z_n = k]} \\
+&amp;\propto \exp \left\{-\frac{\nu + N_k}{2} \mu_k^\top  \mu_k + \mu_k^\top \left(\phi + \sum_{n=1}^N \mathbb{I}[z_n = k] x_n \right) \right\} \\
+&amp;\propto \mathcal{N}\left(\mu_k \, \bigg| \, \widetilde{\nu}_k^{-1} \widetilde{\phi}_k, \, \widetilde{\nu}_k^{-1} I  \right)
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\widetilde{\phi}_k &amp;= \phi + \sum_{n=1}^N \mathbb{I}[z_n = k] x_n \\
+\widetilde{\nu}_k &amp;= \nu + \sum_{n=1}^N \mathbb{I}[z_n = k]
+\end{align*}
+\end{split}\]</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-2-derive-the-cavi-updates">
+<h2>Part 2: Derive the CAVI updates<a class="headerlink" href="#part-2-derive-the-cavi-updates" title="Permalink to this heading">#</a></h2>
+<p>For the Gaussian mixture model we will use a mean field posterior approximation, which assumes that the parameters and latent variables are all independent:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+q(Z, \{\mu_k\}_{k=1}^K, \pi) &amp;= \prod_{n=1}^N \left[q(z_n; \widetilde{\omega}_n) \right] \, \prod_{k=1}^K \left[q(\mu_k; \widetilde{\nu}_k, \widetilde{\phi}_k) \right] \, q(\pi; \widetilde{\alpha})
+\end{align*}
+\]</div>
+<p>We will find the optimal variational approximation via coordinate ascent on the ELBO. Recall that the general form for a CAVI update is to set the mean field factor for one variable <span class="math notranslate nohighlight">\(q(\theta_j; \lambda_j)\)</span> equal to,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+q(\theta_j; \lambda_j) \propto \exp \left\{\mathbb{E}_{q(\theta_{\neg j}; \lambda_{\neg j})}\left[ \log p(\theta_j \mid x, \theta_{\neg j}) \right] \right\}
+\end{align*}
+\]</div>
+<p>or equivalently,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\log q(\theta_j; \lambda_j) &amp;= \mathbb{E}_{q(\theta_{\neg j}; \lambda_{\neg j})}\left[ \log p(\theta_j \mid x, \theta_{\neg j}) \right] + c
+\end{align*}
+\]</div>
+<p>For models like this one, which are built of exponential family distributions with conjugate priors, these CAVI updates will have simple closed form solutions.</p>
+<p>In Problem 1, you already derived the conditional distributions. Now you just have to compute the expected log conditional densities, where the expectation is taken with respect to the other variables.</p>
+<section id="problem-2a-derive-the-cavi-update-for-the-mixture-means">
+<h3>Problem 2a: Derive the CAVI update for the mixture means<a class="headerlink" href="#problem-2a-derive-the-cavi-update-for-the-mixture-means" title="Permalink to this heading">#</a></h3>
+<p>The mixture assignments are discrete variables <span class="math notranslate nohighlight">\(z_n \in \{1,\ldots,K\}\)</span> so their variational posterior must be a discrete distribution; aka a categorical distribution:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+q(z_n; \widetilde{\omega}_n) &amp;= \mathrm{Cat}(z_n ; \widetilde{\omega}_n)
+\end{align*}
+\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\widetilde{\omega}_n = \left[ \widetilde{\omega}_{n,1}, \ldots, \widetilde{\omega}_{n,K} \right]^\top
+\end{align*}
+\]</div>
+<p>are the variational parameters. They must be non-negative and sum to one. These are equivalent to the <em>responsibilities</em> from Week 4.</p>
+<p>Derive an expression for <span class="math notranslate nohighlight">\(\widetilde{\omega}_{n,k}\)</span> in terms of <span class="math notranslate nohighlight">\(\mathbb{E}_{q(\pi)}[\log \pi_k]\)</span> and <span class="math notranslate nohighlight">\(\mathbb{E}_{q(\mu_k)}[\log \mathcal{N}(x_n \mid \mu_k, I)]\)</span></p>
+<hr class="docutils" />
+<p><strong>Solution:</strong>
+From Problem 1a,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\log p(z_n \mid x_n, \pi, \{\mu_k\}_{k=1}^K) 
+&amp;= \log \pi_{z_n} + \log \mathcal{N}(x_n \mid \mu_{z_n}, I) + c
+\end{align*}
+\]</div>
+<p>We need,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\log q(z_n; \widetilde{\omega}_n) &amp;= \mathbb{E}_{q(\pi)}[\log \pi_{z_n}] + \mathbb{E}_{q(\{\mu_k\}_{k=1}^K)}[\log \mathcal{N}(x_n \mid \mu_{z_n}, I)]+ c
+\end{align*}
+\]</div>
+<p>We can write this equivalently as,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\log q(z_n; \widetilde{\omega}_n) &amp;= \sum_{k=1}^K \mathbb{I}[z_n = k] \left[ \mathbb{E}_{q(\pi)}[\log \pi_{k}] + \mathbb{E}_{q(\{\mu_k\}_{k=1}^K)}[\log \mathcal{N}(x_n \mid \mu_k, I)] \right] + c \\
+&amp;= \log \mathrm{Cat}(z_n \mid \widetilde{\omega}_n) 
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\widetilde{\omega}_{n,k} = \frac{\exp \left\{ \mathbb{E}_{q(\pi)}[\log \pi_{k}] + \mathbb{E}_{q(\{\mu_k\}_{k=1}^K)}[\log \mathcal{N}(x_n \mid \mu_k, I)] \right\}}{\sum_{j=1}^K \exp \left\{ \mathbb{E}_{q(\pi)}[\log \pi_{j}] + \mathbb{E}_{q(\{\mu_k\}_{k=1}^K)}[\log \mathcal{N}(x_n \mid \mu_j, I)] \right\}}
+\end{align*}
+\]</div>
+<p>Put differently, the CAVI update is a categorical distribution with <em>logits</em></p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\mathbb{E}_{q(\pi)}[\log \pi_{k}] + \mathbb{E}_{q(\{\mu_k\}_{k=1}^K)}[\log \mathcal{N}(x_n \mid \mu_k, I)]
+\end{align*}
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="problem-2b-derive-the-cavi-update-for-the-mixture-weights">
+<h3>Problem 2b: Derive the CAVI update for the mixture weights<a class="headerlink" href="#problem-2b-derive-the-cavi-update-for-the-mixture-weights" title="Permalink to this heading">#</a></h3>
+<p>Show that</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+q(\pi; \widetilde{\alpha}) = \mathrm{Dir}(\pi ; \widetilde{\alpha})
+\end{align*}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\widetilde{\alpha} \in \mathbb{R}_+^{K}\)</span> is a vector of posterior concentrations.</p>
+<p>Derive the optimal update for the variational parameters <span class="math notranslate nohighlight">\(\widetilde{\alpha}\)</span> in terms of <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\widetilde{\omega}_{n,k}\)</span>, using the fact that</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\mathbb{E}_{q(z_n)}[\mathbb{I}[z_n = k]] &amp;= \widetilde{\omega}_{n,k}.
+\end{align*}
+\]</div>
+<hr class="docutils" />
+<p><strong>Solution:</strong>
+Following the same recipe as above,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\log q(\pi; \widetilde{\alpha}) &amp;= \mathbb{E}_{q(z)}[\log p(\pi \mid Z, \alpha)] \\
+&amp;= \log \mathrm{Dir}(\pi; \alpha) + \sum_{n=1}^N \mathbb{E}_{q(z)}[\log p(z_n \mid \pi)] + c \\
+&amp;= \sum_{k=1}^K \left(\alpha_k + \sum_{n=1}^N \mathbb{E}_{q(z_n)} \mathbb{I}[z_n = k] - 1 \right) \log \pi_k + c\\
+&amp;= \log \mathrm{Dir}(\pi; \widetilde{\alpha}) 
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\widetilde{\alpha}_k &amp;= \alpha_k + \sum_{n=1}^N \mathbb{E}_{q(z_n)} \mathbb{I}[z_n = k] \\
+&amp;= \alpha_k + \sum_{n=1}^N \widetilde{\omega}_{n,k}.
+\end{align*}
+\end{split}\]</div>
+</section>
+<hr class="docutils" />
+<section id="problem-2c-derive-the-cavi-updates-for-the-mixture-means">
+<h3>Problem 2c: Derive the CAVI updates for the mixture means<a class="headerlink" href="#problem-2c-derive-the-cavi-updates-for-the-mixture-means" title="Permalink to this heading">#</a></h3>
+<p>Show that the optimal <span class="math notranslate nohighlight">\(q(\mu_k; \widetilde{\nu}_k, \widetilde{\phi}_k)\)</span> is a Gaussian distribution,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+q(\mu_k; \widetilde{\nu}_k, \widetilde{\phi}_k) = \mathcal{N}(\mu_k; \widetilde{\nu}_k^{-1} \widetilde{\phi}_k, \widetilde{\nu}_k^{-1} I)
+\end{align*}
+\]</div>
+<hr class="docutils" />
+<p><strong>Solution</strong>:
+Like above,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\log q(\mu_k; \widetilde{\nu}_k, \widetilde{\phi}_k) &amp;=
+\mathbb{E}_{q(z)}[\log p(\mu_k \mid X, Z, \nu)] + c \\
+&amp;= \log \mathcal{N}(\mu_k; \nu^{-1} \phi, \nu^{-1}I) + \sum_{n=1}^N \mathbb{E}_{q(z_n)}[\mathbb{I}[z_n = k]] \log \mathcal{N}(x_n \mid \mu_k; I) \\
+&amp;= -\frac{\nu}{2} \mu_k^\top \mu_k  + \phi^\top \mu_k + \sum_{n=1}^N \mathbb{E}_{q(z_n)}[\mathbb{I}[z_n = k]] \left(-\frac{1}{2} \mu_k^\top \mu_k + x_n^\top \mu_k \right) + c\\
+&amp;= -\frac{\widetilde{\nu}_k}{2} \mu_k^\top \mu_k + \widetilde{\phi}_k^\top \mu_k \\
+&amp;= \log \mathcal{N} \left(\mu_k; \widetilde{\nu}_k^{-1} \widetilde{\phi}_k, \widetilde{\nu}_k^{-1} I \right) 
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\widetilde{\nu}_k &amp;= \nu + \sum_{n=1}^N \widetilde{\omega}_{n,k} \\
+\widetilde{\phi}_k &amp;= \phi + \sum_{n=1}^N \widetilde{\omega}_{n,k} x_n
+\end{align*}
+\end{split}\]</div>
+</section>
+<hr class="docutils" />
+<section id="problem-2d-derive-the-gaussian-cross-entropy">
+<h3>Problem 2d: Derive the Gaussian cross entropy<a class="headerlink" href="#problem-2d-derive-the-gaussian-cross-entropy" title="Permalink to this heading">#</a></h3>
+<p>The <em>negative cross entropy</em> between <span class="math notranslate nohighlight">\(q(x)\)</span> and <span class="math notranslate nohighlight">\(p(x)\)</span> is defined as,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\mathbb{E}_{q(x)}[\log p(x)]
+\end{align*}
+\]</div>
+<p>Since <span class="math notranslate nohighlight">\(q(\mu_k)\)</span> is Gaussian, and since <span class="math notranslate nohighlight">\(\mathcal{N}(x_n \mid \mu_k, I) = \mathcal{N}(\mu_k \mid x_n, I)\)</span>, we now recognize the <span class="math notranslate nohighlight">\(\mathbb{E}_{q(\mu_k)}[\log \mathcal{N}(x_n \mid \mu_k, I)]\)</span> term in our <span class="math notranslate nohighlight">\(q(z)\)</span> update as the negative cross entropy between two multivariate normal distributions.</p>
+<p>Show that the negative cross entropy between two multivariate normal distributions is,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\mathbb{E}_{\mathcal{N}(x \mid \mu_1, \Sigma_1)}[\log \mathcal{N}(x \mid \mu_2, \Sigma_2)] 
+&amp;= 
+\log \mathcal{N}(\mu_1 \mid \mu_2, \Sigma_2) -\tfrac{1}{2} \mathrm{Tr}(\Sigma_1 \Sigma_2^{-1})
+\end{align*}
+\]</div>
+<hr class="docutils" />
+<p><strong>Solution:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathbb{E}_{\mathcal{N}(x \mid \mu_1, \Sigma_1)}[\log \mathcal{N}(x \mid \mu_2, \Sigma_2)] 
+&amp;= \mathbb{E}_{\mathcal{N}(x \mid \mu_1, \Sigma_1)} \left[ -\frac{1}{2} \log 2\pi -\frac{1}{2} \log |\Sigma_2| - \frac{1}{2}(x - \mu_2)^\top \Sigma_2^{-1} (x - \mu_2) \right] \\
+&amp;= \mathbb{E}_{\mathcal{N}(x \mid \mu_1, \Sigma_1)} \left[ -\frac{1}{2} \log 2\pi -\frac{1}{2} \log |\Sigma_2| - \frac{1}{2}\langle x x^\top, \Sigma_2^{-1} \rangle + x^\top \Sigma_2^{-1} \mu_2 - \frac{1}{2} \mu_2^\top \Sigma_2^{-1} \mu_2 \right] \\
+&amp;= -\frac{1}{2} \log 2\pi -\frac{1}{2} \log |\Sigma_2| - \frac{1}{2}\langle \Sigma_1 + \mu_1 \mu_1^\top, \Sigma_2^{-1} \rangle + \mu_1^\top \Sigma_2^{-1} \mu_2 - \frac{1}{2} \mu_2^\top \Sigma_2^{-1} \mu_2 \\
+&amp;= -\frac{1}{2} \log 2\pi -\frac{1}{2} \log |\Sigma_2| - \frac{1}{2}  \mu_1^\top \Sigma_2^{-1} \mu_1 + \mu_1^\top \Sigma_2^{-1} \mu_2 - \frac{1}{2} \mu_2^\top \Sigma_2^{-1} \mu_2 + \langle \Sigma_1, \Sigma_2^{-1} \rangle \\
+&amp;= \log \mathcal{N}(\mu_1 \mid \mu_2, \Sigma_2) + \langle \Sigma_1, \Sigma_2^{-1} \rangle \\
+&amp;= \log \mathcal{N}(\mu_1 \mid \mu_2, \Sigma_2) + \mathrm{Tr}(\Sigma_1 \Sigma_2^{-1})
+\end{align*}
+\end{split}\]</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-3-derive-the-elbo">
+<h2>Part 3: Derive the ELBO<a class="headerlink" href="#part-3-derive-the-elbo" title="Permalink to this heading">#</a></h2>
+<section id="problem-3a-break-the-elbo-into-parts">
+<h3>Problem 3a: Break the ELBO into parts<a class="headerlink" href="#problem-3a-break-the-elbo-into-parts" title="Permalink to this heading">#</a></h3>
+<p>The ELBO is generically written as,
+\begin{align}
+\mathcal{L}(\lambda) &amp;=
+\mathbb{E}<em>q [\log p(X, Z, {\mu_k}</em>{k=1}^K, \pi) - \log q(Z, {\mu_k}_{k=1}^K, \pi) ]\end{align}
+Rewrite the ELBO in terms of the following quantities,</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathbb{E}_{q(z_n)}[\mathbb{I}[z_n = k]] \, \mathbb{E}_{q(\mu_k)}[\log \mathcal{N}(x_n \mid \mu_k, I)]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbb{E}_{q(\pi)} [\mathrm{KL}(q(z_n) \, \| \, \pi)]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathrm{KL}(q(\pi) \, \| \, p(\pi))\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathrm{KL}(q(\mu_k) \, \| \, p(\mu_k))\)</span></p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Solution:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathcal{L}(\lambda) &amp;=
+\mathbb{E}_q [\log p(X, Z, \{\mu_k\}_{k=1}^K, \pi) - \log q(Z, \{\mu_k\}_{k=1}^K, \pi) ]\\
+&amp;= 
+\mathbb{E}_q \left[\sum_{n=1}^N \sum_{k=1}^K \mathbb{I}[z_n=k] \left( \log\mathcal{N}(x_n \mid \mu_k, I) + \log \pi_k \right) + \log p(\pi) + \sum_{k=1}^K \log p(\mu_k) \right. \\
+&amp;\qquad \left. - \sum_{n=1}^N \log q(z_n) - \log q(\pi) - \sum_{k=1}^K \log q(\mu_k) \right] \\
+&amp;= 
+\sum_{n=1}^N \sum_{k=1}^K \mathbb{E}_{q(z_n)} \mathbb{E}_{q(\mu_k)} \left[ \mathbb{I}[z_n=k] \log\mathcal{N}(x_n \mid \mu_k, I) \right] + \sum_{n=1}^N \mathbb{E}_{q(\pi)} \mathbb{E}_{q(z_n)}[ \log p(z_n \mid \pi) - \log q(z_n)]  + \mathbb{E}_{q(\pi)} [\log p(\pi) - \log q(\pi)] + \sum_{k=1}^K \mathbb{E}_{q(\mu_k)} [\log p(\mu_k) - \log q(\mu_k)] \\
+&amp;= 
+\sum_{n=1}^N \sum_{k=1}^K \mathbb{E}_{q(z_n)} [\mathbb{I}[z_n=k]] \mathbb{E}_{q(\mu_k)} [\log\mathcal{N}(x_n \mid \mu_k, I)] + \sum_{n=1}^N \mathbb{E}_{q(\pi)} [\mathrm{KL}[q(z_n) \, \| \, p(z_n \mid \pi)] + \mathrm{KL}( q(\pi) \, \| \,  p(\pi)) + \sum_{k=1}^K \mathrm{KL}(q(\mu_k) \, \| \, p(\mu_k))
+\end{align*}
+\end{split}\]</div>
+</section>
+<hr class="docutils" />
+<section id="problem-3b-derive-closed-form-expressions-for-each-term-in-the-elbo">
+<h3>Problem 3b: Derive closed form expressions for each term in the ELBO<a class="headerlink" href="#problem-3b-derive-closed-form-expressions-for-each-term-in-the-elbo" title="Permalink to this heading">#</a></h3>
+<p>Find closed form expressions for each term from Problem 3a.</p>
+<hr class="docutils" />
+<p><strong>Solution:</strong></p>
+<p>These are a bit tedious to type up. The first one follows from problem 2d. The last two are textbook KL divergences. The second is just a KL between two discrete distributions, but you need to use the expected value of <span class="math notranslate nohighlight">\(\log \pi_k\)</span> under a Dirichlet distribution.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-4-implementation">
+<h2>Part 4: Implementation<a class="headerlink" href="#part-4-implementation" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Dirichlet</span><span class="p">,</span> <span class="n">MultivariateNormal</span><span class="p">,</span> <span class="n">Categorical</span>
+<span class="kn">from</span> <span class="nn">torch.distributions.kl</span> <span class="kn">import</span> <span class="n">kl_divergence</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Ellipse</span>
+<span class="kn">import</span> <span class="nn">matplotlib.transforms</span> <span class="k">as</span> <span class="nn">transforms</span>
+
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">trange</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#@title Helper function to draw ellipse</span>
+<span class="k">def</span> <span class="nf">confidence_ellipse</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">n_std</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Modified from: https://matplotlib.org/3.5.0/gallery/\</span>
+<span class="sd">        statistics/confidence_ellipse.html</span>
+<span class="sd">    Create a plot of the covariance confidence ellipse of *x* and *y*.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mean: vector-like, shape (n,)</span>
+<span class="sd">        Mean vector.</span>
+<span class="sd">        </span>
+<span class="sd">    cov : matrix-like, shape (n, n)</span>
+<span class="sd">        Covariance matrix.</span>
+
+<span class="sd">    ax : matplotlib.axes.Axes</span>
+<span class="sd">        The axes object to draw the ellipse into.</span>
+
+<span class="sd">    n_std : float</span>
+<span class="sd">        The number of standard deviations to determine the ellipse&#39;s radiuses.</span>
+
+<span class="sd">    **kwargs</span>
+<span class="sd">        Forwarded to `~matplotlib.patches.Ellipse`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.patches.Ellipse</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># compute the 2D covariance ellipse</span>
+    <span class="n">pearson</span> <span class="o">=</span> <span class="n">cov</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">ell_radius_x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">pearson</span><span class="p">)</span>
+    <span class="n">ell_radius_y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">pearson</span><span class="p">)</span>
+    <span class="n">ellipse</span> <span class="o">=</span> <span class="n">Ellipse</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> 
+                      <span class="n">width</span><span class="o">=</span><span class="n">ell_radius_x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> 
+                      <span class="n">height</span><span class="o">=</span><span class="n">ell_radius_y</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                      <span class="n">facecolor</span><span class="o">=</span><span class="n">facecolor</span><span class="p">,</span> 
+                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Calculating the standard deviation</span>
+    <span class="c1"># the square root of the variance and multiplying</span>
+    <span class="c1"># with the given number of standard deviations.</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_std</span><span class="p">)</span>
+    
+    <span class="c1"># Transform the ellipse by rotating, scaling, and translating</span>
+    <span class="n">transf</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Affine2D</span><span class="p">()</span> \
+        <span class="o">.</span><span class="n">rotate_deg</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="o">*</span><span class="n">scale</span><span class="p">)</span> \
+        <span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="o">*</span><span class="n">mean</span><span class="p">)</span>
+    <span class="n">ellipse</span><span class="o">.</span><span class="n">set_transform</span><span class="p">(</span><span class="n">transf</span> <span class="o">+</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="p">)</span>
+
+    <span class="c1"># Add the patch to the axis</span>
+    <span class="k">return</span> <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">ellipse</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
+<section id="write-some-helper-fucntions-for-kl-divergences-and-cross-entropies">
+<h2>Write some helper fucntions for KL divergences and cross entropies<a class="headerlink" href="#write-some-helper-fucntions-for-kl-divergences-and-cross-entropies" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dirichlet_expected_log</span><span class="p">(</span><span class="n">dirichlet</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper function to compute expected log under Dirichlet distribution.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dirichlet: A torch.distributions.Dirichlet object with a batch shape of</span>
+<span class="sd">            (...,) and a event shape of (K,).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (...,K) tensor of expected logs, E[\log \pi], under the Dirichlet.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">concentration</span> <span class="o">=</span> <span class="n">dirichlet</span><span class="o">.</span><span class="n">concentration</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="n">concentration</span><span class="p">)</span> <span class="o">-</span> \
+           <span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="n">concentration</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">dirichlet_log_normalizer</span><span class="p">(</span><span class="n">concentration</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the log normalizing constant of a Dirichlet distribution with</span>
+<span class="sd">    the specificed concentration.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        concentration: (...,K) tensor of concentration parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (...,) batch of log normalizers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">gammaln</span><span class="p">(</span><span class="n">concentration</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> \
+        <span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">gammaln</span><span class="p">(</span><span class="n">concentration</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">gaussian_neg_cross_entropy</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the negative cross entropy between two Gaussian distributions,</span>
+<span class="sd">        </span>
+<span class="sd">        -E_{q(x | \mu_q, \Sigma_q)}[\log p(x | \mu_p, \Sigma_p)]</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        q: A torch.distributions.MultivariateNormal object</span>
+<span class="sd">        p: A torch.distributions.MultivariateNormal object</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A (batch of) cross entropy(ies) between q and p.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mu_q</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">mean</span>
+    <span class="n">Sigma_q</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">covariance_matrix</span>
+    <span class="n">mu_p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">mean</span>
+    <span class="n">Sigma_p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">covariance_matrix</span>
+
+    <span class="c1"># Compute the multivariate normal cross entropy</span>
+    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mu_q</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">Sigma_p</span><span class="p">,</span> <span class="n">Sigma_q</span><span class="p">),</span> <span class="n">dim1</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim2</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># #@title Test our implementations against tensorflow probability</span>
+<span class="c1"># import jax.numpy as jnp</span>
+<span class="c1"># from tensorflow_probability.substrates import jax as tfp</span>
+<span class="c1"># tfd = tfp.distributions</span>
+
+<span class="c1"># # Code to suppress stupid TFP warnings</span>
+<span class="c1"># import logging</span>
+<span class="c1"># logger = logging.getLogger()</span>
+<span class="c1"># class CheckTypesFilter(logging.Filter):</span>
+<span class="c1">#     def filter(self, record):</span>
+<span class="c1">#         return &quot;check_types&quot; not in record.getMessage()</span>
+<span class="c1"># logger.addFilter(CheckTypesFilter())</span>
+
+<span class="c1"># # Test Gaussian cross entropy</span>
+<span class="c1"># p = MultivariateNormal(torch.zeros(2), torch.eye(2))</span>
+<span class="c1"># q = MultivariateNormal(torch.ones(2), 2 * torch.eye(2))</span>
+<span class="c1"># print(&quot;my ce:  &quot;, gaussian_neg_cross_entropy(q, p).numpy())</span>
+<span class="c1"># p2 = tfd.MultivariateNormalFullCovariance(jnp.zeros(2), jnp.eye(2))</span>
+<span class="c1"># q2 = tfd.MultivariateNormalFullCovariance(jnp.ones(2), 2 * jnp.eye(2))</span>
+<span class="c1"># print(&quot;tfp ce: &quot;, -q2.cross_entropy(p2))</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<section id="problem-4a-implement-cavi-updates">
+<h3>Problem 4a: Implement CAVI updates<a class="headerlink" href="#problem-4a-implement-cavi-updates" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cavi_step_z</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a CAVI update of q(z) given the data, q(\pi), and q(\{\mu_k\}_{k=1}^K)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: (N, D) tensor where each row is a data point</span>
+<span class="sd">        q_pi: td.Dirichlet posterior distribution over the mixture weights</span>
+<span class="sd">        q_theta: td.MultivariateNormal posterior distribution over the set of</span>
+<span class="sd">            mixture means. I.e. `q_theta.mean.shape == (K, D)` and </span>
+<span class="sd">            `q_theta.covariance_matrix.shape == (K, D, D)` where K is the </span>
+<span class="sd">            number of mixture components.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        q_z: a Categorical distribution over a batch of N mixture assignments.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">E_logpi</span> <span class="o">=</span> <span class="n">dirichlet_expected_log</span><span class="p">(</span><span class="n">q_pi</span><span class="p">)</span>  <span class="c1"># (K,)</span>
+    <span class="n">E_loglkhd</span> <span class="o">=</span> <span class="n">gaussian_neg_cross_entropy</span><span class="p">(</span>
+        <span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">q_theta</span><span class="o">.</span><span class="n">mean</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> 
+                           <span class="n">q_theta</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+        <span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span> <span class="c1"># (N, K)</span>
+    
+    <span class="k">return</span> <span class="n">Categorical</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">E_logpi</span> <span class="o">+</span> <span class="n">E_loglkhd</span><span class="p">)</span>
+    
+
+<span class="k">def</span> <span class="nf">cavi_step_pi</span><span class="p">(</span><span class="n">q_z</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performa CAVI update of q(\pi) given q(z) and alpha.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        q_z: Categorical posterior distribution over mixture assignments</span>
+<span class="sd">        alpha: scalar (or shape (K,) tensor of) prior concentration(s)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        q_pi: Dirichlet posterior distribution over mixture weights</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Dirichlet</span><span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">q_z</span><span class="o">.</span><span class="n">probs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">cavi_step_mu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">q_z</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performa CAVI update of q(\mu) given q(z) and prior hyperparameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        q_z: Categorical posterior distribution over mixture assignments</span>
+<span class="sd">        nu:  prior precision (scalar)</span>
+<span class="sd">        phi: prior precision-weighted-mean (scalar or (D,))</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        q_pi: Dirichlet posterior distribution over mixture weights</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">E_z</span> <span class="o">=</span> <span class="n">q_z</span><span class="o">.</span><span class="n">probs</span>
+    <span class="n">phi_tilde</span> <span class="o">=</span> <span class="n">phi</span> <span class="o">+</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">E_z</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>    <span class="c1"># (K, D)</span>
+    <span class="n">nu_tilde</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">+</span> <span class="n">E_z</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                                         <span class="c1"># (K,)</span>
+
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">phi_tilde</span> <span class="o">/</span> <span class="n">nu_tilde</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Sigma</span> <span class="o">=</span>  <span class="mi">1</span> <span class="o">/</span> <span class="n">nu_tilde</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">Sigma</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-4b-implement-the-elbo">
+<h3>Problem 4b: Implement the ELBO<a class="headerlink" href="#problem-4b-implement-the-elbo" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">elbo</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">q_z</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the evidence lower bound.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">E_z</span> <span class="o">=</span> <span class="n">q_z</span><span class="o">.</span><span class="n">probs</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">q_pi</span><span class="o">.</span><span class="n">concentration</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># E_q[\log p(x | z, \{\mu_k\}_{k=1}^K)]</span>
+    <span class="n">E_loglkhd</span> <span class="o">=</span> <span class="n">gaussian_neg_cross_entropy</span><span class="p">(</span>
+        <span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">q_mu</span><span class="o">.</span><span class="n">mean</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> 
+                           <span class="n">q_mu</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+        <span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span><span class="p">)))</span>
+    
+    <span class="n">elbo</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">E_z</span> <span class="o">*</span> <span class="n">E_loglkhd</span><span class="p">)</span>
+    
+    <span class="c1"># E_q(z)q(pi)[\log p(z | \pi)]</span>
+    <span class="n">elbo</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">E_z</span> <span class="o">*</span> <span class="n">dirichlet_expected_log</span><span class="p">(</span><span class="n">q_pi</span><span class="p">))</span>
+
+    <span class="c1"># -E_q[\log q(z)]</span>
+    <span class="n">elbo</span> <span class="o">-=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">E_z</span> <span class="o">*</span> <span class="n">q_z</span><span class="o">.</span><span class="n">logits</span><span class="p">)</span>
+
+    <span class="c1"># KL to prior</span>
+    <span class="n">elbo</span> <span class="o">-=</span> <span class="n">kl_divergence</span><span class="p">(</span><span class="n">q_pi</span><span class="p">,</span> <span class="n">Dirichlet</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">K</span><span class="p">)))</span>
+    <span class="n">elbo</span> <span class="o">-=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">kl_divergence</span><span class="p">(</span>
+        <span class="n">q_mu</span><span class="p">,</span> <span class="n">MultivariateNormal</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">nu</span> <span class="o">*</span> <span class="n">phi</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="n">nu</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span><span class="p">))))</span>
+    <span class="k">return</span> <span class="n">elbo</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="put-it-all-together">
+<h3>Put it all together<a class="headerlink" href="#put-it-all-together" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cavi</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> 
+         <span class="n">num_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+         <span class="n">num_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+         <span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> 
+         <span class="n">alpha</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> 
+         <span class="n">nu</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+         <span class="n">phi</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+         <span class="n">seed</span><span class="o">=</span><span class="mi">305</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">),</span>
+        <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run coordinate ascent VI for the Gaussian Mixture Model.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">num_components</span>      <span class="c1"># short hand</span>
+    
+    <span class="c1"># Initialize the clusters randomly</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">Categorical</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">K</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">N</span><span class="p">,))</span>
+    <span class="n">q_pi</span> <span class="o">=</span> <span class="n">Dirichlet</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">K</span><span class="p">))</span>
+    <span class="n">q_mu</span> <span class="o">=</span> <span class="n">MultivariateNormal</span><span class="p">(</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">row_stack</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">clusters</span> <span class="o">==</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">)]),</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">q_z</span> <span class="o">=</span> <span class="n">Categorical</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">)))</span>
+    
+    <span class="c1"># Run CAVI</span>
+    <span class="n">elbos</span> <span class="o">=</span> <span class="p">[</span><span class="n">elbo</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">q_z</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">phi</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">itr</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">num_iter</span><span class="p">):</span>
+        <span class="c1"># Update variational factors one at a time</span>
+        <span class="n">q_z</span> <span class="o">=</span> <span class="n">cavi_step_z</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">)</span>
+        <span class="n">q_pi</span> <span class="o">=</span> <span class="n">cavi_step_pi</span><span class="p">(</span><span class="n">q_z</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">q_mu</span> <span class="o">=</span> <span class="n">cavi_step_mu</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">q_z</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+        
+        <span class="c1"># Compute the ELBO</span>
+        <span class="n">elbos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elbo</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">q_z</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">phi</span><span class="p">))</span>
+        
+        <span class="c1"># Check for convergence</span>
+        <span class="k">if</span> <span class="n">elbos</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">elbos</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1e-4</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ELBO is going down!&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">elbos</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">elbos</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Converged!&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+        
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">elbos</span><span class="p">),</span> <span class="p">(</span><span class="n">q_z</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">)</span>
+        
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="test-on-synthetic-data">
+<h3>Test on synthetic data<a class="headerlink" href="#test-on-synthetic-data" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate synthetic data points   </span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">))</span>
+<span class="n">K</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">D</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">60</span>
+<span class="n">true_thetas</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">]])</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">MultivariateNormal</span><span class="p">(</span>
+    <span class="n">true_thetas</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">N</span> <span class="o">//</span> <span class="n">K</span><span class="p">,))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+
+<span class="c1"># Run the CAVI algorithm</span>
+<span class="n">elbos</span><span class="p">,</span> <span class="p">(</span><span class="n">q_z</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">)</span> <span class="o">=</span> \
+    <span class="n">cavi</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> 
+         <span class="n">num_components</span><span class="o">=</span><span class="n">K</span><span class="p">,</span> 
+         <span class="n">alpha</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">K</span><span class="p">),</span>
+         <span class="n">nu</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+    
+<span class="c1"># Print the results  </span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cluster &quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> E[mu_k]:   &quot;</span><span class="p">,</span> <span class="n">q_mu</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="n">k</span><span class="p">,:])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Cov[mu_k]: &quot;</span><span class="p">,</span> <span class="n">q_mu</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">[</span><span class="n">k</span><span class="p">,:,:])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> E[pi_k]:   &quot;</span><span class="p">,</span> <span class="n">q_pi</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot the log probabilities over EM iterations</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">elbos</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;CAVI iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;ELBO&quot;</span><span class="p">)</span>
+
+<span class="c1"># create a second figure to plot the clustered data</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># plot scatter </span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">]</span>
+<span class="n">z_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">q_z</span><span class="o">.</span><span class="n">probs</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">z_hat</span><span class="o">==</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">z_hat</span><span class="o">==</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">q_mu</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">q_mu</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> 
+            <span class="n">mec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/100 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 16%|█▌        | 16/100 [00:00&lt;00:00, 352.48it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged!
+Cluster  0 :
+	 E[mu_k]:    tensor([7.3993, 7.4017])
+	 Cov[mu_k]:  tensor([[0.0407, 0.0000],
+        [0.0000, 0.0407]])
+	 E[pi_k]:    tensor(0.3899)
+
+Cluster  1 :
+	 E[mu_k]:    tensor([4.4907, 4.1577])
+	 Cov[mu_k]:  tensor([[0.0522, 0.0000],
+        [0.0000, 0.0522]])
+	 E[pi_k]:    tensor(0.3040)
+
+Cluster  2 :
+	 E[mu_k]:    tensor([1.2618, 1.6898])
+	 Cov[mu_k]:  tensor([[0.0519, 0.0000],
+        [0.0000, 0.0519]])
+	 E[pi_k]:    tensor(0.3061)
+</pre></div>
+</div>
+<img alt="../_images/2bc143436400b022f80984d79c75a98665d0831b10ee0521705246f26b5922ce.png" src="../_images/2bc143436400b022f80984d79c75a98665d0831b10ee0521705246f26b5922ce.png" />
+<img alt="../_images/b1a89a0bc44da78f39da4d0c103bed622f66099aad7a48c2d7a53192999fac2b.png" src="../_images/b1a89a0bc44da78f39da4d0c103bed622f66099aad7a48c2d7a53192999fac2b.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">#</a></h2>
+<p>Truth be told, I spent about an hour debugging my CAVI implementation until I found a ridiculously simple bug! The code was still returning sensible results, but the ELBO was going down. I thought for sure it was a bug in my ELBO calculation (because that’s where it usually is), but this time it was in my update for <span class="math notranslate nohighlight">\(q(\mu_k)\)</span>. In the end, I guess checking if the ELBO decreased was a useful debugging tool!</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="04_mcmc.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Markov Chain Monte Carlo</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../lectures/99_references.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">References</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generative-model">Generative model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-derive-the-conditional-distributions">Part 1: Derive the conditional distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1a-conditional-distribution-of-the-mixture-means">Problem 1a: Conditional distribution of the mixture means</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1b-conditional-distribution-of-the-mixture-weights">Problem 1b: Conditional distribution of the mixture weights</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1c-conditional-distribution-of-the-mixture-means">Problem 1c: Conditional distribution of the mixture means</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-derive-the-cavi-updates">Part 2: Derive the CAVI updates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2a-derive-the-cavi-update-for-the-mixture-means">Problem 2a: Derive the CAVI update for the mixture means</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2b-derive-the-cavi-update-for-the-mixture-weights">Problem 2b: Derive the CAVI update for the mixture weights</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2c-derive-the-cavi-updates-for-the-mixture-means">Problem 2c: Derive the CAVI updates for the mixture means</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2d-derive-the-gaussian-cross-entropy">Problem 2d: Derive the Gaussian cross entropy</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-derive-the-elbo">Part 3: Derive the ELBO</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3a-break-the-elbo-into-parts">Problem 3a: Break the ELBO into parts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3b-derive-closed-form-expressions-for-each-term-in-the-elbo">Problem 3b: Derive closed form expressions for each term in the ELBO</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-implementation">Part 4: Implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#write-some-helper-fucntions-for-kl-divergences-and-cross-entropies">Write some helper fucntions for KL divergences and cross entropies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4a-implement-cavi-updates">Problem 4a: Implement CAVI updates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4b-implement-the-elbo">Problem 4b: Implement the ELBO</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#put-it-all-together">Put it all together</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-on-synthetic-data">Test on synthetic data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
