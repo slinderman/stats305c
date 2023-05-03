@@ -16,6 +16,7 @@ parts:
     - file: notebooks/02_mvn.ipynb
     - file: notebooks/03_hier_gauss.ipynb
     - file: notebooks/04_mcmc.ipynb
+    - file: notebooks/09_cavi_gmm.ipynb
 
   - caption: References
     chapters:
