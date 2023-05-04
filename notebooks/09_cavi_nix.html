@@ -1,0 +1,938 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>CAVI in a Simple Gaussian Model &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/09_cavi_nix';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="References" href="../lectures/99_references.html" />
+    <link rel="prev" title="Coordinate Ascent Variational Inference for Gaussian Mixture Models" href="09_cavi_gmm.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw2/hw2.html">HW2: Gibbs Sampling and Metropolis-Hastings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw3/hw3.html">HW3: Continuous Latent Variable Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw4/hw4.html">HW4: Bayesian Mixture Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_mvn.html">The Multivariate Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_hier_gauss.html">Hierarchical Gaussian Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_mcmc.html">Markov Chain Monte Carlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_cavi_gmm.html">Coordinate Ascent Variational Inference for Gaussian Mixture Models</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CAVI in a Simple Gaussian Model</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/notebooks/09_cavi_nix.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/09_cavi_nix.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>CAVI in a Simple Gaussian Model</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#approximate-the-posterior-with-cavi">Approximate the posterior with CAVI</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-with-respect-to-q-mu">Optimizing with respect to <span class="math notranslate nohighlight">\(q(\mu)\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-with-respect-to-q-sigma-2">Optimizing with respect to <span class="math notranslate nohighlight">\(q(\sigma^2)\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-the-necessary-expectations">Computing the necessary expectations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-derive-a-closed-form-expression-for-the-elbo">Exercise: Derive a closed form expression for the ELBO</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-implement-it">Let’s implement it!</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="cavi-in-a-simple-gaussian-model">
+<h1>CAVI in a Simple Gaussian Model<a class="headerlink" href="#cavi-in-a-simple-gaussian-model" title="Permalink to this heading">#</a></h1>
+<p>To get some intuition for coordinate ascent variational inference (CAVI), let’s go back to our favorite example. In lecture 1, we introduce the normal-inverse-chi-squared (NIX) distribution as a conjugate prior for the Gaussian with unknown mean and variance. For that simple model, we could compute the exact posterior in closed form (the posterior is an NIX distribution too!). Let’s pretend we don’t know the true posterior and instead perform approximate inference with CAVI.</p>
+<p><strong>Notation:</strong> Let,</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_n \in \mathbb{R}\)</span> denote the <span class="math notranslate nohighlight">\(n\)</span>-th data point,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu \in \mathbb{R}\)</span> denote the unknown mean of the distribution, and</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma^2 \in \mathbb{R}_+\)</span> denote the unknown variance of the distribution.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu_0, \kappa_0, \nu_0, \sigma_0^2\)</span> denote the hyperparameters of a NIX prior on <span class="math notranslate nohighlight">\((\mu, \sigma^2)\)</span>.</p></li>
+</ul>
+<p><strong>Model:</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\sigma^2 &amp;\sim \chi^{-2}(\nu_0, \sigma_0^2) \\
+\mu \mid \sigma^2 &amp;\sim \mathcal{N}(\mu_0, \kappa_0^{-1} \sigma^2) \\
+x_n \mid \mu, \sigma^2 &amp;\sim \mathcal{N}(\mu, \sigma^2)  \quad  \text{for } n =1, \ldots, N
+\end{align*}
+\end{split}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">StudentT</span><span class="p">,</span> <span class="n">TransformedDistribution</span>
+<span class="kn">from</span> <span class="nn">torch.distributions.transforms</span> <span class="kn">import</span> <span class="n">PowerTransform</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.gridspec</span> <span class="kn">import</span> <span class="n">GridSpec</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ScaledInvChiSq</span><span class="p">(</span><span class="n">TransformedDistribution</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of the scaled inverse \chi^2 distribution defined in class.</span>
+<span class="sd">    We will implement it as a transformation of a gamma distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">Gamma</span><span class="p">(</span><span class="n">dof</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dof</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PowerTransform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">TransformedDistribution</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">transforms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dof</span> <span class="o">=</span> <span class="n">dof</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set NIX hypers</span>
+<span class="n">mu0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+<span class="n">kappa0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">nu0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">sigmasq0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+
+<span class="c1"># Sample from the model</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">sigmasq</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq</span> <span class="o">/</span> <span class="n">kappa0</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sample_shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mean X: &quot;</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;var X: &quot;</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">var</span><span class="p">())</span>
+
+<span class="c1"># Compute the posterior</span>
+<span class="n">nu_N</span> <span class="o">=</span> <span class="n">nu0</span> <span class="o">+</span> <span class="n">N</span>
+<span class="n">kappa_N</span> <span class="o">=</span> <span class="n">kappa0</span> <span class="o">+</span> <span class="n">N</span>
+<span class="n">mu_N</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">kappa_N</span> <span class="o">*</span> <span class="p">(</span><span class="n">kappa0</span> <span class="o">*</span> <span class="n">mu0</span> <span class="o">+</span> <span class="n">X</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">sigmasq_N</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">nu_N</span> <span class="o">*</span> <span class="p">(</span><span class="n">nu0</span> <span class="o">*</span> <span class="n">sigmasq0</span> <span class="o">+</span> <span class="n">kappa0</span> <span class="o">*</span> <span class="n">mu0</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">kappa_N</span> <span class="o">*</span> <span class="n">mu_N</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;E[mu | X]:      &quot;</span><span class="p">,</span> <span class="n">mu_N</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;E[sigmasq | X]: &quot;</span><span class="p">,</span> <span class="n">sigmasq_N</span> <span class="o">*</span> <span class="p">(</span><span class="n">nu_N</span> <span class="o">/</span> <span class="p">(</span><span class="n">nu_N</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mean X:  tensor(-0.9374)
+var X:  tensor(2.3735)
+E[mu | X]:       tensor(-0.8927)
+E[sigmasq | X]:  tensor(2.0805)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Evaluate the density on a grid</span>
+<span class="k">def</span> <span class="nf">plot_nix</span><span class="p">(</span><span class="n">mu_N</span><span class="p">,</span> <span class="n">kappa_N</span><span class="p">,</span> <span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">,</span> <span class="n">q_mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q_sigmasq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">mu_min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">mu_max</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigmasq_min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sigmasq_max</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    
+    <span class="c1"># Make a grid of mu and sigmasq values</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">mu_min</span><span class="p">,</span> <span class="n">mu_max</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="n">sigmasqs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">sigmasq_min</span><span class="p">,</span> <span class="n">sigmasq_max</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="n">mu_grid</span><span class="p">,</span> <span class="n">sigmasq_grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">mus</span><span class="p">,</span> <span class="n">sigmasqs</span><span class="p">)</span>
+    
+    <span class="c1"># Compute the true log probability</span>
+    <span class="n">true_log_prob</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">)</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">sigmasq_grid</span><span class="p">)</span>
+    <span class="n">true_log_prob</span> <span class="o">+=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu_N</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq_grid</span> <span class="o">/</span> <span class="n">kappa_N</span><span class="p">))</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">)</span>
+    
+    <span class="c1"># Compute the true marginals</span>
+    <span class="n">sigmasq_marginal</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">)</span>
+    <span class="n">mu_marginal</span> <span class="o">=</span> <span class="n">StudentT</span><span class="p">(</span><span class="n">nu_N</span><span class="p">,</span> <span class="n">mu_N</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq_N</span> <span class="o">/</span> <span class="n">kappa_N</span><span class="p">))</span>
+
+    <span class="c1"># Start with a square Figure.</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>  <span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">height_ratios</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+                        <span class="n">left</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+                        <span class="n">wspace</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+    
+    <span class="n">ax_j</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax_j</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">,</span> <span class="n">sigmasq_grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">true_log_prob</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">ax_j</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">mu_min</span><span class="p">,</span> <span class="n">mu_max</span><span class="p">)</span>
+    <span class="n">ax_j</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">sigmasq_min</span><span class="p">,</span> <span class="n">sigmasq_max</span><span class="p">)</span>
+    <span class="n">ax_j</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;$\mu$&quot;</span><span class="p">)</span>
+    <span class="n">ax_j</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$\sigma^2$&quot;</span><span class="p">)</span>
+    <span class="c1"># ax_j.set_title(&quot;joint distribution&quot;)</span>
+    
+    <span class="n">ax_mu</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sharex</span><span class="o">=</span><span class="n">ax_j</span><span class="p">)</span>
+    <span class="n">ax_mu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mus</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">mu_marginal</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mus</span><span class="p">)))</span>
+    <span class="c1"># ax_mu.set_title(r&quot;$\mu$ marginal&quot;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">ax_mu</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">visible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="n">ax_sig</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">sharey</span><span class="o">=</span><span class="n">ax_j</span><span class="p">)</span>
+    <span class="n">ax_sig</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">sigmasq_marginal</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">sigmasqs</span><span class="p">)),</span> <span class="n">sigmasqs</span><span class="p">)</span>
+    <span class="c1"># ax_sig.set_title(r&quot;$\sigma^2$ marginal&quot;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">ax_sig</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">(),</span> <span class="n">visible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="c1"># If variational posterior is given, plot its joint and marginals</span>
+    <span class="k">if</span> <span class="n">q_mu</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q_sigmasq</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">var_log_prob</span> <span class="o">=</span> <span class="n">q_sigmasq</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">sigmasq_grid</span><span class="p">)</span>
+        <span class="n">var_log_prob</span> <span class="o">+=</span> <span class="n">q_mu</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">)</span>
+        <span class="n">ax_j</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">mu_grid</span><span class="p">,</span> <span class="n">sigmasq_grid</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">var_log_prob</span><span class="p">),</span> 
+                     <span class="mi">10</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">ax_mu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mus</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">q_mu</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">mus</span><span class="p">)),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+        <span class="n">ax_sig</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">q_sigmasq</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">sigmasqs</span><span class="p">)),</span> <span class="n">sigmasqs</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">plot_nix</span><span class="p">(</span><span class="n">mu_N</span><span class="p">,</span> <span class="n">kappa_N</span><span class="p">,</span> <span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;true posterior distribution&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/torch/functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3483.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+</pre></div>
+</div>
+<img alt="../_images/0e50ef4c45c3bcc50cc49ce0edceace02d41118bb3c9d827901824fd4cc1894b.png" src="../_images/0e50ef4c45c3bcc50cc49ce0edceace02d41118bb3c9d827901824fd4cc1894b.png" />
+</div>
+</div>
+<section id="approximate-the-posterior-with-cavi">
+<h2>Approximate the posterior with CAVI<a class="headerlink" href="#approximate-the-posterior-with-cavi" title="Permalink to this heading">#</a></h2>
+<p>The true posterior is <em>not</em> independent:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+p(\mu, \sigma^2 \mid X) 
+&amp;= \mathrm{NIX}(\mu, \sigma^2 \mid \mu_N, \kappa_N, \nu_N, \sigma_N^2) \\
+&amp;= \mathcal{N}(\mu \mid \mu_N, \kappa_N^{-1} \sigma^2) \, \chi^{-2}(\sigma^2 \mid \nu_N, \sigma_N^2) \\
+&amp;\neq p(\mu \mid X) \, p(\sigma^2 \mid X)
+\end{align*}
+\end{split}\]</div>
+<p>As we emphasized in lecture 1, the true posterior factors into a scaled inverse chi-squared distribution on <span class="math notranslate nohighlight">\(\sigma^2\)</span> time a normal distribution on <span class="math notranslate nohighlight">\(\mu\)</span> whose <em>variance depends on</em> <span class="math notranslate nohighlight">\(\sigma^2\)</span>.</p>
+<p>Suppose, however, that we approximated the posterior with variational inference, assuming a mean field posterior of the form,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+p(\mu, \sigma^2 \mid X) 
+&amp;\approx q(\mu, \sigma^2) \triangleq q(\mu) \, q(\sigma^2)
+\end{align*}
+\]</div>
+<p>For conjugate, exponential family models like this, we don’t need to assume a functional form for the factors. As we’ll see, the optimal form of the posterior factors will be the same family as the prior.</p>
+<!-- Moreover, assume the following functional forms for the posterior factors (these will turn out to be optimal anyway),
+
+$$
+\begin{align*}
+q(\mu) &= \mathcal{N}(\mu \mid \widetilde{\mu}, \widetilde{v}) \\
+q(\sigma^2) &= \chi^{-2}(\sigma^2 \mid \widetilde{\nu}, \widetilde{\sigma}^2) \\
+\end{align*}
+$$
+
+with **variational parameters** $\lambda = (\widetilde{\mu}, \widetilde{v}, \widetilde{\nu}, \widetilde{\sigma}^2)$. Our goal is to find parameters $\lambda$  -->
+<p>Out goal is to find a posterior approximation that minimizes the KL divergence, <span class="math notranslate nohighlight">\(\mathrm{KL}(q(\mu, \sigma^2) \, \|\, p(\mu, \sigma^2 \mid X))\)</span>, or, equivalently, maximize the <strong>evidence lower bound (ELBO)</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\mathcal{L}[q] &amp;=
+\mathbb{E}_{q(\mu, \sigma^2)}\left[ \log p(X, \mu, \sigma^2) - \log q(\mu, \sigma^2) \right].
+\end{align*}
+\]</div>
+<p>We will do so by coordinate ascent — iteratively optimizing with respect to the parameters for <span class="math notranslate nohighlight">\(q(\mu)\)</span> then for <span class="math notranslate nohighlight">\(q(\sigma^2)\)</span>, holding the other fixed. This is called <strong>coordinate ascent variational inference (CAVI)</strong>.</p>
+<section id="optimizing-with-respect-to-q-mu">
+<h3>Optimizing with respect to <span class="math notranslate nohighlight">\(q(\mu)\)</span><a class="headerlink" href="#optimizing-with-respect-to-q-mu" title="Permalink to this heading">#</a></h3>
+<p>First, let’s maximize the ELBO with respect to <span class="math notranslate nohighlight">\(q(\mu)\)</span>. The trick is to notice that the problem simplifies due to the mean field posterior assumption and the conjugacy of the model.</p>
+<p>Expanding the ELBO and dropping terms that don’t depend on <span class="math notranslate nohighlight">\(q(\mu)\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathcal{L}[q]
+&amp;=\mathbb{E}_{q(\mu)} \mathbb{E}_{q(\sigma^2)} \left[\sum_{n=1}^N \log p(x_n \mid \mu, \sigma^2) + \log p(\mu \mid \sigma^2) + \log p(\sigma^2) - \log q(\mu) -\log q(\sigma^2) \right] \\
+&amp;= \mathbb{E}_{q(\mu)} \left[ \mathbb{E}_{q(\sigma^2)} \left[ \sum_{n=1}^N  \log p(x_n \mid \mu, \sigma^2) + \log p(\mu \mid \sigma^2) - \log q(\mu) \right]\right] + 
+\underbrace{\mathbb{E}_{q(\sigma^2)}\left[ \log p(\sigma^2) - \log q(\sigma^2) \right]}_{\mathrm{KL}(q(\sigma^2) \, \| \, p(\sigma^2))}.
+\end{align*}
+\end{split}\]</div>
+<p>We can drop the final KL term since it’s constant wrt <span class="math notranslate nohighlight">\(q(mu)\)</span>. Now let’s expand the functional form of the model,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathcal{L}[q]
+&amp;= \mathbb{E}_{q(\mu)} \left[ \mathbb{E}_{q(\sigma^2)} \left[ \sum_{n=1}^N  \log \mathcal{N}(x_n \mid \mu, \sigma^2) + \log \mathcal{N}(\mu \mid \mu_0, \kappa_0^{-1} \sigma^2) - \log q(\mu) \right]\right] + c\\
+&amp;= \mathbb{E}_{q(\mu)} \left[ \mathbb{E}_{q(\sigma^2)} \left[ \sum_{n=1}^N  -\frac{1}{2\sigma^2} (x_n - \mu)^2 + \frac{\kappa_0}{2\sigma^2} (\mu - \mu_0)^2 - \log q(\mu) \right]\right] + c\\
+&amp;= \mathbb{E}_{q(\mu)} \left[ -\frac{1}{2} \widetilde{J} \mu^2 + \widetilde{h} \mu - \log q(\mu) \right] + c\\
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\widetilde{J} &amp;= (N + \kappa_0) \, \mathbb{E}_{q(\sigma^2)}[\sigma^{-2}] \\
+\widetilde{h} &amp;= \left(\sum_{n=1}^N x_n + \kappa_0 \mu_0\right) \mathbb{E}_{q(\sigma^2)}[\sigma^{-2}] 
+\end{align*}
+\end{split}\]</div>
+<p>We recognize the first terms inside the expectation as the log probability of a Gaussian distribution, up to a constant,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\widetilde{p}(\mu)
+&amp;= \mathcal{N}(\mu \mid \widetilde{\mu}, \widetilde{v}) \\
+\widetilde{\mu} &amp;= \widetilde{J}^{-1} \widetilde{h} \\
+\widetilde{v} &amp;= \widetilde{J}^{-1}
+\end{align*}
+\end{split}\]</div>
+<p>Moreover, we can rewrite the ELBO as a negative KL divergence,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align*}
+\mathcal{L}[q]
+&amp;= \mathbb{E}_{q(\mu)} \left[ \log \widetilde{p}(\mu) - \log q(\mu) \right] + c  
+= -\mathrm{KL}(q(\mu) \, \| \, \widetilde{p}(\mu)) + c
+\end{align*}
+\]</div>
+<p>Thus, maximizing the ELBO wrt <span class="math notranslate nohighlight">\(q(\mu)\)</span> is the same as minimizing this KL divergence. When is the KL minimized? When the two distributions are equal! Thus, the optimal coordinate update for <span class="math notranslate nohighlight">\(q(\mu)\)</span> is,</p>
+<div class="math notranslate nohighlight">
+\[
+q^\star(\mu) = \mathcal{N}(\mu \mid \widetilde{\mu}, \widetilde{v}) 
+\]</div>
+<p><strong>Note:</strong> the parameters <span class="math notranslate nohighlight">\(J\)</span> and <span class="math notranslate nohighlight">\(h\)</span> depend on <span class="math notranslate nohighlight">\(q(\sigma^2)\)</span> through the expectation, <span class="math notranslate nohighlight">\(\mathbb{E}_q[\sigma^{-2}]\)</span>.</p>
+<p><strong>Question:</strong> does the mean of <span class="math notranslate nohighlight">\(q^\star(\mu)\)</span> depend on <span class="math notranslate nohighlight">\(q(\sigma^2)\)</span>?</p>
+</section>
+<section id="optimizing-with-respect-to-q-sigma-2">
+<h3>Optimizing with respect to <span class="math notranslate nohighlight">\(q(\sigma^2)\)</span><a class="headerlink" href="#optimizing-with-respect-to-q-sigma-2" title="Permalink to this heading">#</a></h3>
+<p>Now let’s maximize the ELBO with respect to <span class="math notranslate nohighlight">\(q(\sigma^2)\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathcal{L}[q]
+&amp;=\mathbb{E}_{q(\sigma^2)} \mathbb{E}_{q(\mu)} \left[\sum_{n=1}^N \log p(x_n \mid \mu, \sigma^2) + \log p(\mu \mid \sigma^2) + \log p(\sigma^2) -\log q(\sigma^2) \right] + c \\
+&amp;=\mathbb{E}_{q(\sigma^2)} \mathbb{E}_{q(\mu)} \left[\sum_{n=1}^N \log \mathcal{N}(x_n \mid \mu, \sigma^2) + \log \mathcal{N}(\mu \mid \mu_0, \kappa_0^{-1} \sigma^2) + \log \chi^{-2}(\sigma^2 \mid \nu_0, \sigma_0^2) -\log q(\sigma^2) \right] + c \\
+&amp;= \mathbb{E}_{q(\sigma^2)} \mathbb{E}_{q(\mu)} \left[-\left(\frac{\nu_0 + N + 1}{2} + 1\right) \log \sigma^{2} -\frac{1}{2\sigma^2} \left(\sum_{n=1}^N (x_n - \mu)^2 + \kappa_0 (\mu - \mu_0)^2 + \nu_0 \sigma_0^2 \right)  -\log q(\sigma^2) \right] + c \\
+&amp;= \mathbb{E}_{q(\sigma^2)} \left[\log \widetilde{p}(\sigma^2) -\log q(\sigma^2) \right] + c \\
+\end{align*}
+\end{split}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\widetilde{p}(\sigma^2) &amp;= \chi^{-2}(\sigma^2 \mid \widetilde{\nu}, \widetilde{\sigma}^2) \\
+\widetilde{\nu} &amp;= \nu_0 + N + 1 \\
+\widetilde{\sigma}^2 &amp;= \widetilde{\nu}^{-1} \left(\sum_{n=1}^N \mathbb{E}_{q(\mu)}[(x_n - \mu)^2] + \kappa_0 \mathbb{E}_{q(\mu)}[(\mu - \mu_0)^2] + \nu_0 \sigma_0^2 \right)
+\end{align*}
+\end{split}\]</div>
+<p>As before, maximizing the ELBO wrt <span class="math notranslate nohighlight">\(q(\sigma^2)\)</span> is equivalent to minimizing a KL divergence to <span class="math notranslate nohighlight">\(\widetilde{p}(\sigma^2)\)</span>. Thus, the optimal update is,</p>
+<div class="math notranslate nohighlight">
+\[
+q(\sigma^2) = \chi^{-2}(\sigma^2 \mid \widetilde{\nu}, \widetilde{\sigma}^2).
+\]</div>
+</section>
+<section id="computing-the-necessary-expectations">
+<h3>Computing the necessary expectations<a class="headerlink" href="#computing-the-necessary-expectations" title="Permalink to this heading">#</a></h3>
+<p>Now that we know the form of the variational posterior factors, we can compute the necessary expectations for each update.</p>
+<ol class="arabic">
+<li><p>To update <span class="math notranslate nohighlight">\(q(\mu)\)</span> we need <span class="math notranslate nohighlight">\(\mathbb{E}_{q(\sigma^2)}[\sigma^{-2}]\)</span>. Under a scaled inverse chi-squared distribution, <span class="math notranslate nohighlight">\(q(\sigma^2) = \chi^{-2}(\sigma^2 \mid \widetilde{\nu}, \widetilde{\sigma}^2)\)</span>, this is,</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbb{E}_{q(\sigma^2)}[\sigma^{-2}] = \widetilde{\sigma}^2 
+    \]</div>
+</li>
+<li><p>To update <span class="math notranslate nohighlight">\(q(\sigma^2)\)</span> we need expectations of the form <span class="math notranslate nohighlight">\(\mathbb{E}_{q(\mu)}[(x - \mu)^2]\)</span>. Under a Gaussian distribution, <span class="math notranslate nohighlight">\(q(\mu) = \mathcal{N}(\mu \mid \widetilde{\mu}, \widetilde{v})\)</span>, these are,</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbb{E}_{q(\mu)}[(x - \mu)^2] = (x-\widetilde{\mu})^2 + \widetilde{v}.
+    \]</div>
+</li>
+</ol>
+</section>
+<section id="exercise-derive-a-closed-form-expression-for-the-elbo">
+<h3>Exercise: Derive a closed form expression for the ELBO<a class="headerlink" href="#exercise-derive-a-closed-form-expression-for-the-elbo" title="Permalink to this heading">#</a></h3>
+<p>You can compute the ELBO in closed form too. As an exercise, try deriving an expression for it yourself.</p>
+</section>
+</section>
+<section id="let-s-implement-it">
+<h2>Let’s implement it!<a class="headerlink" href="#let-s-implement-it" title="Permalink to this heading">#</a></h2>
+<p>We’ve done the hard part. Now let’s try to write it in code!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Helper functions to compute necessary expectations</span>
+<span class="k">def</span> <span class="nf">expec_sigmasq_inv</span><span class="p">(</span><span class="n">q_sigmasq</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute E_{q(\sigma^2)}[1/\sigma^2]&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">q_sigmasq</span><span class="o">.</span><span class="n">scale</span>
+
+
+<span class="k">def</span> <span class="nf">expec_quadratic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute E_{q(\mu)}[(x - mu)^2]&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">q_mu</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">q_mu</span><span class="o">.</span><span class="n">variance</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_cavi_update_mu</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">q_sigmasq</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CAVI update for q(\mu) holding q(\sigma^2) fixed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X: data array (shape (N,))</span>
+<span class="sd">        q_sigmasq: ScaledInvChiSq distribution</span>
+<span class="sd">        mu0: prior mean (scalar)</span>
+<span class="sd">        kappa0: prior precision factor (scalar)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">E_sigmasq_inv</span> <span class="o">=</span> <span class="n">expec_sigmasq_inv</span><span class="p">(</span><span class="n">q_sigmasq</span><span class="p">)</span>
+    <span class="n">J_tilde</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="n">kappa0</span><span class="p">)</span> <span class="o">*</span> <span class="n">E_sigmasq_inv</span>
+    <span class="n">h_tilde</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">kappa0</span> <span class="o">*</span> <span class="n">mu0</span><span class="p">)</span> <span class="o">*</span> <span class="n">E_sigmasq_inv</span>
+    <span class="n">mu_tilde</span> <span class="o">=</span> <span class="n">h_tilde</span> <span class="o">/</span> <span class="n">J_tilde</span>
+    <span class="n">v_tilde</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">J_tilde</span>
+    <span class="k">return</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu_tilde</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v_tilde</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_cavi_update_sigmasq</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CAVI update for q(\sigma^2) holding q(\mu) fixed</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X: data array (shape (N,))</span>
+<span class="sd">        q_mu: Normal distribution</span>
+<span class="sd">        mu0: prior mean (scalar)</span>
+<span class="sd">        kappa0: prior precision factor (scalar)</span>
+<span class="sd">        nu0: prior degrees of freedom (scalar)</span>
+<span class="sd">        sigmasq0: prior scale (scalar)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">nu_tilde</span> <span class="o">=</span> <span class="n">nu0</span> <span class="o">+</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">sigmasq_tilde</span> <span class="o">=</span> <span class="p">(</span><span class="n">expec_quadratic</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span>
+                     <span class="n">kappa0</span> <span class="o">*</span> <span class="n">expec_quadratic</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">)</span> <span class="o">+</span>
+                     <span class="n">nu0</span> <span class="o">*</span> <span class="n">sigmasq0</span><span class="p">)</span> <span class="o">/</span> <span class="n">nu_tilde</span>
+    <span class="k">return</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu_tilde</span><span class="p">,</span> <span class="n">sigmasq_tilde</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cavi</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">,</span> <span class="n">q_sigmasq</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run CAVI!</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X: data array (shape (N,))</span>
+<span class="sd">        q_mu: initial Normal distribution</span>
+<span class="sd">        q_sigmasq: initial ScaledInvChiSq distribution</span>
+<span class="sd">        mu0: prior mean (scalar)</span>
+<span class="sd">        kappa0: prior precision factor (scalar)</span>
+<span class="sd">        nu0: prior degrees of freedom (scalar)</span>
+<span class="sd">        sigmasq0: prior scale (scalar)</span>
+<span class="sd">        num_iters: number of iterations to run for (int)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_nix</span><span class="p">(</span><span class="n">mu_N</span><span class="p">,</span> <span class="n">kappa_N</span><span class="p">,</span> <span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">,</span> <span class="n">q_mu</span><span class="o">=</span><span class="n">q_mu</span><span class="p">,</span> <span class="n">q_sigmasq</span><span class="o">=</span><span class="n">q_sigmasq</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;step 0&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;step_</span><span class="si">{:02d}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
+        <span class="c1"># Alternate between mu and sigmasq updates</span>
+        <span class="c1"># Split them up so we can watch each coordinate update        </span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">q_mu</span> <span class="o">=</span> <span class="n">_cavi_update_mu</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">q_sigmasq</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">q_sigmasq</span> <span class="o">=</span> <span class="n">_cavi_update_sigmasq</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">q_mu</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">)</span>
+            
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_nix</span><span class="p">(</span><span class="n">mu_N</span><span class="p">,</span> <span class="n">kappa_N</span><span class="p">,</span> <span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">,</span> <span class="n">q_mu</span><span class="o">=</span><span class="n">q_mu</span><span class="p">,</span> <span class="n">q_sigmasq</span><span class="o">=</span><span class="n">q_sigmasq</span><span class="p">,</span> 
+                       <span class="n">title</span><span class="o">=</span><span class="s2">&quot;step </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;step_</span><span class="si">{:02d}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        
+    <span class="k">return</span> <span class="n">q_mu</span><span class="p">,</span> <span class="n">q_sigmasq</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize the posterior factors near the prior</span>
+<span class="n">init_q_sigmasq</span> <span class="o">=</span> <span class="n">ScaledInvChiSq</span><span class="p">(</span><span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">)</span>
+<span class="n">init_q_mu</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq0</span> <span class="o">/</span> <span class="n">kappa0</span><span class="p">))</span>
+
+<span class="n">q_mu</span><span class="p">,</span> <span class="n">q_sigmasq</span> <span class="o">=</span> <span class="n">cavi</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">init_q_mu</span><span class="p">,</span> <span class="n">init_q_sigmasq</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6dadee23d74424e32332f16978a92a42089272aa8d42cd533f74878191e5856c.png" src="../_images/6dadee23d74424e32332f16978a92a42089272aa8d42cd533f74878191e5856c.png" />
+<img alt="../_images/4b33af0396c352d16dea05cd0b5c9705ec54c300f4bb037dab6a2b15193038c0.png" src="../_images/4b33af0396c352d16dea05cd0b5c9705ec54c300f4bb037dab6a2b15193038c0.png" />
+<img alt="../_images/f3ac6b815c6096d453a107a205befba4e7db33233508ff8d2809f834696e936c.png" src="../_images/f3ac6b815c6096d453a107a205befba4e7db33233508ff8d2809f834696e936c.png" />
+<img alt="../_images/8fe41eefdada0e086c0ed6dda426488f57ceace238f66f9c9cee63f72170d057.png" src="../_images/8fe41eefdada0e086c0ed6dda426488f57ceace238f66f9c9cee63f72170d057.png" />
+<img alt="../_images/4e02b7593f7f288a7f5e616ac4e1cc4a8c80d9c64380e83f1e69d6739fb309d3.png" src="../_images/4e02b7593f7f288a7f5e616ac4e1cc4a8c80d9c64380e83f1e69d6739fb309d3.png" />
+<img alt="../_images/ada0c9035f3e76e3758e879862f8296de1f1a9a6202330657bdca7b643caeaf4.png" src="../_images/ada0c9035f3e76e3758e879862f8296de1f1a9a6202330657bdca7b643caeaf4.png" />
+<img alt="../_images/16d4d297cb3de50b87f733b2c432885ad9e4a6ba4874a94e6d6efa4bb5223284.png" src="../_images/16d4d297cb3de50b87f733b2c432885ad9e4a6ba4874a94e6d6efa4bb5223284.png" />
+<img alt="../_images/32c5cd99b71358442b813f813c652b72128edc86b51cbe2ee782f38f6bf250e1.png" src="../_images/32c5cd99b71358442b813f813c652b72128edc86b51cbe2ee782f38f6bf250e1.png" />
+<img alt="../_images/7e5f2bc61c425bd642d9fcace12f29ee4573031483dc9bd249f2a17d254b1709.png" src="../_images/7e5f2bc61c425bd642d9fcace12f29ee4573031483dc9bd249f2a17d254b1709.png" />
+<img alt="../_images/1f90f0328fa0270390897b8b2e31c95021da61286d2b554573c56b1bdd50ab3c.png" src="../_images/1f90f0328fa0270390897b8b2e31c95021da61286d2b554573c56b1bdd50ab3c.png" />
+<img alt="../_images/a2f25fa9d1af000dcfbdc88feaba3f211787f638580eb2d4d4159655a5844913.png" src="../_images/a2f25fa9d1af000dcfbdc88feaba3f211787f638580eb2d4d4159655a5844913.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>convert<span class="w"> </span>-delay<span class="w"> </span><span class="m">100</span><span class="w"> </span>-loop<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="sb">`</span>ls<span class="w"> </span>-v<span class="w"> </span>step_*.png<span class="sb">`</span><span class="w"> </span>cavi_nix.gif
+<span class="o">!</span>rm<span class="w"> </span>step_*.png
+</pre></div>
+</div>
+</div>
+</div>
+<img src="cavi_nix.gif" width="750" align="center"></section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="09_cavi_gmm.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Coordinate Ascent Variational Inference for Gaussian Mixture Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../lectures/99_references.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">References</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#approximate-the-posterior-with-cavi">Approximate the posterior with CAVI</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-with-respect-to-q-mu">Optimizing with respect to <span class="math notranslate nohighlight">\(q(\mu)\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-with-respect-to-q-sigma-2">Optimizing with respect to <span class="math notranslate nohighlight">\(q(\sigma^2)\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-the-necessary-expectations">Computing the necessary expectations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-derive-a-closed-form-expression-for-the-elbo">Exercise: Derive a closed form expression for the ELBO</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-implement-it">Let’s implement it!</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
