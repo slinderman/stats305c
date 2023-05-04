@@ -42,7 +42,7 @@ You may also find these texts helpful
 | Apr 25 | Mixture Models <br> {Download}`[slides]<slides/lecture07-mixtures.pdf>`  | Ch 28.2 |
 | Apr 27 | Expectation Maximization <br> {Download}`[slides]<slides/lecture08-em.pdf>` | Ch 6.5 |
 | May 2  | Coordinate Ascent Variational Inference <br> {Download}`[slides]<slides/lecture09-cavi.pdf>` [[notebook]](notebooks/09_cavi_gmm.ipynb) | [Blei et al, 2017](https://www.tandfonline.com/doi/full/10.1080/01621459.2017.1285773), Ch 10.1-10.3 |
-| May 4  | Mixed Membership Models <br> {Download}`[slides]<slides/lecture10-lda_cavi.pdf>` |  Ch 28.5|
+| May 4  | Mixed Membership Models <br> {Download}`[slides]<slides/lecture10_mixed_membership.pdf>` |  Ch 28.5|
 | May 9  | Variational Autoencoders <br> {Download}`[slides]<slides/lecture11-12-vaes.pdf>` | [Kingma and Welling, 2019](https://arxiv.org/pdf/1906.02691.pdf), Ch 21|
 | May 11 | Amortized Variational Inference <br> {Download}`[slides]<slides/lecture11-12-vaes.pdf>` | [Kingma and Welling, 2019](https://arxiv.org/pdf/1906.02691.pdf), Ch 10.2|
 | May 16 | Hidden Markov Models <br> {Download}`[slides]<slides/lecture13_hmms.pdf>` | Ch 29.2-29.5 |
