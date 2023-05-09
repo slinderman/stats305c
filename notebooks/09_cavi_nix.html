@@ -66,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/09_cavi_nix';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="References" href="../lectures/99_references.html" />
+    <link rel="next" title="Gradient-based Variational Inference in a Simple Gaussian Model" href="10_advi_nix.html" />
     <link rel="prev" title="Coordinate Ascent Variational Inference for Gaussian Mixture Models" href="09_cavi_gmm.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -169,6 +169,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="04_mcmc.html">Markov Chain Monte Carlo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="09_cavi_gmm.html">Coordinate Ascent Variational Inference for Gaussian Mixture Models</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">CAVI in a Simple Gaussian Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_advi_nix.html">Gradient-based Variational Inference in a Simple Gaussian Model</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -522,11 +523,11 @@ E[sigmasq | X]:  tensor(2.0805)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/torch/functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3483.)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/scott/miniconda3/lib/python3.7/site-packages/torch/functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/aten/src/ATen/native/TensorShape.cpp:3191.)
   return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
 </pre></div>
 </div>
-<img alt="../_images/0e50ef4c45c3bcc50cc49ce0edceace02d41118bb3c9d827901824fd4cc1894b.png" src="../_images/0e50ef4c45c3bcc50cc49ce0edceace02d41118bb3c9d827901824fd4cc1894b.png" />
+<img alt="../_images/b95dd891ee1bd2bf353c9f21454ee5a71e318c6e80deda24a8cc37b0d2f56844.png" src="../_images/b95dd891ee1bd2bf353c9f21454ee5a71e318c6e80deda24a8cc37b0d2f56844.png" />
 </div>
 </div>
 <section id="approximate-the-posterior-with-cavi">
@@ -755,6 +756,7 @@ q(\sigma^2) = \chi^{-2}(\sigma^2 \mid \widetilde{\nu}, \widetilde{\sigma}^2).
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_nix</span><span class="p">(</span><span class="n">mu_N</span><span class="p">,</span> <span class="n">kappa_N</span><span class="p">,</span> <span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">,</span> <span class="n">q_mu</span><span class="o">=</span><span class="n">q_mu</span><span class="p">,</span> <span class="n">q_sigmasq</span><span class="o">=</span><span class="n">q_sigmasq</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;step 0&quot;</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;step_</span><span class="si">{:02d}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
     
     <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
         <span class="c1"># Alternate between mu and sigmasq updates</span>
@@ -767,6 +769,7 @@ q(\sigma^2) = \chi^{-2}(\sigma^2 \mid \widetilde{\nu}, \widetilde{\sigma}^2).
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_nix</span><span class="p">(</span><span class="n">mu_N</span><span class="p">,</span> <span class="n">kappa_N</span><span class="p">,</span> <span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">,</span> <span class="n">q_mu</span><span class="o">=</span><span class="n">q_mu</span><span class="p">,</span> <span class="n">q_sigmasq</span><span class="o">=</span><span class="n">q_sigmasq</span><span class="p">,</span> 
                        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;step </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;step_</span><span class="si">{:02d}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
         
     <span class="k">return</span> <span class="n">q_mu</span><span class="p">,</span> <span class="n">q_sigmasq</span>
 </pre></div>
@@ -780,21 +783,14 @@ q(\sigma^2) = \chi^{-2}(\sigma^2 \mid \widetilde{\nu}, \widetilde{\sigma}^2).
 <span class="n">init_q_mu</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq0</span> <span class="o">/</span> <span class="n">kappa0</span><span class="p">))</span>
 
 <span class="n">q_mu</span><span class="p">,</span> <span class="n">q_sigmasq</span> <span class="o">=</span> <span class="n">cavi</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">init_q_mu</span><span class="p">,</span> <span class="n">init_q_sigmasq</span><span class="p">,</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">kappa0</span><span class="p">,</span> <span class="n">nu0</span><span class="p">,</span> <span class="n">sigmasq0</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">plot_nix</span><span class="p">(</span><span class="n">mu_N</span><span class="p">,</span> <span class="n">kappa_N</span><span class="p">,</span> <span class="n">nu_N</span><span class="p">,</span> <span class="n">sigmasq_N</span><span class="p">,</span> <span class="n">q_mu</span><span class="o">=</span><span class="n">q_mu</span><span class="p">,</span> <span class="n">q_sigmasq</span><span class="o">=</span><span class="n">q_sigmasq</span><span class="p">,</span> 
+             <span class="n">title</span><span class="o">=</span><span class="s2">&quot;true and inferred posterior&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/473f77a8c899fa8310b83ea61c09e2c201a33241d167b48846687b2597cc5f62.png" src="../_images/473f77a8c899fa8310b83ea61c09e2c201a33241d167b48846687b2597cc5f62.png" />
-<img alt="../_images/4b33af0396c352d16dea05cd0b5c9705ec54c300f4bb037dab6a2b15193038c0.png" src="../_images/4b33af0396c352d16dea05cd0b5c9705ec54c300f4bb037dab6a2b15193038c0.png" />
-<img alt="../_images/f3ac6b815c6096d453a107a205befba4e7db33233508ff8d2809f834696e936c.png" src="../_images/f3ac6b815c6096d453a107a205befba4e7db33233508ff8d2809f834696e936c.png" />
-<img alt="../_images/267d9ef253e3e46fb16ca6cf64476a2bfe8f21922457ba174e43c1e019682c43.png" src="../_images/267d9ef253e3e46fb16ca6cf64476a2bfe8f21922457ba174e43c1e019682c43.png" />
-<img alt="../_images/3ac81ee4d5132d72abec4e51e293fe3550658a9571d5fd8c94756e85afbfe12e.png" src="../_images/3ac81ee4d5132d72abec4e51e293fe3550658a9571d5fd8c94756e85afbfe12e.png" />
-<img alt="../_images/ada0c9035f3e76e3758e879862f8296de1f1a9a6202330657bdca7b643caeaf4.png" src="../_images/ada0c9035f3e76e3758e879862f8296de1f1a9a6202330657bdca7b643caeaf4.png" />
-<img alt="../_images/16d4d297cb3de50b87f733b2c432885ad9e4a6ba4874a94e6d6efa4bb5223284.png" src="../_images/16d4d297cb3de50b87f733b2c432885ad9e4a6ba4874a94e6d6efa4bb5223284.png" />
-<img alt="../_images/32c5cd99b71358442b813f813c652b72128edc86b51cbe2ee782f38f6bf250e1.png" src="../_images/32c5cd99b71358442b813f813c652b72128edc86b51cbe2ee782f38f6bf250e1.png" />
-<img alt="../_images/08beb13c69550964e318c0cde9aaa2393310c31d7725b48f4a9f4ce777a13a0f.png" src="../_images/08beb13c69550964e318c0cde9aaa2393310c31d7725b48f4a9f4ce777a13a0f.png" />
-<img alt="../_images/1f90f0328fa0270390897b8b2e31c95021da61286d2b554573c56b1bdd50ab3c.png" src="../_images/1f90f0328fa0270390897b8b2e31c95021da61286d2b554573c56b1bdd50ab3c.png" />
-<img alt="../_images/a2f25fa9d1af000dcfbdc88feaba3f211787f638580eb2d4d4159655a5844913.png" src="../_images/a2f25fa9d1af000dcfbdc88feaba3f211787f638580eb2d4d4159655a5844913.png" />
+<img alt="../_images/89e212ff56b968ad4638628d50d224df3e8166ec4cb65ac2fec0d43683b71856.png" src="../_images/89e212ff56b968ad4638628d50d224df3e8166ec4cb65ac2fec0d43683b71856.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -805,7 +801,9 @@ q(\sigma^2) = \chi^{-2}(\sigma^2 \mid \widetilde{\nu}, \widetilde{\sigma}^2).
 </div>
 </div>
 </div>
-<img src="cavi_nix.gif" width="750" align="center"></section>
+<!-- <img src="cavi_nix.gif" width="750" align="center"> -->
+<p><img alt="advi_nix" src="notebooks/cavi_nix.gif" /></p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -849,11 +847,11 @@ q(\sigma^2) = \chi^{-2}(\sigma^2 \mid \widetilde{\nu}, \widetilde{\sigma}^2).
       </div>
     </a>
     <a class="right-next"
-       href="../lectures/99_references.html"
+       href="10_advi_nix.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">References</p>
+        <p class="prev-next-title">Gradient-based Variational Inference in a Simple Gaussian Model</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
