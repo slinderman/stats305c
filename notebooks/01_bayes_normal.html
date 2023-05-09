@@ -167,9 +167,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="02_mvn.html">The Multivariate Normal Distribution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03_hier_gauss.html">Hierarchical Gaussian Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04_mcmc.html">Markov Chain Monte Carlo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="09_cavi_gmm.html">Coordinate Ascent Variational Inference for Gaussian Mixture Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_cavi_gmm.html">Coordinate Ascent Variational Inference for GMMs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="09_cavi_nix.html">CAVI in a Simple Gaussian Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="10_advi_nix.html">Gradient-based Variational Inference in a Simple Gaussian Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cavi_lda.html">Latent Dirichlet Allocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_advi_nix.html">Gradient-based VI in a Simple Gaussian Model</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -445,7 +446,7 @@ x_n \mid \mu, \sigma^2 &amp;\sim \mathcal{N}(\mu, \sigma^2)  \quad  \text{for } 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fb68119e730&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f22c13c37c0&gt;
 </pre></div>
 </div>
 <img alt="../_images/8d9439cb18cda3f2facc7578372738bb665be31554157f89887c9dfaf88eec5f.png" src="../_images/8d9439cb18cda3f2facc7578372738bb665be31554157f89887c9dfaf88eec5f.png" />
@@ -533,7 +534,7 @@ X.mean():  tensor(0.4819)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fb67ef64bb0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f22bf1b7df0&gt;
 </pre></div>
 </div>
 <img alt="../_images/1d21e568e71634ac2d7925fdf8905c8717f7d34f7bbbfb352e5fb72c372d820d.png" src="../_images/1d21e568e71634ac2d7925fdf8905c8717f7d34f7bbbfb352e5fb72c372d820d.png" />
@@ -614,7 +615,7 @@ p(x \mid \mu, \lambda) &amp;=
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fb67eee00a0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f22bf107130&gt;
 </pre></div>
 </div>
 <img alt="../_images/b8dcfe72fecd0f761c5dc6e272b4b31be6c6c86790a7f655ea8f5784ad66d8f5.png" src="../_images/b8dcfe72fecd0f761c5dc6e272b4b31be6c6c86790a7f655ea8f5784ad66d8f5.png" />
@@ -713,7 +714,7 @@ p(x \mid \mu, \lambda) &amp;=
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fb67de53460&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f22be05bd60&gt;
 </pre></div>
 </div>
 <img alt="../_images/51d84991530bf2e42e6f34cb6dba11e096cf8ebcdcd0420cb9e929773ef291ed.png" src="../_images/51d84991530bf2e42e6f34cb6dba11e096cf8ebcdcd0420cb9e929773ef291ed.png" />

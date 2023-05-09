@@ -167,9 +167,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="02_mvn.html">The Multivariate Normal Distribution</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Hierarchical Gaussian Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04_mcmc.html">Markov Chain Monte Carlo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="09_cavi_gmm.html">Coordinate Ascent Variational Inference for Gaussian Mixture Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_cavi_gmm.html">Coordinate Ascent Variational Inference for GMMs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="09_cavi_nix.html">CAVI in a Simple Gaussian Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="10_advi_nix.html">Gradient-based Variational Inference in a Simple Gaussian Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_cavi_lda.html">Latent Dirichlet Allocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_advi_nix.html">Gradient-based VI in a Simple Gaussian Model</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -589,7 +590,7 @@ This motivates the following <strong>hierarchical model</strong>:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;p_tau.pdf&quot;</span><span class="p">)</span>
+<span class="c1"># plt.savefig(&quot;p_tau.pdf&quot;)</span>
 </pre></div>
 </div>
 </div>
@@ -674,7 +675,7 @@ E[tau]: 4.459  Std[tau]: 2.541
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;p_mu.pdf&quot;</span><span class="p">)</span>
+<span class="c1"># plt.savefig(&quot;p_mu.pdf&quot;)</span>
 </pre></div>
 </div>
 </div>
@@ -812,7 +813,7 @@ E[tau]: 4.459  Std[tau]: 2.541
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;p_theta.pdf&quot;</span><span class="p">)</span>
+<span class="c1"># plt.savefig(&quot;p_theta.pdf&quot;)</span>
 </pre></div>
 </div>
 </div>
@@ -902,7 +903,7 @@ median:  tensor([7.7211, 6.5044, 5.7342, 6.4147, 5.2019, 5.6808, 7.8380, 6.5527]
     <span class="n">axs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;School </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;theta_samples.pdf&quot;</span><span class="p">)</span>
+<span class="c1"># plt.savefig(&quot;theta_samples.pdf&quot;)</span>
 </pre></div>
 </div>
 </div>

@@ -1,0 +1,1283 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Latent Dirichlet Allocation &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/10_cavi_lda';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Gradient-based VI in a Simple Gaussian Model" href="11_advi_nix.html" />
+    <link rel="prev" title="CAVI in a Simple Gaussian Model" href="09_cavi_nix.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw2/hw2.html">HW2: Gibbs Sampling and Metropolis-Hastings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw3/hw3.html">HW3: Continuous Latent Variable Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw4/hw4.html">HW4: Bayesian Mixture Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/hw5/hw5.html">HW 5: Poisson Matrix Factorization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_mvn.html">The Multivariate Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_hier_gauss.html">Hierarchical Gaussian Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_mcmc.html">Markov Chain Monte Carlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_cavi_gmm.html">Coordinate Ascent Variational Inference for GMMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_cavi_nix.html">CAVI in a Simple Gaussian Model</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Latent Dirichlet Allocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_advi_nix.html">Gradient-based VI in a Simple Gaussian Model</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/notebooks/10_cavi_lda.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/10_cavi_lda.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Latent Dirichlet Allocation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-data">Load the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#write-some-helper-fucntions-for-dirichlet-distributions">Write some helper fucntions for Dirichlet distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implement-coordinate-ascent-variational-inference-cavi">Implement Coordinate Ascent Variational Inference (CAVI)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-topics-by-author-usage">Exploring topics by author usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="latent-dirichlet-allocation">
+<h1>Latent Dirichlet Allocation<a class="headerlink" href="#latent-dirichlet-allocation" title="Permalink to this heading">#</a></h1>
+<p>Recall the following generatize model for LDA. Suppose we have <span class="math notranslate nohighlight">\(K\)</span> topics and <span class="math notranslate nohighlight">\(N\)</span> documents.</p>
+<p>For each topic <span class="math notranslate nohighlight">\(k =1,\ldots,K\)</span>, draw a topic</p>
+<div class="math notranslate nohighlight">
+\[\theta_k \sim \text{Dir}(\phi)\]</div>
+<p>Then, for each document <span class="math notranslate nohighlight">\(n = 1,\ldots, N\)</span>, draw topic proportions</p>
+<div class="math notranslate nohighlight">
+\[\pi_n \sim \text{Dir}(\alpha)\]</div>
+<p>Finally, for each word <span class="math notranslate nohighlight">\(l\)</span> in document <span class="math notranslate nohighlight">\(n\)</span>, first draw a topic assignment</p>
+<div class="math notranslate nohighlight">
+\[
+z_{n,d} \mid \pi_n \sim \text{Cat}(\pi_n)
+\]</div>
+<p>and draw a word</p>
+<div class="math notranslate nohighlight">
+\[
+x_{n,d} \mid z_{n,d} \sim \text{Cat}(\theta_{z_{n,d}})
+\]</div>
+<p>As mentioned in the lecture notes, while this formulation is easier to present, it’s more efficient to represent the documents as sparse vectors of <em>word counts</em>, <span class="math notranslate nohighlight">\(\mathbf{y}_n \in \mathbb{N}^V\)</span> where <span class="math notranslate nohighlight">\(y_{n,v} = \sum_{d=1}^D \mathbb{I}[x_{n,d} = v]\)</span>.</p>
+<p>This notebook studies Federalist papers in their entirety. We’ve provided a <span class="math notranslate nohighlight">\(N \times V\)</span> dataframe of the essays represented as word counts. The rows of the data frame correspond to the 85 individual essays and the columns correspond to the 5320 words in the vocabulary. We have already preprocessed the raw essays to remove very common and very infrequent words.</p>
+<p>Using this data, we will fit a topic model and do some analysis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Dirichlet</span><span class="p">,</span> <span class="n">Multinomial</span><span class="p">,</span> <span class="n">Categorical</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">trange</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="load-the-data">
+<h2>Load the data<a class="headerlink" href="#load-the-data" title="Permalink to this heading">#</a></h2>
+<p>We’ve already tokenized the text and created a bag-of-words representation of the corpus. We removed words from the vocabulary that occur in more than 95% of the essays or only appear in 1 essay.</p>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download the data</span>
+<span class="o">!</span>wget<span class="w"> </span>-nc<span class="w"> </span>https://www.dropbox.com/s/p6jb2cw5w5626pl/tokenized_fed.csv
+<span class="o">!</span>wget<span class="w"> </span>-nc<span class="w"> </span>https://www.dropbox.com/s/ftedra0jyk1j3hx/authorship.csv
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;tokenized_fed.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">docs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+<span class="n">vocab</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+  <div id="df-e6fdb306-54fd-4327-bd14-55de9f371f9b">
+    <div class="colab-df-container">
+      <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>unequivocal</th>
+      <th>experience</th>
+      <th>inefficacy</th>
+      <th>subsisting</th>
+      <th>federal</th>
+      <th>called</th>
+      <th>deliberate</th>
+      <th>new</th>
+      <th>constitution</th>
+      <th>united</th>
+      <th>...</th>
+      <th>chancery</th>
+      <th>jurisprudence</th>
+      <th>reexamination</th>
+      <th>writ</th>
+      <th>commonlaw</th>
+      <th>intent</th>
+      <th>refutation</th>
+      <th>habeas</th>
+      <th>corpus</th>
+      <th>clerks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>5.0</td>
+      <td>7.0</td>
+      <td>1.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>4.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>8.0</td>
+      <td>12.0</td>
+      <td>8.0</td>
+      <td>...</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>5.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>81</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>12.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>4.0</td>
+      <td>5.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>7.0</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>9.0</td>
+      <td>13.0</td>
+      <td>6.0</td>
+      <td>...</td>
+      <td>7.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>5.0</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>9.0</td>
+      <td>26.0</td>
+      <td>12.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>4.0</td>
+      <td>13.0</td>
+      <td>2.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>85 rows × 5320 columns</p>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-e6fdb306-54fd-4327-bd14-55de9f371f9b')"
+              title="Convert this dataframe to an interactive table."
+              style="display:none;">
+        
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px">
+    <path d="M0 0h24v24H0V0z" fill="none"/>
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z"/><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z"/>
+  </svg>
+      </button>
+      
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-e6fdb306-54fd-4327-bd14-55de9f371f9b button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-e6fdb306-54fd-4327-bd14-55de9f371f9b');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div>
+  </div></div>
+</div>
+</section>
+<section id="write-some-helper-fucntions-for-dirichlet-distributions">
+<h2>Write some helper fucntions for Dirichlet distributions<a class="headerlink" href="#write-some-helper-fucntions-for-dirichlet-distributions" title="Permalink to this heading">#</a></h2>
+<p>Specifically, we need the expected log of a Dirichlet random vector and the KL divergence between two Dirichlet random variables.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dirichlet_expected_log</span><span class="p">(</span><span class="n">dirichlet</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper function to compute expected log under Dirichlet distribution.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dirichlet: A torch.distributions.Dirichlet object with a batch shape of</span>
+<span class="sd">            (...,) and a event shape of (K,).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (...,K) tensor of expected logs, E[\log \pi], under the Dirichlet.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">concentration</span> <span class="o">=</span> <span class="n">dirichlet</span><span class="o">.</span><span class="n">concentration</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="n">concentration</span><span class="p">)</span> <span class="o">-</span> \
+           <span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="n">concentration</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">dirichlet_log_normalizer</span><span class="p">(</span><span class="n">concentration</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the log normalizing constant of a Dirichlet distribution with</span>
+<span class="sd">    the specificed concentration.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        concentration: (...,K) tensor of concentration parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (...,) batch of log normalizers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">gammaln</span><span class="p">(</span><span class="n">concentration</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> \
+        <span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">gammaln</span><span class="p">(</span><span class="n">concentration</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">dirichlet_kl</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the KL divergence between two Dirichlet disdtributions</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        q: A torch.distributions.Dirichlet object</span>
+<span class="sd">        p: A torch.distributions.Dirichlet object over the same domain</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A (batch of) KL divergence(s) between q and p.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kl</span> <span class="o">=</span> <span class="o">-</span><span class="n">dirichlet_log_normalizer</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">concentration</span><span class="p">)</span>
+    <span class="n">kl</span> <span class="o">+=</span> <span class="n">dirichlet_log_normalizer</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">concentration</span><span class="p">)</span>
+    <span class="n">kl</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">q</span><span class="o">.</span><span class="n">concentration</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">concentration</span><span class="p">)</span> <span class="o">*</span> \
+                    <span class="n">dirichlet_expected_log</span><span class="p">(</span><span class="n">q</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">kl</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="implement-coordinate-ascent-variational-inference-cavi">
+<h2>Implement Coordinate Ascent Variational Inference (CAVI)<a class="headerlink" href="#implement-coordinate-ascent-variational-inference-cavi" title="Permalink to this heading">#</a></h2>
+<p><em>Note: The <code class="docutils literal notranslate"><span class="pre">torch.distributions.Multinomial</span></code> object doesn’t work well when you have a batch with different numbers of counts. We hijack this object by not giving it a count so that it defaults to 1, which is equivalent to a categorical distribution. Then we multiply by the total counts to get the necessary expectations under the multinomial posterior.</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cavi</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> 
+         <span class="n">num_topics</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
+         <span class="n">num_iters</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> 
+         <span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> 
+         <span class="n">alpha</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> 
+         <span class="n">phi</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+         <span class="n">seed</span><span class="o">=</span><span class="mi">305</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">),</span>
+        <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run coordinate ascent VI for LDA.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">docs</span> <span class="o">=</span> <span class="n">docs</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">docs</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">num_topics</span>      <span class="c1"># short hand</span>
+    
+    <span class="k">def</span> <span class="nf">cavi_step</span><span class="p">(</span><span class="n">q_c</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;One step of CAVI.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Update the topic assignment counts</span>
+        <span class="n">E_logpi</span> <span class="o">=</span> <span class="n">dirichlet_expected_log</span><span class="p">(</span><span class="n">q_pi</span><span class="p">)</span>
+        <span class="n">E_logtheta</span> <span class="o">=</span> <span class="n">dirichlet_expected_log</span><span class="p">(</span><span class="n">q_theta</span><span class="p">)</span>
+        <span class="n">q_c</span> <span class="o">=</span> <span class="n">Multinomial</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">E_logpi</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">E_logtheta</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        
+        <span class="c1"># Compute the mean of q(c) since we&#39;ll use it twice below</span>
+        <span class="n">E_c</span> <span class="o">=</span> <span class="n">docs</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">q_c</span><span class="o">.</span><span class="n">mean</span>
+        
+        <span class="c1"># Update the topic proportions</span>
+        <span class="n">q_pi</span> <span class="o">=</span> <span class="n">Dirichlet</span><span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">E_c</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        
+        <span class="c1"># Update the topic word probabilities</span>
+        <span class="n">q_theta</span> <span class="o">=</span> <span class="n">Dirichlet</span><span class="p">(</span><span class="n">phi</span> <span class="o">+</span> <span class="n">E_c</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">q_c</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_theta</span>
+    
+    <span class="k">def</span> <span class="nf">elbo</span><span class="p">(</span><span class="n">q_c</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the evidence lower bound.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">elbo</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="c1"># KL to prior</span>
+        <span class="n">elbo</span> <span class="o">-=</span> <span class="n">dirichlet_kl</span><span class="p">(</span><span class="n">q_pi</span><span class="p">,</span> <span class="n">Dirichlet</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">K</span><span class="p">)))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">elbo</span> <span class="o">-=</span> <span class="n">dirichlet_kl</span><span class="p">(</span><span class="n">q_theta</span><span class="p">,</span> <span class="n">Dirichlet</span><span class="p">(</span><span class="n">phi</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">V</span><span class="p">)))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        
+        <span class="c1"># Entropy of q(z) [a little different from multinomial entropy]</span>
+        <span class="n">E_c</span> <span class="o">=</span> <span class="n">docs</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">q_c</span><span class="o">.</span><span class="n">mean</span>
+        <span class="n">elbo</span> <span class="o">-=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">E_c</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">q_c</span><span class="o">.</span><span class="n">probs</span><span class="p">))</span>
+        
+        <span class="c1"># Expected log p(z | \theta)</span>
+        <span class="n">E_logpi</span> <span class="o">=</span> <span class="n">dirichlet_expected_log</span><span class="p">(</span><span class="n">q_pi</span><span class="p">)</span>
+        <span class="n">E_logtheta</span> <span class="o">=</span> <span class="n">dirichlet_expected_log</span><span class="p">(</span><span class="n">q_theta</span><span class="p">)</span>
+        <span class="n">elbo</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">E_c</span> <span class="o">*</span> <span class="n">E_logpi</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">elbo</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">E_c</span> <span class="o">*</span> <span class="n">E_logtheta</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">elbo</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">docs</span><span class="p">)</span>
+    
+    <span class="c1"># Initialize the topics by randomly clustering the documents</span>
+    <span class="c1"># and using their word counts</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">Categorical</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">K</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">N</span><span class="p">,))</span>
+    <span class="n">q_pi</span> <span class="o">=</span> <span class="n">Dirichlet</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">)))</span>
+    <span class="n">q_theta</span> <span class="o">=</span> <span class="n">Dirichlet</span><span class="p">(</span><span class="n">phi</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">row_stack</span><span class="p">([</span><span class="n">docs</span><span class="p">[</span><span class="n">clusters</span> <span class="o">==</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+                                               <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">)]))</span>
+    <span class="n">q_c</span> <span class="o">=</span> <span class="n">Multinomial</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">K</span><span class="p">)))</span>
+    
+    <span class="c1"># Run CAVI</span>
+    <span class="n">elbos</span> <span class="o">=</span> <span class="p">[</span><span class="n">elbo</span><span class="p">(</span><span class="n">q_c</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">itr</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">num_iters</span><span class="p">):</span>
+        <span class="n">q_c</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_theta</span> <span class="o">=</span> <span class="n">cavi_step</span><span class="p">(</span><span class="n">q_c</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">)</span>
+        <span class="n">elbos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elbo</span><span class="p">(</span><span class="n">q_c</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">elbos</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">elbos</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1e-4</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ELBO is going down!&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">elbos</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">elbos</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Converged!&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+        
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">elbos</span><span class="p">),</span> <span class="p">(</span><span class="n">q_c</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">)</span>
+        
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">elbos</span><span class="p">,</span> <span class="p">(</span><span class="n">q_c</span><span class="p">,</span> <span class="n">q_pi</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">)</span> <span class="o">=</span> <span class="n">cavi</span><span class="p">(</span><span class="n">docs</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">elbos</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;ELBO per word&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "678444446c6b403fa165ecf9abbb7624", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Converged!
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;ELBO per word&#39;)
+</pre></div>
+</div>
+<img alt="../_images/d31ee822e82f215309842b60c2343674c5eaaeca166a5f34e88505d4da324b78.png" src="../_images/d31ee822e82f215309842b60c2343674c5eaaeca166a5f34e88505d4da324b78.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">topic_usage</span> <span class="o">=</span> <span class="n">q_pi</span><span class="o">.</span><span class="n">mean</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">topic_usage</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">topic_usage</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;topic&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;document&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar at 0x7fd4c70b60d0&gt;
+</pre></div>
+</div>
+<img alt="../_images/d6280abf18aabf3691e4e0964036f0a83b4cf4731bd6bfcd4f8b6a92211a6d0d.png" src="../_images/d6280abf18aabf3691e4e0964036f0a83b4cf4731bd6bfcd4f8b6a92211a6d0d.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Analyze the topics</span>
+<span class="n">usage</span> <span class="o">=</span> <span class="n">q_pi</span><span class="o">.</span><span class="n">mean</span>
+<span class="n">topics</span> <span class="o">=</span> <span class="n">q_theta</span><span class="o">.</span><span class="n">mean</span>
+
+<span class="c1"># Sort the topics by usage</span>
+<span class="n">topic_perm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">usage</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">usage</span> <span class="o">=</span> <span class="n">usage</span><span class="p">[:,</span> <span class="n">topic_perm</span><span class="p">]</span>
+<span class="n">topics</span> <span class="o">=</span> <span class="n">topics</span><span class="p">[</span><span class="n">topic_perm</span><span class="p">]</span>
+
+<span class="n">keywords</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">topic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">topics</span><span class="p">):</span>
+    <span class="c1"># if torch.allclose(usage[k], usage.min()):</span>
+    <span class="c1">#     continue</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;topic &quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;usage : &quot;</span><span class="p">,</span> <span class="n">usage</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+    
+    <span class="n">inds</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vocab</span><span class="p">[</span><span class="n">inds</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inds</span><span class="p">[:</span><span class="mi">5</span><span class="p">]):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">vocab</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">topic</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>topic  0 usage :  tensor([0.3847, 0.0888, 0.0834, 0.0931, 0.0613, 0.0777, 0.0585, 0.0508, 0.0508,
+        0.0508])
+	 people : tensor(0.0149)
+	 federal : tensor(0.0077)
+	 national : tensor(0.0070)
+	 union : tensor(0.0062)
+	 representatives : tensor(0.0058)
+
+topic  1 usage :  tensor([0.4278, 0.0656, 0.0646, 0.0685, 0.0777, 0.1051, 0.0534, 0.0457, 0.0457,
+        0.0457])
+	 executive : tensor(0.0141)
+	 legislative : tensor(0.0097)
+	 senate : tensor(0.0074)
+	 body : tensor(0.0074)
+	 president : tensor(0.0068)
+
+topic  2 usage :  tensor([0.2959, 0.1060, 0.1093, 0.0754, 0.0586, 0.1825, 0.0463, 0.0420, 0.0420,
+        0.0420])
+	 cases : tensor(0.0093)
+	 courts : tensor(0.0088)
+	 jurisdiction : tensor(0.0065)
+	 trial : tensor(0.0060)
+	 court : tensor(0.0059)
+
+topic  3 usage :  tensor([0.1641, 0.0610, 0.0538, 0.0989, 0.0484, 0.4167, 0.0448, 0.0374, 0.0374,
+        0.0374])
+	 peace : tensor(0.0058)
+	 military : tensor(0.0055)
+	 time : tensor(0.0049)
+	 militia : tensor(0.0047)
+	 war : tensor(0.0045)
+
+topic  4 usage :  tensor([0.1576, 0.0593, 0.0542, 0.0715, 0.0478, 0.4437, 0.0471, 0.0396, 0.0396,
+        0.0396])
+	 powers : tensor(0.0105)
+	 constitution : tensor(0.0075)
+	 congress : tensor(0.0068)
+	 authority : tensor(0.0065)
+	 confederation : tensor(0.0062)
+
+topic  5 usage :  tensor([0.1520, 0.0574, 0.0452, 0.0517, 0.0385, 0.5027, 0.0535, 0.0330, 0.0330,
+        0.0330])
+	 nations : tensor(0.0073)
+	 us : tensor(0.0062)
+	 commerce : tensor(0.0044)
+	 war : tensor(0.0041)
+	 foreign : tensor(0.0034)
+
+topic  6 usage :  tensor([0.1873, 0.0498, 0.0726, 0.0520, 0.0590, 0.4437, 0.0382, 0.0325, 0.0325,
+        0.0325])
+	 confederacy : tensor(0.0045)
+	 members : tensor(0.0044)
+	 empire : tensor(0.0034)
+	 cities : tensor(0.0027)
+	 among : tensor(0.0021)
+
+topic  7 usage :  tensor([0.1334, 0.0510, 0.0439, 0.5379, 0.0393, 0.0635, 0.0378, 0.0310, 0.0310,
+        0.0310])
+	 kind : tensor(0.0003)
+	 reasons : tensor(0.0003)
+	 equally : tensor(0.0003)
+	 union : tensor(0.0003)
+	 connected : tensor(0.0003)
+
+topic  8 usage :  tensor([0.3348, 0.0920, 0.0871, 0.0862, 0.0592, 0.0634, 0.1420, 0.0451, 0.0451,
+        0.0451])
+	 kind : tensor(0.0003)
+	 reasons : tensor(0.0003)
+	 equally : tensor(0.0003)
+	 union : tensor(0.0003)
+	 connected : tensor(0.0003)
+
+topic  9 usage :  tensor([0.7449, 0.0341, 0.0359, 0.0272, 0.0263, 0.0312, 0.0260, 0.0248, 0.0248,
+        0.0248])
+	 kind : tensor(0.0003)
+	 reasons : tensor(0.0003)
+	 equally : tensor(0.0003)
+	 union : tensor(0.0003)
+	 connected : tensor(0.0003)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="exploring-topics-by-author-usage">
+<h2>Exploring topics by author usage<a class="headerlink" href="#exploring-topics-by-author-usage" title="Permalink to this heading">#</a></h2>
+<p>Using the model, plot the total topic usage for each author</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load authorship and convert </span>
+<span class="n">authors_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;authorship.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">to_tensor</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+<span class="n">author_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;HAMILTON&quot;</span><span class="p">,</span> <span class="s2">&quot;JAY&quot;</span><span class="p">,</span> <span class="s2">&quot;MADISON&quot;</span><span class="p">,</span> <span class="s2">&quot;DISPUTED&quot;</span><span class="p">]</span>
+<span class="n">authors</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">authors_df</span> <span class="o">==</span> <span class="n">name</span><span class="p">)</span> 
+                              <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">author_names</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">author_usage</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">row_stack</span><span class="p">([</span><span class="n">usage</span><span class="p">[</span><span class="n">authors</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">usage</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">author_names</span><span class="p">,</span> <span class="n">author_usage</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">usage</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;topic&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">keywords</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="c1"># ax.set_ylabel(&quot;usage&quot;)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bbfe4f93d1b8dd62268cfcbfa073c32c6dbc59aa835dd381f3554c05260835b7.png" src="../_images/bbfe4f93d1b8dd62268cfcbfa073c32c6dbc59aa835dd381f3554c05260835b7.png" />
+</div>
+</div>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">#</a></h2>
+<p>This notebook demonstrates a very naive implementation of CAVI for LDA and applies it to the Federalist papers – a collection of documents authored by Hamilton, Jay, and Madison that were influential in forming the US Constitution.</p>
+<p>There are many ways this implementation could be improved. For example,</p>
+<ul class="simple">
+<li><p>While it does work with word counts, it does not take advantage of the sparsity of the data matrix. It explicitly instantiates parameters for the posterior over <span class="math notranslate nohighlight">\(c_{n,v}\)</span> even when <span class="math notranslate nohighlight">\(y_{n,v}=0\)</span>. We could improve performance by leveraging this sparsity.</p></li>
+<li><p>It operates in “batch mode,” which is fine for small datasets like this one, but can become intractable for massive corpora, like all the pages of Wikipedia. For those regimes, it is better to work with <em>stochastic variational inference</em> (Hoffman et al, 2011).</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="09_cavi_nix.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CAVI in a Simple Gaussian Model</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="11_advi_nix.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Gradient-based VI in a Simple Gaussian Model</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-the-data">Load the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#write-some-helper-fucntions-for-dirichlet-distributions">Write some helper fucntions for Dirichlet distributions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implement-coordinate-ascent-variational-inference-cavi">Implement Coordinate Ascent Variational Inference (CAVI)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-topics-by-author-usage">Exploring topics by author usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
