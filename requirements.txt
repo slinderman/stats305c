@@ -6,3 +6,4 @@ jupyter-book
 matplotlib
 tqdm
 seaborn
+fastprogress

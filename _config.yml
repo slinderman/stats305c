@@ -10,6 +10,8 @@ execute:
     - 'hw3.ipynb'
     - 'hw4.ipynb'
     - 'hw5.ipynb'
+    - '09_cavi_nix.ipynb'
+    - '10_advi_nix.ipynb'
 only_build_toc_files: true
 
 # Add a bibtex file so that we can create citations
