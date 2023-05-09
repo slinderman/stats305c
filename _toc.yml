@@ -19,7 +19,8 @@ parts:
     - file: notebooks/04_mcmc.ipynb
     - file: notebooks/09_cavi_gmm.ipynb
     - file: notebooks/09_cavi_nix.ipynb
-    - file: notebooks/10_advi_nix.ipynb
+    - file: notebooks/10_cavi_lda.ipynb
+    - file: notebooks/11_advi_nix.ipynb
 
   - caption: References
     chapters:
