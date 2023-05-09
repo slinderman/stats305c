@@ -39,11 +39,11 @@ You may also find these texts helpful
 | Apr 13 | Markov Chain Monte Carlo <br> {Download}`[slides]<slides/annotated/lecture04-mcmc.pdf>` [[notebook]](notebooks/04_mcmc.ipynb) | Ch 11.1-11.2, 12.1-12.3 |
 | Apr 18 | Probabilistic PCA and Factor Analysis <br> {Download}`[slides]<slides/annotated/lecture05-continuous_lvms.pdf>` | Ch 28.3 |
 | Apr 20 | Hamiltonian Monte Carlo <br> {Download}`[slides]<slides/annotated/lecture06-hmc.pdf>` | [Neal, 2012](https://arxiv.org/abs/1206.1901), Ch 12.5 |
-| Apr 25 | Mixture Models <br> {Download}`[slides]<slides/lecture07-mixtures.pdf>`  | Ch 28.2 |
+| Apr 25 | Mixture Models <br> {Download}`[slides]<slides/annotated/lecture07-mixtures.pdf>`  | Ch 28.2 |
 | Apr 27 | Expectation Maximization <br> {Download}`[slides]<slides/lecture08-em.pdf>` | Ch 6.5 |
-| May 2  | Coordinate Ascent Variational Inference <br> {Download}`[slides]<slides/lecture09-cavi.pdf>` [[notebook]](notebooks/09_cavi_gmm.ipynb) | [Blei et al, 2017](https://www.tandfonline.com/doi/full/10.1080/01621459.2017.1285773), Ch 10.1-10.3 |
-| May 4  | Mixed Membership Models <br> {Download}`[slides]<slides/lecture10_mixed_membership.pdf>` |  Ch 28.5|
-| May 9  | Gradient-Based Variational Inference <br> {Download}`[slides]<slides/lecture11-advi.pdf>` [[notebook]](notebooks/10_advi_nix.ipynb) | Ch 21|
+| May 2  | Coordinate Ascent Variational Inference <br> {Download}`[slides]<slides/lecture09-cavi.pdf>` [[notebook 1]](notebooks/09_cavi_gmm.ipynb) [[notebook 2]](notebooks/09_cavi_nix.ipynb) | [Blei et al, 2017](https://www.tandfonline.com/doi/full/10.1080/01621459.2017.1285773), Ch 10.1-10.3 |
+| May 4  | Mixed Membership Models <br> {Download}`[slides]<slides/lecture10_mixed_membership.pdf>` [[notebook]](notebooks/10_cavi_lda.ipynb) |  Ch 28.5|
+| May 9  | Gradient-Based Variational Inference <br> {Download}`[slides]<slides/lecture11-advi.pdf>` [[notebook]](notebooks/11_advi_nix.ipynb) | Ch 21|
 | May 11 | Variational Autoencoders <br> {Download}`[slides]<slides/lecture11-12-vaes.pdf>` | [Kingma and Welling, 2019](https://arxiv.org/pdf/1906.02691.pdf), Ch 10.2|
 | May 16 | Hidden Markov Models <br> {Download}`[slides]<slides/lecture13_hmms.pdf>` | Ch 29.2-29.5 |
 | May 18 | Linear Dynamical Systems <br> {Download}`[slides]<slides/lecture14-lds.pdf>` | Ch 29.6-12.8 |
