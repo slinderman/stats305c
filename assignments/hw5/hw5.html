@@ -417,7 +417,7 @@ x_{n,m} &amp;\sim \mathrm{Po}\Big(\boldsymbol{\theta}_{n}^\top \boldsymbol{\eta}
 = \mathrm{Po}\Big(\sum_{k=1}^K \theta_{n,k} \eta_{m,k} \Big),
 \end{align*}
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(\boldsymbol{\theta}_{n} \in \mathbb{R}_+^K\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{\eta}_{n} \in \mathbb{R}_+^K\)</span> are <em>non-negative</em> feature vectors for row <span class="math notranslate nohighlight">\(n\)</span> and column <span class="math notranslate nohighlight">\(m\)</span>, respectively.</p>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{\theta}_{n} \in \mathbb{R}_+^K\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{\eta}_{m} \in \mathbb{R}_+^K\)</span> are <em>non-negative</em> feature vectors for row <span class="math notranslate nohighlight">\(n\)</span> and column <span class="math notranslate nohighlight">\(m\)</span>, respectively.</p>
 <p>PMF has been used for recommender systems, aka collaborative filtering. In a recommender system, the rows correspond to users, the columns to items, and the entries <span class="math notranslate nohighlight">\(x_{n,m}\)</span> to how much user <span class="math notranslate nohighlight">\(n\)</span> liked item <span class="math notranslate nohighlight">\(m\)</span> (on a scale of <span class="math notranslate nohighlight">\(0,1,2,\ldots\)</span> stars, for example). The <span class="math notranslate nohighlight">\(K\)</span> feature dimensions capture different aspects of items that users may weight in their ratings.</p>
 <p>Note that the Poisson rate must be non-negative. It is sufficient to ensure <span class="math notranslate nohighlight">\(\boldsymbol{\theta}_{n}\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{\eta}_{m}\)</span> are non-negative. To that end, PMF uses gamma priors,</p>
 <div class="math notranslate nohighlight">
@@ -694,12 +694,7 @@ q(\eta_{m,k}; {\lambda}^{(\eta)}_{m,k,1}, {\lambda}^{(\eta)}_{m,k,2})
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">expected_poisson_logpdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">expected_rate</span><span class="p">,</span> <span class="n">expected_log_rate</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper function to compute the expected logpdf under a Poisson.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">gammaln</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">expected_log_rate</span> <span class="o">-</span> <span class="n">expected_rate</span>
-
-<span class="k">def</span> <span class="nf">elbo</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">q_z</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">,</span> <span class="n">q_eta</span><span class="p">,</span> <span class="n">p_theta</span><span class="p">,</span> <span class="n">p_eta</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">elbo</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">q_z</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">,</span> <span class="n">q_eta</span><span class="p">,</span> <span class="n">p_theta</span><span class="p">,</span> <span class="n">p_eta</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the evidence lower bound.</span>
 <span class="sd">    </span>
 <span class="sd">    Args:</span>
@@ -886,7 +881,7 @@ q(\eta_{m,k}; {\lambda}^{(\eta)}_{m,k,1}, {\lambda}^{(\eta)}_{m,k,2})
 </div>
 </div>
 </div>
-<p>Using the code below, run coordinate ascent variational inference on this dataset. Our implementation takes around 10-15 minutes to finish, and achieves an ELBO of <span class="math notranslate nohighlight">\(-1590\)</span>.</p>
+<p>Using the code below, run coordinate ascent variational inference on this dataset. Our implementation takes around 10-15 minutes to finish, and achieves a rescaled ELBO of around <span class="math notranslate nohighlight">\(-2\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">elbos</span><span class="p">,</span> <span class="p">(</span><span class="n">q_z</span><span class="p">,</span> <span class="n">q_theta</span><span class="p">,</span> <span class="n">q_eta</span><span class="p">)</span> <span class="o">=</span> <span class="n">cavi</span><span class="p">(</span><span class="n">lfm</span><span class="p">,</span> 
