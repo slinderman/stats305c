@@ -22,6 +22,7 @@ parts:
     - file: notebooks/09_cavi_nix.ipynb
     - file: notebooks/10_cavi_lda.ipynb
     - file: notebooks/11_advi_nix.ipynb
+    - file: notebooks/12_nns_vaes.ipynb
 
   - caption: References
     chapters:
