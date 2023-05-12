@@ -10,6 +10,7 @@ parts:
     - file: assignments/hw3/hw3.ipynb
     - file: assignments/hw4/hw4.ipynb
     - file: assignments/hw5/hw5.ipynb
+    - file: assignments/hw6/hw6.ipynb
 
   - caption: Notebooks
     chapters:
