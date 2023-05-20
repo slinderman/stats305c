@@ -1,0 +1,1452 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>HW7: Autoregressive HMMs &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'assignments/hw7/hw7';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Bayesian Analysis of the Normal Distribution" href="../../notebooks/01_bayes_normal.html" />
+    <link rel="prev" title="HW6: Neural Networks and VAEs" href="../hw6/hw6.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw2/hw2.html">HW2: Gibbs Sampling and Metropolis-Hastings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw3/hw3.html">HW3: Continuous Latent Variable Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw4/hw4.html">HW4: Bayesian Mixture Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw5/hw5.html">HW5: Poisson Matrix Factorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw6/hw6.html">HW6: Neural Networks and VAEs</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">HW7: Autoregressive HMMs</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/02_mvn.html">The Multivariate Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/03_hier_gauss.html">Hierarchical Gaussian Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/04_mcmc.html">Markov Chain Monte Carlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/09_cavi_gmm.html">Coordinate Ascent Variational Inference for GMMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/09_cavi_nix.html">CAVI in a Simple Gaussian Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/10_cavi_lda.html">Latent Dirichlet Allocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/11_advi_nix.html">Gradient-based VI in a Simple Gaussian Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/12_nns_vaes.html">Neural Networks and VAEs</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/assignments/hw7/hw7.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/assignments/hw7/hw7.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>HW7: Autoregressive HMMs</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup">Environment Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-implement-the-forward-backward-algorithm">Part 1: Implement the forward-backward algorithm</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1a-code-implement-the-forward-pass">Problem 1a [Code]: Implement the forward pass</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1b-code-implement-the-backward-pass">Problem 1b [Code]: Implement the backward pass</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1c-code-combine-the-forward-and-backward-passes">Problem 1c [Code]: Combine the forward and backward passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-it-on-some-more-realistic-sizes">Time it on some more realistic sizes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-gaussian-hmm">Part 2: Gaussian HMM</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2a-code-complete-the-following-gaussianhmm-class">Problem 2a [Code]: Complete the following GaussianHMM class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-synthetic-data-from-the-model">Sample synthetic data from the model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-the-gaussian-hmm-to-synthetic-data">Fit the Gaussian HMM to synthetic data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2b-code-cross-validation">Problem 2b [Code]: Cross validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2c-short-answer-initialization">Problem 2c [Short Answer]: Initialization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-autoregressive-hmms">Part 3: Autoregressive HMMs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3a-math-derive-the-natural-parameters-and-sufficient-statistics-for-a-linear-regression">Problem 3a [Math]: Derive the natural parameters and sufficient statistics for a linear regression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3b-math-solve-for-the-optimal-linear-regression-parameters-given-expected-sufficient-statistics">Problem 3b [Math]: Solve for the optimal linear regression parameters given expected sufficient statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3c-code-implement-an-autoregressive-hmm">Problem 3c [Code]: Implement an Autoregressive HMM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Sample synthetic data from the model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-an-arhmm-to-the-synthetic-data">Fit an ARHMM to the synthetic data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-fit-the-arhmm-to-mouse-videos">Part 4: Fit the ARHMM to mouse videos</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-a-slice-of-data">Plot a slice of data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-it">Fit it!</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-the-data-and-the-inferred-states">Plot the data and the inferred states</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-the-state-usage-histogram">Plot the state usage histogram</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-some-crowd-movies">Plot some “crowd” movies</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#download-crowd-movies-for-all-states">Download crowd movies for all states</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4a-short-answer-discussion">Problem 4a [Short Answer]: Discussion</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hw7-autoregressive-hmms">
+<h1>HW7: Autoregressive HMMs<a class="headerlink" href="#hw7-autoregressive-hmms" title="Permalink to this heading">#</a></h1>
+<hr class="docutils" />
+<p><strong>Name:</strong></p>
+<p><strong>Names of any collaborators:</strong></p>
+<hr class="docutils" />
+<p><img alt="" src="https://ars.els-cdn.com/content/image/1-s2.0-S0896627315010375-gr1.jpg" /></p>
+<p>In this lab we’ll develop hidden Markov models, specifically Gaussian autoregressive hidden Markov models, to analyze depth videos of freely behaving mice. We’ll implement the model developed by Wiltschko et al (2015) and extended in Markowitz et al (2018). Figure 1 of Wiltschko et al is reproduced above.</p>
+<p><strong>References</strong></p>
+<p>Markowitz, J. E., Gillis, W. F., Beron, C. C., Neufeld, S. Q., Robertson, K., Bhagat, N. D., … &amp; Sabatini, B. L. (2018). The striatum organizes 3D behavior via moment-to-moment action selection. Cell, 174(1), 44-58.</p>
+<p>Wiltschko, A. B., Johnson, M. J., Iurilli, G., Peterson, R. E., Katon, J. M., Pashkovski, S. L., … &amp; Datta, S. R. (2015). Mapping sub-second structure in mouse behavior. Neuron, 88(6), 1121-1135.</p>
+<section id="environment-setup">
+<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%%capture
+!pip install pynwb
+!wget -nc https://raw.githubusercontent.com/slinderman/stats305c/main/assignments/hw7/helpers.py
+!wget -nc https://www.dropbox.com/s/564wzasu1w7iogh/moseq_data.zip
+!unzip -n moseq_data.zip
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># First, import necessary libraries.
+import torch
+from torch.distributions import MultivariateNormal, Categorical
+import torch.nn.functional as F
+
+from dataclasses import dataclass
+from tqdm.auto import trange
+from google.colab import files
+
+import matplotlib.pyplot as plt
+from matplotlib.cm import get_cmap
+import seaborn as sns
+sns.set_context(&quot;notebook&quot;)
+
+# We&#39;ve written a few helpers for plotting, etc.
+import helpers
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="part-1-implement-the-forward-backward-algorithm">
+<h2>Part 1: Implement the forward-backward algorithm<a class="headerlink" href="#part-1-implement-the-forward-backward-algorithm" title="Permalink to this heading">#</a></h2>
+<p>First, implement the forward-backward algorithm for computing the posterior distribution on latent states of a hidden Markov model, <span class="math notranslate nohighlight">\(q(z) = p(z \mid x, \Theta)\)</span>. Specifically, this algorithm will return a <span class="math notranslate nohighlight">\(T \times K\)</span> matrix where each entry represents the posterior probability that <span class="math notranslate nohighlight">\(q(z_t = k)\)</span>.</p>
+<section id="problem-1a-code-implement-the-forward-pass">
+<h3>Problem 1a [Code]: Implement the forward pass<a class="headerlink" href="#problem-1a-code-implement-the-forward-pass" title="Permalink to this heading">#</a></h3>
+<p>As we derived in class, the forward pass recursively computes the <em>normalized</em> forward messages <span class="math notranslate nohighlight">\(\tilde{\alpha}_t\)</span> and the marginal log likelihood <span class="math notranslate nohighlight">\(\log p(x \mid \Theta) = \sum_{t} \log A_t\)</span>.</p>
+<p><strong>Notes</strong>:</p>
+<ul class="simple">
+<li><p>This function takes in the <em>log</em> likelihoods, <span class="math notranslate nohighlight">\(\log \ell_{tk}\)</span>, so you’ll have to exponentiate in the forward pass</p></li>
+<li><p>You need to be careful exponentiating though. If the log likelihoods are very negative, they’ll all be essentially zero when exponentiated and you’ll run into a divide-by-zero error when you compute the normalized forward message. Alternatively, if they’re large positive numbers, your exponent will blow up and you’ll get nan’s in your calculations.</p></li>
+<li><p>To avoid numerical issues, subtract <span class="math notranslate nohighlight">\(\max_k (\log \ell_{tk})\)</span> prior to exponentiating. It won’t affect the normalized messages, but you will have to account for it in your computation of the marginal likelihood.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def forward_pass(initial_probs, transition_matrix, log_likes):
+    &quot;&quot;&quot;
+    Perform the (normalized) forward pass of the HMM.
+
+    Parameters
+    ----------
+    initial_probs: $\pi$, the initial state probabilities. Length K, sums to 1.
+    transition_matrix: $P$, a KxK transition matrix. Rows sum to 1.
+    log_likes: $\log \ell_{t,k}$, a TxK matrix of _log_ likelihoods.
+
+    Returns
+    -------
+    alphas: TxK matrix with _normalized_ forward messages $\tilde{\alpha}_{t,k}$
+    marginal_ll: Scalar marginal log likelihood $\log p(x | \Theta)$
+    &quot;&quot;&quot;
+    ##
+    # YOUR CODE HERE
+    alphas = ...
+    marginal_ll = ...
+    #
+    ##
+    return alphas, marginal_ll
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-1b-code-implement-the-backward-pass">
+<h3>Problem 1b [Code]: Implement the backward pass<a class="headerlink" href="#problem-1b-code-implement-the-backward-pass" title="Permalink to this heading">#</a></h3>
+<p>Recursively compute the backward messages <span class="math notranslate nohighlight">\(\beta_t\)</span>. Again, normalize to avoid underflow, and be careful when you exponentiate the log likelihoods. The same trick of subtracting the max before exponentiating will work here too.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def backward_pass(transition_matrix, log_likes):
+    &quot;&quot;&quot;
+    Perform the (normalized) backward pass of the HMM.
+
+    Parameters
+    ----------
+    transition_matrix: $P$, a KxK transition matrix. Rows sum to 1.
+    log_likes: $\log \ell_{t,k}$, a TxK matrix of _log_ likelihoods.
+
+    Returns
+    -------
+    betas: TxK matrix with _normalized_ backward messages $\tilde{\beta}_{t,k}$
+    &quot;&quot;&quot;
+    ##
+    # YOUR CODE HERE
+    betas = ...
+    #
+    ##
+
+    return betas
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-1c-code-combine-the-forward-and-backward-passes">
+<h3>Problem 1c [Code]: Combine the forward and backward passes<a class="headerlink" href="#problem-1c-code-combine-the-forward-and-backward-passes" title="Permalink to this heading">#</a></h3>
+<p>Compute the posterior marginal probabilities. We call these the <code class="docutils literal notranslate"><span class="pre">expected_states</span></code> because <span class="math notranslate nohighlight">\(q(z_t = k) = \mathbb{E}_{q(z)}[\mathbb{I}[z_t = k]]\)</span>. To compute them, combine the forward messages, backward messages, and the likelihoods, then normalize. Again, be careful when exponentiating the likelihoods.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@dataclass
+class HMMPosterior:
+    expected_states: torch.Tensor
+    marginal_ll: float
+
+
+def forward_backward(initial_probs, transition_matrix, log_likes):
+    &quot;&quot;&quot;
+    Fun the forward and backward passes and then combine to compute the 
+    posterior probabilities q(z_t=k).
+
+    Parameters
+    ----------
+    initial_probs: $\pi$, the initial state probabilities. Length K, sums to 1.
+    transition_matrix: $P$, a KxK transition matrix. Rows sum to 1.
+    log_likes: $\log \ell_{t,k}$, a TxK matrix of _log_ likelihoods.
+
+    Returns
+    -------
+    posterior: an HMMPosterior object
+    &quot;&quot;&quot;
+    ##
+    # YOUR CODE HERE
+    expected_states = ...
+    marginal_ll = ...
+    #
+    ##
+    
+    # Package the results into a HMMPosterior
+    return HMMPosterior(expected_states=expected_states,
+                        marginal_ll=marginal_ll)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="time-it-on-some-more-realistic-sizes">
+<h3>Time it on some more realistic sizes<a class="headerlink" href="#time-it-on-some-more-realistic-sizes" title="Permalink to this heading">#</a></h3>
+<p>It should take about 3 seconds for a <span class="math notranslate nohighlight">\(T=36000\)</span> time series with <span class="math notranslate nohighlight">\(K=50\)</span> states.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%timeit forward_backward(*helpers.random_args(36000, 50))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="part-2-gaussian-hmm">
+<h2>Part 2: Gaussian HMM<a class="headerlink" href="#part-2-gaussian-hmm" title="Permalink to this heading">#</a></h2>
+<p>First we’ll implement a hidden Markov model (HMM) with Gaussian observations. This is the same model we studied in class,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+p(x, z; \Theta) &amp;= \mathrm{Cat}(z_1; \pi) \prod_{t=2}^{T} \mathrm{Cat}(z_t; P_{z_{t-1}}) \prod_{t=1}^T \mathcal{N}(x_t; \mu_{z_t}, \Sigma_{z_t})
+\end{align}
+\]</div>
+<p>with parameters <span class="math notranslate nohighlight">\(\Theta = \pi, P, \{\mu_k, \Sigma_k\}_{k=1}^K\)</span>. The observed datapoints are <span class="math notranslate nohighlight">\(x_t \in \mathbb{R}^{D}\)</span> and the latent states are <span class="math notranslate nohighlight">\(z_t \in \{1,\ldots, K\}\)</span>.</p>
+<section id="problem-2a-code-complete-the-following-gaussianhmm-class">
+<h3>Problem 2a [Code]: Complete the following GaussianHMM class<a class="headerlink" href="#problem-2a-code-complete-the-following-gaussianhmm-class" title="Permalink to this heading">#</a></h3>
+<p>Finish the code below to implement a <code class="docutils literal notranslate"><span class="pre">GaussianHMM</span></code> object. Specifically, complete the following functions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sample</span></code>: to simulate from the joint distribution <span class="math notranslate nohighlight">\(p(z_{1:T}, x_{1:T})\)</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">e_step</span></code>: to compute the posterior expectations and marginal likelihood using the <code class="docutils literal notranslate"><span class="pre">forward_backward</span></code> function you wrote in Part 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">m_step</span></code>: to update the parameters by maximizing the expected log joint probability under the posterior from <code class="docutils literal notranslate"><span class="pre">e_step</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fit</span></code>: to run the EM algorithm.</p></li>
+</ul>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>Recall that in Homework 4 you derived the M-step for a Gaussian mixture model with a normal-inverse Wishart prior distribution. You can reuse the same calculations for the M-step of the Gaussian HMM. Here, we are assuming an improper uniform prior on the parameters <span class="math notranslate nohighlight">\((\mu_k, \Sigma_k)\)</span>, but you can think of that as a normal-inverse-Wishart prior with parameters <span class="math notranslate nohighlight">\(\mu_0=0\)</span>, <span class="math notranslate nohighlight">\(\kappa_0=0\)</span>, <span class="math notranslate nohighlight">\(\Sigma_0=0\)</span>, and <span class="math notranslate nohighlight">\(\nu_0=-(D+2)\)</span>.</p></li>
+<li><p>For numerical stability, in the M-step you may need to add a small amount to the diagonal of <span class="math notranslate nohighlight">\(\Sigma_k\)</span> and explicitly make it symmetric; e.g. after solving for the optimal covariance do,</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">Sigma</span> <span class="o">+</span> <span class="n">Sigma</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-4</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dim</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can think of this as a very weak NIW prior.</p>
+<ul class="simple">
+<li><p>We will <strong>keep the initial distribution and transition matrix fixed</strong> in this code!</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>class GaussianHMM:
+    &quot;&quot;&quot;Simple implementation of a Gaussian HMM.
+    &quot;&quot;&quot;
+    def __init__(self, num_states, data_dim):
+        self.num_states = num_states
+        self.data_dim = data_dim
+
+        # Initialize the HMM parameters
+        self.initial_probs = torch.ones(num_states) / num_states
+        self.transition_matrix = \
+            0.9 * torch.eye(num_states) + \
+            0.1 * torch.ones((num_states, num_states)) / num_states
+        self.emission_means = torch.randn(num_states, data_dim)
+        self.emission_covs = torch.eye(data_dim).repeat(num_states, 1, 1)
+
+    def sample(self, num_timesteps, seed=0):
+        &quot;&quot;&quot;Sample the HMM
+        &quot;&quot;&quot;
+        # Set random seed
+        torch.manual_seed(seed)
+
+        # Initialize outputs
+        states = torch.full((num_timesteps,), -1, dtype=int)
+        data = torch.zeros((num_timesteps, self.data_dim))
+
+        ## 
+        # YOUR CODE HERE
+        states[0] = ...                     # Sample the initial state
+        for t in range(num_timesteps):
+            data[t] = ...                   # Sample emission
+            if t &lt; num_timesteps - 1:
+                states[t+1] = ...           # Sample next state
+        #
+        ##
+
+        return states, data
+
+    def e_step(self, data):
+        &quot;&quot;&quot;Run the forward-backward algorithm and return the posterior distribution
+        over latent states given the data and the current model parameters.
+        &quot;&quot;&quot;
+        ##
+        # YOUR CODE HERE
+        posterior = ...
+        #
+        ##
+        return posterior
+
+    def m_step(self, data, posterior):
+        &quot;&quot;&quot;Perform one m-step to update the emission means and covariance given the
+        data and the posteriors output by the forward-backward algorithm.
+        
+        NOTE: We will keep the initial distribution and transition matrix fixed!
+        &quot;&quot;&quot;
+        ##
+        # YOUR CODE HERE
+        self.emission_means = ...
+        self.emission_covs = ...
+        #
+        ##
+
+    def fit(self, data, num_iters=100):
+        &quot;&quot;&quot;Estimate the parameters of the HMM with expectation-maximization (EM).
+        &quot;&quot;&quot;
+        # Initialize the posterior randomly
+        expected_states = torch.rand(len(data), num_states)
+        expected_states /= expected_states.sum(axis=1, keepdims=True)
+        posterior = HMMPosterior(expected_states=expected_states,
+                                 marginal_ll=-torch.inf)
+        
+        # Track the marginal log likelihood of the data over EM iterations
+        lls = []
+
+        # Main loop of the EM algorithm
+        for itr in trange(num_iters):
+            ###
+            # YOUR CODE HERE
+
+            # E step: compute the posterior distribution given current parameters
+            posterior = ...
+
+            # Track the log likeliood
+            lls.append(...)
+
+            # M step: udate model parameters under the current posterior
+            ...
+            #
+            ##
+
+            
+        # convert lls to arrays and return
+        lls = torch.tensor(lls)
+        return lls, posterior
+        
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sample-synthetic-data-from-the-model">
+<h3>Sample synthetic data from the model<a class="headerlink" href="#sample-synthetic-data-from-the-model" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Make a &quot;true&quot; HMM
+num_states = 5
+data_dim = 2
+true_hmm = GaussianHMM(num_states, data_dim)
+
+# Override the emission distribution
+true_hmm.emission_means = torch.column_stack([
+    torch.cos(torch.linspace(0, 2 * torch.pi, num_states+1))[:-1],
+    torch.sin(torch.linspace(0, 2 * torch.pi, num_states+1))[:-1]
+])
+true_hmm.emission_covs = 0.25**2 * torch.eye(data_dim).repeat(num_states, 1, 1)
+
+# Sample the model
+num_timesteps = 200
+states, emissions = true_hmm.sample(num_timesteps, seed=305+ord(&#39;c&#39;))
+
+# Plot the data and the smoothed data
+lim = 1.05 * abs(emissions).max()
+plt.figure(figsize=(8, 6))
+plt.imshow(states[None,:],
+           aspect=&quot;auto&quot;,
+           interpolation=&quot;none&quot;,
+           cmap=helpers.cmap,
+           vmin=0,
+           vmax=len(helpers.colors)-1,
+           extent=(0, num_timesteps, -lim, (data_dim)*lim))
+
+means = true_hmm.emission_means[states]
+for d in range(data_dim):
+    plt.plot(emissions[:,d] + lim * d, &#39;-k&#39;)
+    plt.plot(means[:,d] + lim * d, &#39;:k&#39;)
+
+plt.xlim(0, num_timesteps)
+plt.xlabel(&quot;time&quot;)
+plt.yticks(lim * torch.arange(data_dim), [&quot;$x_{}$&quot;.format(d+1) for d in range(data_dim)])
+
+plt.title(&quot;Simulated data from an HMM&quot;)
+
+plt.tight_layout()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="fit-the-gaussian-hmm-to-synthetic-data">
+<h3>Fit the Gaussian HMM to synthetic data<a class="headerlink" href="#fit-the-gaussian-hmm-to-synthetic-data" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Build the HMM and fit it with EM
+hmm = GaussianHMM(num_states, data_dim)
+lls, posterior = hmm.fit(emissions)
+
+# Plot the log likelihoods. They should go up.
+plt.plot(lls)
+plt.xlabel(&quot;iteration&quot;)
+plt.ylabel(&quot;marginal log lkhd&quot;)
+plt.grid(True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Plot the true and inferred states
+fig, axs = plt.subplots(2, 1, sharex=True)
+axs[0].imshow(states[None,:],
+              aspect=&quot;auto&quot;,
+              interpolation=&quot;none&quot;,
+              cmap=helpers.cmap,
+              vmin=0, vmax=len(helpers.colors)-1)
+axs[0].set_yticks([])
+axs[0].set_title(&quot;true states&quot;)
+
+axs[1].imshow(posterior.expected_states.T,
+              aspect=&quot;auto&quot;,
+              interpolation=&quot;none&quot;,
+              cmap=&quot;Greys&quot;,
+              vmin=0, vmax=1)
+axs[1].set_yticks(torch.arange(num_states))
+axs[1].set_ylabel(&quot;state&quot;)
+axs[1].set_xlabel(&quot;time&quot;)
+axs[1].set_title(&quot;expected states&quot;)
+
+plt.tight_layout()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-2b-code-cross-validation">
+<h3>Problem 2b [Code]: Cross validation<a class="headerlink" href="#problem-2b-code-cross-validation" title="Permalink to this heading">#</a></h3>
+<p>Fit HMMs with varying numbers of discrete states, <span class="math notranslate nohighlight">\(K\)</span>, and compare them on held-out test data. For each <span class="math notranslate nohighlight">\(K\)</span>, fit an HMM multiple times from different initial conditions to guard against local optima in the EM fits. Plot the held-out likelihoods as a function of <span class="math notranslate nohighlight">\(K\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>##
+# Your code here
+
+#
+##
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-2c-short-answer-initialization">
+<h3>Problem 2c [Short Answer]: Initialization<a class="headerlink" href="#problem-2c-short-answer-initialization" title="Permalink to this heading">#</a></h3>
+<p>The HMM doens’t always find the true latent states. Sometimes it merges the red and blue states, for example. Running multiple restarts with random initializations sometimes works, but not always. Can you think of smarter initialization strategies?</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="part-3-autoregressive-hmms">
+<h2>Part 3: Autoregressive HMMs<a class="headerlink" href="#part-3-autoregressive-hmms" title="Permalink to this heading">#</a></h2>
+<p>Autoregressive hidden Markov models (ARHMMs) replace the Gaussian observations with an AR model:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+p(x, z \mid \Theta) &amp;= \mathrm{Cat}(z_1 \mid \pi) \prod_{t=2}^{T} \mathrm{Cat}(z_t \mid P_{z_{t-1}}) \prod_{t=1}^T p(x_t \mid x_{1:t-1}, z_t)
+\end{align}
+\]</div>
+<p>The model is “autoregressive” because <span class="math notranslate nohighlight">\(x_t\)</span> depends not only on <span class="math notranslate nohighlight">\(z_t\)</span> but on <span class="math notranslate nohighlight">\(x_{1:t-1}\)</span> as well. The precise form of this dependence varies; here we will consider linear Gaussian dependencies on only the most recent <span class="math notranslate nohighlight">\(L\)</span> timesteps,:</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+p(x_t \mid x_{1:t-1}, z_t) &amp;= \mathcal{N}\left(x_t \mid \sum_{l=1}^L A_{z_t,l} x_{t-l} + b_{z_t}, Q_{z_t} \right)  \qquad \text{for } t &gt; L
+\end{align}
+\]</div>
+<p>To complete the model, assume</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+p(x_t \mid x_{1:t-1}, z_t) &amp;= \mathcal{N}\left(x_t \mid 0, I \right)  \qquad \text{for } t \leq L
+\end{align}
+\]</div>
+<p>The new parameters are <span class="math notranslate nohighlight">\(\Theta = \pi, P, \{\{A_{k,l}\}_{l=1}^L, b_{k}, Q_k\}_{k=1}^K\)</span>, which include weights <span class="math notranslate nohighlight">\(A_{k,l} \in \mathbb{R}^{D \times D}\)</span> for each of the <span class="math notranslate nohighlight">\(K\)</span> states and the <span class="math notranslate nohighlight">\(L\)</span> lags, and a bias vector <span class="math notranslate nohighlight">\(b_k \in \mathbb{R}^D\)</span>.</p>
+<p>Note that we can write this as a simple <strong>linear regression</strong>,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+p(x_t \mid x_{1:t-1}, z_t) &amp;= \mathcal{N}\left(x_t \mid W_k \phi_t , Q_{z_t} \right)  
+\end{align}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\phi_t = (x_{t-1}, \ldots, x_{t-L}, 1) \in \mathbb{R}^{LD +1}\)</span> is a vector of covariates (aka features) that includes the past <span class="math notranslate nohighlight">\(L\)</span> time steps along with a 1 for the bias term.</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+W_k = \begin{bmatrix} A_{k,1}  &amp; A_{k,2} &amp; \ldots &amp; A_{kL} &amp; b_k \end{bmatrix}
+\in \mathbb{R}^{D \times LD + 1}
+\end{align}
+\]</div>
+<p>is a block matrix of the autoregressive weights and the bias.</p>
+<p><em>Note that the covariates are fixed functions of the data so we can precompute them, if we know the number of lags <span class="math notranslate nohighlight">\(L\)</span>.</em></p>
+<section id="problem-3a-math-derive-the-natural-parameters-and-sufficient-statistics-for-a-linear-regression">
+<h3>Problem 3a [Math]: Derive the natural parameters and sufficient statistics for a linear regression<a class="headerlink" href="#problem-3a-math-derive-the-natural-parameters-and-sufficient-statistics-for-a-linear-regression" title="Permalink to this heading">#</a></h3>
+<p>Expand the expected log likelihood of a linear regression model in terms of <span class="math notranslate nohighlight">\(W_k\)</span> and <span class="math notranslate nohighlight">\(b_k\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+\mathbb{E}_{q(z)}\left[ \sum_{t=1}^T \mathbb{I}[z_t=k] \cdot \log \mathcal{N}(x_t \mid W_k \phi_t, Q_k) \right].
+\end{align}
+\]</div>
+<p>Write it as a sum of inner products between natural parameters (i.e. functions of <span class="math notranslate nohighlight">\(W_k\)</span> and <span class="math notranslate nohighlight">\(Q_k\)</span>) and expected sufficient statistics (i.e. functions of <span class="math notranslate nohighlight">\(q\)</span>, <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span>).</p>
+<hr class="docutils" />
+<p><em>Your answer here</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-3b-math-solve-for-the-optimal-linear-regression-parameters-given-expected-sufficient-statistics">
+<h3>Problem 3b [Math]: Solve for the optimal linear regression parameters given expected sufficient statistics<a class="headerlink" href="#problem-3b-math-solve-for-the-optimal-linear-regression-parameters-given-expected-sufficient-statistics" title="Permalink to this heading">#</a></h3>
+<p>Solve for <span class="math notranslate nohighlight">\(W_k^\star, Q_k^\star\)</span> that maximize the objective above in terms of the expected sufficient statistics.</p>
+<hr class="docutils" />
+<p><em>Your answer here</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-3c-code-implement-an-autoregressive-hmm">
+<h3>Problem 3c [Code]: Implement an Autoregressive HMM<a class="headerlink" href="#problem-3c-code-implement-an-autoregressive-hmm" title="Permalink to this heading">#</a></h3>
+<p>Now complete the code below to implement an AR-HMM.</p>
+<p><em>Note: This code assumes <span class="math notranslate nohighlight">\(L=1\)</span></em>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>class AutoregressiveHMM:
+    &quot;&quot;&quot;Simple implementation of an Autoregressive HMM.
+    &quot;&quot;&quot;
+    def __init__(self, num_states, data_dim):
+        self.num_states = num_states
+        self.data_dim = data_dim
+
+        # Initialize the HMM parameters
+        self.initial_probs = torch.ones(num_states) / num_states
+        self.initial_mean = torch.zeros(data_dim)
+        self.initial_cov = torch.eye(data_dim)
+        self.transition_matrix = \
+            0.9 * torch.eye(num_states) + \
+            0.1 * torch.ones((num_states, num_states)) / num_states
+        self.emission_dynamics = torch.randn(num_states, data_dim, data_dim)
+        self.emission_bias = torch.randn(num_states, data_dim)
+        self.emission_cov = torch.eye(data_dim).repeat(num_states, 1, 1)
+
+    def sample(self, num_timesteps, seed=0):
+        &quot;&quot;&quot;Sample the HMM
+        &quot;&quot;&quot;
+        # Set random seed
+        torch.manual_seed(seed)
+
+        # Initialize outputs
+        states = torch.full((num_timesteps,), -1, dtype=int)
+        data = torch.zeros((num_timesteps, self.data_dim))
+
+        ## 
+        # YOUR CODE HERE
+        states[0] = ...                     # Sample the initial state
+        data[0] = ...                       # Sample the initial emission
+        for t in range(1, num_timesteps):
+            states[t] = ...                 # Sample state
+            data[t] = ...                   # Sample emission
+        #
+        ##
+        return states, data
+
+    def e_step(self, data):
+        &quot;&quot;&quot;Perform one e-step to compute the posterior over the latent states
+        given the data.
+        &quot;&quot;&quot;
+        ###
+        # YOUR CODE HERE
+        posterior = ...
+        #
+        ##
+        return posterior
+
+    def m_step(self, data, posterior):
+        &quot;&quot;&quot;Perform one m-step to update the emission means and covariance given the
+        data and the posteriors output by the forward-backward algorithm.
+        &quot;&quot;&quot;
+        ##
+        # YOUR CODE HERE
+        self.emission_dynamics = ...
+        self.emission_bias = ...
+        self.emission_covs = ...
+        #
+        ##
+
+    def fit(self, data, num_iters=100):
+        &quot;&quot;&quot;Estimate the parameters of the HMM with expectation-maximization (EM).
+        &quot;&quot;&quot;
+        # Initialize the posterior randomly
+        expected_states = F.softmax(torch.randn(len(data), num_states), dim=0)
+        posterior = HMMPosterior(expected_states=expected_states,
+                                 marginal_ll=-torch.inf)
+        
+        # Track the marginal log likelihood of the data over EM iterations
+        lls = []
+
+        # Main loop of the EM algorithm
+        for itr in trange(num_iters):
+            ###
+            # YOUR CODE HERE
+            # E step: compute the posterior given the current parameters
+            posterior = ...
+
+            # Track the log likeliood
+            lls.append(...)
+
+            # M step: update model parameters under the current posterior
+            ...
+            #
+            ##
+
+        # convert lls to arrays and return
+        lls = torch.tensor(lls)
+        return lls, posterior        
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h3>Sample synthetic data from the model<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Make observation distributions
+num_states = 5
+data_dim = 2
+
+# Initialize the transition matrix to proceed in a cycle
+transition_probs = (torch.arange(num_states)**10).type(torch.float)
+transition_probs /= transition_probs.sum()
+transition_matrix = torch.zeros((num_states, num_states))
+for k, p in enumerate(transition_probs.flip(0)):
+    transition_matrix += torch.roll(p * torch.eye(num_states), k, dims=1)
+
+# Initialize the AR dynamics to spiral toward points
+rotation_matrix = \
+    lambda theta: torch.tensor([[torch.cos(theta), -torch.sin(theta)],
+                                [torch.sin(theta),  torch.cos(theta)]])
+theta = torch.tensor(-torch.pi / 25)
+dynamics = 0.8 * rotation_matrix(theta).repeat(num_states, 1, 1)
+bias = torch.column_stack([torch.cos(torch.linspace(0, 2*torch.pi, num_states+1)[:-1]), 
+                        torch.sin(torch.linspace(0, 2*torch.pi, num_states+1)[:-1])])
+covs = torch.tile(0.001 * torch.eye(data_dim), (num_states, 1, 1))
+
+# Compute the stationary points
+stationary_points = torch.linalg.solve(torch.eye(data_dim) - dynamics, bias)
+
+# Construct an ARHMM and overwrite the emission parameters
+true_arhmm = AutoregressiveHMM(num_states, data_dim)
+true_arhmm.transition_matrix = transition_matrix
+true_arhmm.emission_dynamics = dynamics
+true_arhmm.emission_bias = bias
+true_arhmm.emission_cov = covs
+
+# Plot the true ARHMM dynamics for each of the 5 states
+helpers.plot_dynamics(true_arhmm)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Sample from the true ARHMM
+states, data = true_arhmm.sample(10000, seed=305+ord(&#39;c&#39;))
+
+# Plot the data
+for k in range(num_states):
+    plt.plot(*data[states==k].T, &#39;o&#39;, color=helpers.colors[k],
+         alpha=0.75, markersize=3)
+    
+plt.plot(*data.T, &#39;-k&#39;, lw=0.5, alpha=0.2)
+plt.xlabel(&quot;$x_1$&quot;)
+plt.ylabel(&quot;$x_2$&quot;)
+plt.gca().set_aspect(&quot;equal&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="fit-an-arhmm-to-the-synthetic-data">
+<h3>Fit an ARHMM to the synthetic data<a class="headerlink" href="#fit-an-arhmm-to-the-synthetic-data" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Construct another ARHMM and fit it with EM
+arhmm = AutoregressiveHMM(num_states, data_dim)
+lls, posterior = arhmm.fit(data, num_iters=25)
+
+# Plot the log likelihoods. They should go up.
+plt.plot(lls)
+plt.xlabel(&quot;iteration&quot;)
+plt.ylabel(&quot;marginal log lkhd&quot;)
+plt.grid(True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Plot the true and inferred states
+fig, axs = plt.subplots(2, 1, sharex=True)
+axs[0].imshow(states[None,:],
+              aspect=&quot;auto&quot;,
+              interpolation=&quot;none&quot;,
+              cmap=helpers.cmap,
+              vmin=0, vmax=len(helpers.colors)-1)
+axs[0].set_xlim(0, 1000)
+axs[0].set_yticks([])
+axs[0].set_title(&quot;true states&quot;)
+
+axs[1].imshow(posterior.expected_states.T,
+              aspect=&quot;auto&quot;,
+              interpolation=&quot;none&quot;,
+              cmap=&quot;Greys&quot;,
+              vmin=0, vmax=1)
+axs[1].set_xlim(0, 1000)
+axs[1].set_yticks(torch.arange(num_states))
+axs[1].set_ylabel(&quot;state&quot;)
+axs[1].set_xlabel(&quot;time&quot;)
+axs[1].set_title(&quot;expected states&quot;)
+plt.tight_layout()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Plot the learned dynamics
+helpers.plot_dynamics(arhmm)
+</pre></div>
+</div>
+</div>
+</div>
+<p>As with the Gaussian HMM, you may find that the ARHMM doesn’t perfectly learn the true underlying states.</p>
+</section>
+</section>
+<section id="part-4-fit-the-arhmm-to-mouse-videos">
+<h2>Part 4: Fit the ARHMM to mouse videos<a class="headerlink" href="#part-4-fit-the-arhmm-to-mouse-videos" title="Permalink to this heading">#</a></h2>
+<p>Now we’ll load in some real data from depth video recordings of freely moving mice. This data is from the Datta Lab at Harvard Medical School. The references are given at the top of this notebook.</p>
+<p>The video frames, even after cropping, are still 80x80 pixels. That’s a 3600 dimensional observation. In practice, the frames can be adequately reconstructed with far fewer principal components. As little as ten PCs does a pretty good job of capturing the mouse’s posture.</p>
+<p>The Datta lab has already computed the principal components and included them in the NWB. We’ll extract them, along with other relevant information like the centroid position and heading angle of the mouse, which we’ll use for making “crowd” movies below. Finally, they also included labels from MoSeq, an autoregressive (AR) HMM. You’ll build an ARHMM in Part 3 of the lab and infer similar discrete latent state sequences yourself!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Load one session of data
+data_dim = 10
+train_dataset, test_dataset = helpers.load_dataset(indices=[0], num_pcs=data_dim)
+train_data = train_dataset[0]
+test_data = test_dataset[0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>You should now have a <code class="docutils literal notranslate"><span class="pre">train_dataset</span></code> and a <code class="docutils literal notranslate"><span class="pre">test_dataset</span></code> loaded in memory. Each dataset is a list of dictionaries, one for each mouse. Each dictionary contains a few keys, most important of which is the <code class="docutils literal notranslate"><span class="pre">data</span></code> key, containing the standardized principal component time series, as shown above. For the test dataset, we also included the <code class="docutils literal notranslate"><span class="pre">frames</span></code> key, which has the original 80x80 images. We’ll use these to create the movies of each inferred state.</p>
+<p><strong>Note:</strong> Keeping the data in memory is costly but convenient.  You shouldn’t run out of memory in this lab, but if you ever did, a better solution might be to write the preprocessed data (e.g. with the standardized PC trajectories) back to the NWB files and reload those files as necessary during fitting.</p>
+<section id="plot-a-slice-of-data">
+<h3>Plot a slice of data<a class="headerlink" href="#plot-a-slice-of-data" title="Permalink to this heading">#</a></h3>
+<p>In the background, we’re showing the labels that were given to us from MoSeq, an autoregressive hidden Markov model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>helpers.plot_data_and_states(
+    train_data, train_data[&quot;labels&quot;],
+    title=&quot;data and given discrete states&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="fit-it">
+<h3>Fit it!<a class="headerlink" href="#fit-it" title="Permalink to this heading">#</a></h3>
+<p>With my implementation, this takes about 5 minutes to run on Colab.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Build the HMM
+num_states = 25
+data_dim = 10
+arhmm = AutoregressiveHMM(num_states, data_dim)
+
+# Fit it!
+lls, posterior = arhmm.fit(torch.tensor(train_data[&quot;data&quot;]), 
+                           num_iters=50)
+
+plt.plot(lls, label=&quot;train&quot;)
+plt.xlabel(&quot;iteration&quot;)
+plt.ylabel(&quot;marginal log lkhd&quot;)
+plt.grid(True)
+plt.legend()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-the-data-and-the-inferred-states">
+<h3>Plot the data and the inferred states<a class="headerlink" href="#plot-the-data-and-the-inferred-states" title="Permalink to this heading">#</a></h3>
+<p>We’ll make the same plot as above (in the warm-up) but using our inferred states instead. Hopefully, the states seem to switch along with changes in the data.</p>
+<p><strong>Note</strong>: We’re showing the state with the highest marginal probability, <span class="math notranslate nohighlight">\(z_t^\star = \mathrm{arg} \, \mathrm{max}_k \; q(z_t = k)\)</span>. This is different from the most likely state path, <span class="math notranslate nohighlight">\(z_{1:T}^\star = \mathrm{arg}\,\mathrm{max} \; q(z)\)</span>. We could compute the latter with the Viterbi algorithm, which is similar to the forward-backward algorithm you implemented above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>arhmm_states = posterior.expected_states.argmax(1)
+helpers.plot_data_and_states(train_data, arhmm_states)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-the-state-usage-histogram">
+<h3>Plot the state usage histogram<a class="headerlink" href="#plot-the-state-usage-histogram" title="Permalink to this heading">#</a></h3>
+<p>The state usage histogram shows how often each discrete state was used under the posterior distribution. You’ll probably see a long tail of states with non-trivial usage (hundreds of frames), all the way out to state 50. That suggests the model is using all its available capacity, and we could probably crank the number of states up even further for this model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Sort states by usage
+arhmm_states = posterior.expected_states.argmax(1)
+arhmm_usage = torch.bincount(arhmm_states, minlength=num_states)
+arhmm_order = torch.argsort(arhmm_usage).flip(0)
+
+plt.bar(torch.arange(num_states), arhmm_usage[arhmm_order])
+plt.xlabel(&quot;state index [ordered]&quot;)
+plt.ylabel(&quot;num frames&quot;)
+plt.title(&quot;histogram of inferred state usage&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-some-crowd-movies">
+<h3>Plot some “crowd” movies<a class="headerlink" href="#plot-some-crowd-movies" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>test_posterior = arhmm.e_step(torch.tensor(test_data[&quot;data&quot;]))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>helpers.play(helpers.make_crowd_movie(
+    int(arhmm_order[0]), [test_data], [test_posterior]))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>helpers.play(helpers.make_crowd_movie(
+    int(arhmm_order[1]), [test_data], [test_posterior]))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>helpers.play(helpers.make_crowd_movie(
+    int(arhmm_order[2]), [test_data], [test_posterior]))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>helpers.play(helpers.make_crowd_movie(
+    int(arhmm_order[3]), [test_data], [test_posterior]))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>helpers.play(helpers.make_crowd_movie(
+    int(arhmm_order[4]), [test_data], [test_posterior]))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>helpers.play(helpers.make_crowd_movie(
+    int(arhmm_order[20]), [test_data], [test_posterior]))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="download-crowd-movies-for-all-states">
+<h3>Download crowd movies for all states<a class="headerlink" href="#download-crowd-movies-for-all-states" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Make &quot;crowd&quot; movies for each state and save them to disk
+# Then you can download them and play them offline
+for i in trange(num_states):
+    helpers.play(helpers.make_crowd_movie(
+        int(arhmm_order[i]), [test_data], [test_posterior]),
+        filename=&quot;arhmm_crowd_{}.mp4&quot;.format(i), show=False)
+
+# Zip the movies up    
+!zip arhmm_crowd_movies.zip arhmm_crowd_*.mp4
+
+# Download the files as a zip
+files.download(&quot;arhmm_crowd_movies.zip&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-4a-short-answer-discussion">
+<h3>Problem 4a [Short Answer]: Discussion<a class="headerlink" href="#problem-4a-short-answer-discussion" title="Permalink to this heading">#</a></h3>
+<p>Now that you’ve completed the analysis, discuss your findings in one or two paragraphs. Some questions to consider (though you need not answer all) are:</p>
+<ul class="simple">
+<li><p>Did any interesting states pop out in your crowd movies?</p></li>
+<li><p>Are the less frequently used states interesting or are they just noise?</p></li>
+<li><p>It took a few minutes to fit data from a single mouse with ~50,000 frames of video. In practice, we have data from dozens of mice and millions of frames of video. What approaches might you take to speed up the fitting procedure?</p></li>
+<li><p>Aside from runtime, what other challenges might you encounter when fitting the same model to multiple mice? What could you do to address those challenges?</p></li>
+<li><p>The ARHMM finds reasonable looking discrete states (“syllables”) but it’s surely not a perfect model. What changes could you make to better model mouse behavior?</p></li>
+</ul>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+<hr class="docutils" />
+<p><strong>Formatting:</strong> check that your code does not exceed 80 characters in line width. If you’re working in Colab, you can set <em>Tools → Settings → Editor → Vertical ruler column</em> to 80 to see when you’ve exceeded the limit.</p>
+<p>Download your notebook in .ipynb format and use the following commands to convert it to PDF:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">pdf</span> <span class="n">hw7_yourname</span><span class="o">.</span><span class="n">ipynb</span>
+</pre></div>
+</div>
+<p><strong>Dependencies:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nbconvert</span></code>: If you’re using Anaconda for package management,</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">anaconda</span> <span class="n">nbconvert</span>
+</pre></div>
+</div>
+<p><strong>Upload</strong> your .pdf file to Gradescope.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./assignments/hw7"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../hw6/hw6.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">HW6: Neural Networks and VAEs</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../notebooks/01_bayes_normal.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Bayesian Analysis of the Normal Distribution</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup">Environment Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-implement-the-forward-backward-algorithm">Part 1: Implement the forward-backward algorithm</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1a-code-implement-the-forward-pass">Problem 1a [Code]: Implement the forward pass</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1b-code-implement-the-backward-pass">Problem 1b [Code]: Implement the backward pass</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1c-code-combine-the-forward-and-backward-passes">Problem 1c [Code]: Combine the forward and backward passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-it-on-some-more-realistic-sizes">Time it on some more realistic sizes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-gaussian-hmm">Part 2: Gaussian HMM</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2a-code-complete-the-following-gaussianhmm-class">Problem 2a [Code]: Complete the following GaussianHMM class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-synthetic-data-from-the-model">Sample synthetic data from the model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-the-gaussian-hmm-to-synthetic-data">Fit the Gaussian HMM to synthetic data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2b-code-cross-validation">Problem 2b [Code]: Cross validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2c-short-answer-initialization">Problem 2c [Short Answer]: Initialization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-autoregressive-hmms">Part 3: Autoregressive HMMs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3a-math-derive-the-natural-parameters-and-sufficient-statistics-for-a-linear-regression">Problem 3a [Math]: Derive the natural parameters and sufficient statistics for a linear regression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3b-math-solve-for-the-optimal-linear-regression-parameters-given-expected-sufficient-statistics">Problem 3b [Math]: Solve for the optimal linear regression parameters given expected sufficient statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3c-code-implement-an-autoregressive-hmm">Problem 3c [Code]: Implement an Autoregressive HMM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Sample synthetic data from the model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-an-arhmm-to-the-synthetic-data">Fit an ARHMM to the synthetic data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-fit-the-arhmm-to-mouse-videos">Part 4: Fit the ARHMM to mouse videos</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-a-slice-of-data">Plot a slice of data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-it">Fit it!</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-the-data-and-the-inferred-states">Plot the data and the inferred states</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-the-state-usage-histogram">Plot the state usage histogram</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-some-crowd-movies">Plot some “crowd” movies</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#download-crowd-movies-for-all-states">Download crowd movies for all states</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-4a-short-answer-discussion">Problem 4a [Short Answer]: Discussion</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
