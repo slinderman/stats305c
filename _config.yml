@@ -17,6 +17,7 @@ execute:
     - '10_cavi_lda.ipynb'
     - '11_advi_nix.ipynb'
     - '12_nns_vaes.ipynb'
+    - '15_gps.ipynb'
 only_build_toc_files: true
 
 # Add a bibtex file so that we can create citations
