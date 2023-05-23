@@ -24,6 +24,7 @@ parts:
     - file: notebooks/10_cavi_lda.ipynb
     - file: notebooks/11_advi_nix.ipynb
     - file: notebooks/12_nns_vaes.ipynb
+    - file: notebooks/15_gps.ipynb
 
   - caption: References
     chapters:
