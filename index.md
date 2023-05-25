@@ -46,8 +46,8 @@ You may also find these texts helpful
 | May 9  | Gradient-Based Variational Inference <br> {Download}`[slides]<slides/lecture11-advi.pdf>` [[notebook]](notebooks/11_advi_nix.ipynb) | Ch 21|
 | May 11 | Variational Autoencoders <br> {Download}`[slides]<slides/lecture12-vaes.pdf>` | [Kingma and Welling, 2019](https://arxiv.org/pdf/1906.02691.pdf), Ch 10.2|
 | May 16 | Hidden Markov Models <br> {Download}`[slides]<slides/lecture13_hmms.pdf>` | Ch 29.2-29.5 |
-| May 18 | Linear Dynamical Systems <br> {Download}`[slides]<slides/lecture14-lds.pdf>` | Ch 29.6-12.8 |
-| May 23 | Gaussian Processes <br> {Download}`[slides]<slides/lecture15-gps.pdf>`| Ch 18 |
+| May 18 | Linear Dynamical Systems <br> {Download}`[slides]<slides/annotated/lecture14-lds.pdf>` | Ch 29.6-12.8 |
+| May 23 | Gaussian Processes <br> {Download}`[slides]<slides/annotated/lecture15-gps.pdf>`| Ch 18 |
 | May 25 | Poisson Processes <br> {Download}`[slides]<slides/lecture16-poisson_processes.pdf>` | |
 | May 30 | Stochastic Differential Equations <br> {Download}`[slides]<slides/lecture17-sdes.pdf>` | |
 | June 1 | Dirichlet Process Mixture Models <br> {Download}`[slides]<slides/lecture18-dpmm.pdf>`| |
