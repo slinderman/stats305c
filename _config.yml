@@ -12,6 +12,7 @@ execute:
     - 'hw5.ipynb'
     - 'hw6.ipynb'
     - 'hw7.ipynb'
+    - 'hw8.ipynb'
     - '04_mcmc.ipynb'
     - '09_cavi_nix.ipynb'
     - '10_cavi_lda.ipynb'
