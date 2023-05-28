@@ -1,0 +1,1440 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>HW 8: Sigmoidal Gaussian Cox Processes &#8212; Applied Statistics III</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'assignments/hw8/hw8';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Bayesian Analysis of the Normal Distribution" href="../../notebooks/01_bayes_normal.html" />
+    <link rel="prev" title="HW7: Autoregressive HMMs" href="../hw7/hw7.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Applied Statistics III</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Assignments</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hw0/hw0.html">HW0: PyTorch Primer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw1/hw1.html">HW1: Bayesian Linear Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw2/hw2.html">HW2: Gibbs Sampling and Metropolis-Hastings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw3/hw3.html">HW3: Continuous Latent Variable Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw4/hw4.html">HW4: Bayesian Mixture Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw5/hw5.html">HW5: Poisson Matrix Factorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw6/hw6.html">HW6: Neural Networks and VAEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hw7/hw7.html">HW7: Autoregressive HMMs</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">HW 8: Sigmoidal Gaussian Cox Processes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/01_bayes_normal.html">Bayesian Analysis of the Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/02_mvn.html">The Multivariate Normal Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/03_hier_gauss.html">Hierarchical Gaussian Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/04_mcmc.html">Markov Chain Monte Carlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/09_cavi_gmm.html">Coordinate Ascent Variational Inference for GMMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/09_cavi_nix.html">CAVI in a Simple Gaussian Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/10_cavi_lda.html">Latent Dirichlet Allocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/11_advi_nix.html">Gradient-based VI in a Simple Gaussian Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/12_nns_vaes.html">Neural Networks and VAEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/15_gps.html">Gaussian Processes</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../lectures/99_references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/slinderman/stats305c/blob/spring2023/assignments/hw8/hw8.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/assignments/hw8/hw8.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>HW 8: Sigmoidal Gaussian Cox Processes</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#helpers">Helpers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-gaussian-processes">Part 1: Gaussian processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1a-code-write-a-function-to-sample-a-1d-gaussian-process">Problem 1a [Code]: Write a function to sample a 1D Gaussian process</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-that-your-code-outputs-sensible-samples">Test that your code outputs sensible samples</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1b-code-write-a-function-to-compute-the-1d-gp-posterior-predictive-distribution">Problem 1b [Code]: Write a function to compute the 1D GP posterior predictive distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-that-your-code-outputs-reasonable-predictions">Test that your code outputs reasonable predictions</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1c-short-answer-playing-with-kernel-hyperparameters">Problem 1c [Short answer] Playing with kernel hyperparameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1d-code-gp-probit-classification">Problem 1d [Code]: GP Probit Classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-your-gibbs-sampler">Test your Gibbs sampler</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-poisson-processes">Part 2: Poisson processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2a-code-write-a-function-to-sample-a-homogeneous-poisson-process">Problem 2a [Code]: Write a function to sample a homogeneous Poisson process</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-one-of-your-samples">Plot one of your samples</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2b-code-sample-an-inhomogeneous-poisson-process-by-thinning">Problem 2b [Code]: Sample an inhomogeneous Poisson process by thinning</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-your-function">Test your function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-sigmoidal-gaussian-cox-processes">Part 3: Sigmoidal Gaussian Cox Processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3a-code-write-a-function-to-sample-an-scgp">Problem 3a [Code]: Write a function to sample an SCGP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3b-code-comment-the-gibbs-sampling-code-below">Problem 3b [Code]: Comment the Gibbs sampling code below</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#now-let-s-see-if-it-works">Now let’s see if it works!</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3c-short-answer-computational-efficiency">Problem 3c [Short Answer]: Computational efficiency</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bonus-math-gibbs-updates-for-lambda-mathsf-max">Bonus [math]: Gibbs updates for <span class="math notranslate nohighlight">\(\lambda_{\mathsf{max}}\)</span></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hw-8-sigmoidal-gaussian-cox-processes">
+<h1>HW 8: Sigmoidal Gaussian Cox Processes<a class="headerlink" href="#hw-8-sigmoidal-gaussian-cox-processes" title="Permalink to this heading">#</a></h1>
+<hr class="docutils" />
+<p><strong>Name:</strong></p>
+<p><strong>Names of any collaborators:</strong></p>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Bernoulli</span><span class="p">,</span> <span class="n">Distribution</span><span class="p">,</span> <span class="n">Exponential</span><span class="p">,</span> 
+    <span class="n">MultivariateNormal</span><span class="p">,</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">Poisson</span><span class="p">,</span> <span class="n">Uniform</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">trange</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="helpers">
+<h2>Helpers<a class="headerlink" href="#helpers" title="Permalink to this heading">#</a></h2>
+<p>First we define a few helper functions and classes.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">probit</span></code> computes the probit function (i.e. the standard normal CDF)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OneSidedTruncatedNormal</span></code> is a PyTorch <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> for sampling from a truncated normal distribution of the form,</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+p(x; \mu, \sigma^2, a) &amp;\propto \mathcal{N}(x; \mu, \sigma^2) \, \mathbb{I}[x &gt; a].
+\end{align}
+\]</div>
+<p>It uses the inverse CDF sampling method when <span class="math notranslate nohighlight">\(\frac{a - \mu}{\sigma} &lt; 2\)</span> and a rejection sampling method from <a class="reference external" href="https://arxiv.org/pdf/0907.4010.pdf">Robert (2009)</a> otherwise. For the latter case, rejection sampling is more numerically stable and nearly as efficient.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">probit</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">validate_args</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">OneSidedTruncatedNormal</span><span class="p">(</span><span class="n">Distribution</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Super simple implementation of a one-sided truncated normal distribution.</span>
+<span class="sd">    </span>
+<span class="sd">    ..math:</span>
+<span class="sd">        p(x; \mu, \sigma^2, a) \propto N(x; \mu, \sigma^2) I[x &gt; a]</span>
+
+<span class="sd">    where $\mu$ is the location, $\sigma$ is the scale, and $a$ is the lower bound.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">        loc: the location of the truncated normal distribution</span>
+<span class="sd">        scale: the scale of the truncated normal distribution</span>
+<span class="sd">        lower_bound: the lower bound of the truncated normal distribution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">to_tensor</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">to_tensor</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">to_tensor</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">to_tensor</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">)</span>
+
+        <span class="c1"># Compute the batch shape and broadcast</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">broadcast_shapes</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span><span class="p">)</span>
+
+        <span class="c1"># Convert params into cdf coordinates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_u_lb</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span><span class="o">.</span><span class="n">cdf</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_shape</span><span class="o">=</span><span class="p">()):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw samples from the truncated normal distribution.</span>
+
+<span class="sd">        NOTE: This can be unstable when self._u_lb is close to 1... </span>
+<span class="sd">        In those cases we should really use a rejection sampling algorithm.</span>
+<span class="sd">        C.f. https://arxiv.org/pdf/0907.4010.pdf</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sample_shape</span> <span class="o">!=</span> <span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;We haven&#39;t supported sampling many at once. &quot;</span>
+                <span class="s2">&quot;If you need to do that, broadcast the constructor args.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Use the inverse CDF sampling algorithm only if the lower bound is small</span>
+        <span class="n">do_icdf</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">&lt;</span> <span class="mf">2.0</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+        <span class="n">samples</span><span class="p">[</span><span class="n">do_icdf</span><span class="p">]</span> <span class="o">=</span> <span class="n">OneSidedTruncatedNormal</span><span class="o">.</span><span class="n">_inverse_cdf_sample</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">do_icdf</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="n">do_icdf</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">do_icdf</span><span class="p">])</span>
+        
+        <span class="n">samples</span><span class="p">[</span><span class="o">~</span><span class="n">do_icdf</span><span class="p">]</span> <span class="o">=</span> <span class="n">OneSidedTruncatedNormal</span><span class="o">.</span><span class="n">_rejection_sample</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">do_icdf</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="o">~</span><span class="n">do_icdf</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="o">~</span><span class="n">do_icdf</span><span class="p">])</span>
+        
+        <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">samples</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_inverse_cdf_sample</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">):</span>
+        <span class="n">u_lb</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">Uniform</span><span class="p">(</span><span class="n">u_lb</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="mf">1e-4</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span><span class="o">.</span><span class="n">icdf</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_rejection_sample</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Inverse CDF sampling is unstable when (lower_bound - loc) / scale &gt;&gt; 1.</span>
+<span class="sd">        In that case, use a rejection sampling algorithm instead:</span>
+<span class="sd">        https://arxiv.org/pdf/0907.4010.pdf</span>
+
+<span class="sd">        This algorithm draws samples from N_+(0, 1, a) where a is the lower bound.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">_propose_and_accept</span><span class="p">(</span><span class="n">z_lb</span><span class="p">):</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">z_lb</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">z_lb</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">4</span><span class="p">))</span>
+            <span class="n">proposal</span> <span class="o">=</span> <span class="n">z_lb</span> <span class="o">+</span> <span class="n">Exponential</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+            <span class="n">threshold</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">proposal</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">accept</span> <span class="o">=</span> <span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">z_lb</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">threshold</span>
+            <span class="k">return</span> <span class="n">proposal</span><span class="p">,</span> <span class="n">accept</span>
+
+        <span class="c1"># Compute the standardized lower bound</span>
+        <span class="n">z_lb</span> <span class="o">=</span> <span class="p">(</span><span class="n">lower_bound</span> <span class="o">-</span> <span class="n">loc</span><span class="p">)</span> <span class="o">/</span> <span class="n">scale</span>
+
+        <span class="c1"># Propose from an exponential distribution</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">z_lb</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">z_lb</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">torch</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="o">~</span><span class="n">valid</span><span class="p">):</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="n">max_steps</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Maximum number of rejection sampling steps reached!&quot;</span><span class="p">)</span>
+
+            <span class="c1"># only update the indices that are invalid</span>
+            <span class="n">inds</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="o">~</span><span class="n">valid</span><span class="p">,</span> <span class="n">as_tuple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">proposal</span><span class="p">,</span> <span class="n">accept</span> <span class="o">=</span> <span class="n">_propose_and_accept</span><span class="p">(</span><span class="n">z_lb</span><span class="p">[</span><span class="n">inds</span><span class="p">])</span>
+            <span class="n">samples</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">accept</span><span class="p">,</span> <span class="n">proposal</span><span class="p">,</span> <span class="n">samples</span><span class="p">[</span><span class="n">inds</span><span class="p">])</span>
+            <span class="n">valid</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">accept</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">valid</span><span class="p">[</span><span class="n">inds</span><span class="p">])</span>
+
+        <span class="c1"># Rescale samples and return</span>
+        <span class="k">return</span> <span class="n">samples</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">+</span> <span class="n">loc</span>        
+
+    <span class="k">def</span> <span class="nf">log_prob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">lp</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">u_lb</span><span class="p">)</span> 
+        <span class="n">lp</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">lp</span><span class="p">,</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">lp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lp</span>
+
+<span class="c1">## Test</span>
+<span class="c1"># plt.figure()</span>
+<span class="c1"># tn = OneSidedTruncatedNormal(0 * torch.ones(10000), </span>
+<span class="c1">#                              2. * torch.ones(10000), </span>
+<span class="c1">#                              0. * torch.ones(10000))</span>
+<span class="c1"># plt.hist(tn.sample(), 25)</span>
+<span class="c1"># plt.xlabel(&quot;x&quot;)</span>
+<span class="c1"># plt.ylabel(&quot;p(x)&quot;)</span>
+
+<span class="c1"># plt.figure()</span>
+<span class="c1"># tn = OneSidedTruncatedNormal(-6 * torch.ones(10000), </span>
+<span class="c1">#                              2. * torch.ones(10000), </span>
+<span class="c1">#                              0. * torch.ones(10000))</span>
+<span class="c1"># plt.hist(tn.sample(), 25)</span>
+<span class="c1"># plt.xlabel(&quot;x&quot;)</span>
+<span class="c1"># plt.ylabel(&quot;p(x)&quot;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="part-1-gaussian-processes">
+<h2>Part 1: Gaussian processes<a class="headerlink" href="#part-1-gaussian-processes" title="Permalink to this heading">#</a></h2>
+<section id="problem-1a-code-write-a-function-to-sample-a-1d-gaussian-process">
+<h3>Problem 1a [Code]: Write a function to sample a 1D Gaussian process<a class="headerlink" href="#problem-1a-code-write-a-function-to-sample-a-1d-gaussian-process" title="Permalink to this heading">#</a></h3>
+<p><em>Hint: For numerical stability, you may have to add a small amount (like <span class="math notranslate nohighlight">\(10^{-4}\)</span>) to the diagonal of the Gram matrix to ensure positive definiteness.</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample_gp</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">sample_shape</span><span class="o">=</span><span class="p">()):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample a one-dimensional Gaussian process.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        xs: shape (N,) tensor specifying the inputs at which to sample the GP</span>
+<span class="sd">        mean_func: function that takes in an (N,) tensor of xs and outputs an </span>
+<span class="sd">            (N,) tensor of the means E[f(x)] for each x</span>
+<span class="sd">        kernel: function that takes in (N,) tensor of xs and (M,) tensor of x&#39;s </span>
+<span class="sd">            and outputs a (N, M) tensor of the kernel evaluated at each pair </span>
+<span class="sd">            (x, x&#39;). E.g. if the input tensors are the same, this function</span>
+<span class="sd">             computes the Gram matrix.</span>
+<span class="sd">        sample_shape: [optional] tuple specifying number of samples</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        fs: tensor of shape (sample_shape + (N,)) with independent samples of </span>
+<span class="sd">            the GP.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
+    
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">fs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="test-that-your-code-outputs-sensible-samples">
+<h4>Test that your code outputs sensible samples<a class="headerlink" href="#test-that-your-code-outputs-sensible-samples" title="Permalink to this heading">#</a></h4>
+<p>This code uses a mean function of zero and a squared exponential kernel with length scale <span class="math notranslate nohighlight">\(\ell = 5\)</span> and variance <span class="math notranslate nohighlight">\(\sigma^2 4\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mean_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">xs</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1s</span><span class="p">,</span> <span class="n">x2s</span><span class="p">:</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+    <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">x1s</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">x2s</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span> <span class="o">/</span> <span class="mi">5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fs_samples</span> <span class="o">=</span> <span class="n">sample_gp</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">sample_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,))</span>
+
+<span class="c1"># Plot the samples</span>
+<span class="k">for</span> <span class="n">fs</span> <span class="ow">in</span> <span class="n">fs_samples</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;f(x)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Samples from the GP prior&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-1b-code-write-a-function-to-compute-the-1d-gp-posterior-predictive-distribution">
+<h3>Problem 1b [Code]: Write a function to compute the 1D GP posterior predictive distribution<a class="headerlink" href="#problem-1b-code-write-a-function-to-compute-the-1d-gp-posterior-predictive-distribution" title="Permalink to this heading">#</a></h3>
+<p>Given observations <span class="math notranslate nohighlight">\(\{x_n, f(x_n)\}_{n=1}^N\)</span> with <span class="math notranslate nohighlight">\(x_n \in \mathbb{R}\)</span> and <span class="math notranslate nohighlight">\(f(x_n) \in \mathbb{R}\)</span>, compute the posterior predictive distribution of <span class="math notranslate nohighlight">\(\{f(x_m)\}_{m=1}^M\)</span> at new points <span class="math notranslate nohighlight">\(\{x_m\}_{m=1}^M\)</span>.</p>
+<p><em>Hint: like above, you may need to add a small amount to the diagonal of the Gram matrices.</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_gp_predictions</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">new_xs</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the posterior predictive distribution of a </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        xs: shape (N,) tensor specifying the observed inputs </span>
+<span class="sd">        fs: shape (N,) tensor specifying the observed outputs </span>
+<span class="sd">        new_xs: shape (M,) tensor specifying the inputs at which to evaluate the </span>
+<span class="sd">            posterior predictive distribution.</span>
+<span class="sd">        mean_func: function that takes in an (N,) tensor of xs and outputs an </span>
+<span class="sd">            (N,) tensor of the means E[f(x)] for each x</span>
+<span class="sd">        kernel: function that takes in (N,) tensor of xs and (M,) tensor of x&#39;s </span>
+<span class="sd">            and outputs a (N, M) tensor of the kernel evaluated at each pair </span>
+<span class="sd">            (x, x&#39;). E.g. if the input tensors are the same, this function </span>
+<span class="sd">            computes the Gram matrix.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        pred_mean: shape (M,) tensor with posterior predictive mean</span>
+<span class="sd">        pred_cov: shape (M,M) tensor with posterior predictive covariance</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="k">assert</span> <span class="n">xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">fs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">new_xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">pred_mean</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="n">pred_cov</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+
+    <span class="c1"># Answer might not be perfectly symmetric due to numerical precision </span>
+    <span class="c1"># limits. Symmetrize to be safe. </span>
+    <span class="n">pred_cov</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">pred_cov</span> <span class="o">+</span> <span class="n">pred_cov</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pred_mean</span><span class="p">,</span> <span class="n">pred_cov</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="test-that-your-code-outputs-reasonable-predictions">
+<h4>Test that your code outputs reasonable predictions<a class="headerlink" href="#test-that-your-code-outputs-reasonable-predictions" title="Permalink to this heading">#</a></h4>
+<p>Run the following cell to produce a plot of the GP posterior predictive distribution over the function <span class="math notranslate nohighlight">\(f(x)\)</span> at a dense grid of test points (<code class="docutils literal notranslate"><span class="pre">new_xs</span></code>) given observations (<code class="docutils literal notranslate"><span class="pre">xs</span></code> and <code class="docutils literal notranslate"><span class="pre">ys</span></code>).</p>
+<p>You can tweak the kernel while debugging or answer Problem 1c, but please reset to length scale <span class="math notranslate nohighlight">\(\ell = 5\)</span> and variance <span class="math notranslate nohighlight">\(\sigma^2 4\)</span> before submitting.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">mean_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">xs</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1s</span><span class="p">,</span> <span class="n">x2s</span><span class="p">:</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+    <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">x1s</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">x2s</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span> <span class="o">/</span> <span class="mi">5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">new_xs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">pred_mean</span><span class="p">,</span> <span class="n">pred_cov</span> <span class="o">=</span> <span class="n">compute_gp_predictions</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">new_xs</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+<span class="n">pred_std</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">pred_cov</span><span class="p">))</span>
+
+<span class="c1"># Plot the predictive mean and the marginal predictive variance</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_xs</span><span class="p">,</span> <span class="n">pred_mean</span><span class="p">,</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;predictive mean&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;posterior credible intervals&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">new_xs</span><span class="p">,</span> 
+                    <span class="n">pred_mean</span> <span class="o">-</span> <span class="n">i</span> <span class="o">*</span> <span class="n">pred_std</span><span class="p">,</span> 
+                    <span class="n">pred_mean</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">pred_std</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="s1">&#39;ko&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;observations&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;f(x)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Posterior predictive distribution under the GP&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-1c-short-answer-playing-with-kernel-hyperparameters">
+<h3>Problem 1c [Short answer] Playing with kernel hyperparameters<a class="headerlink" href="#problem-1c-short-answer-playing-with-kernel-hyperparameters" title="Permalink to this heading">#</a></h3>
+<p>Describe how your predictions change when you vary the length scale or the variance of the squared exponential kernel.</p>
+<p>How do you think your answers would change if you instead used a Matern kernel with the same length scale and variance, but set <span class="math notranslate nohighlight">\(\nu = 1/2\)</span>?</p>
+<hr class="docutils" />
+<p><em>Your answer here</em></p>
+</section>
+<hr class="docutils" />
+<section id="problem-1d-code-gp-probit-classification">
+<h3>Problem 1d [Code]: GP Probit Classification<a class="headerlink" href="#problem-1d-code-gp-probit-classification" title="Permalink to this heading">#</a></h3>
+<p>Now we will write a simple Gibbs sampling algorithm for GP classification using a probit mean function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+f &amp;\sim \mathrm{GP}(\mu(\cdot), \, K(\cdot, \cdot)) \\
+y_n \mid f, x_n &amp;\sim \mathrm{Bern}(g(f(x_n)))
+\end{align}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(g(u) = \Pr(z \leq u)\)</span> with <span class="math notranslate nohighlight">\(z \sim \mathcal{N}(0, 1))\)</span>.</p>
+<p>First, we’ve written some code that generates synthetic data.</p>
+<p><em>Note: this code relies on your solutions to Problems 1a and 1b!</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span><span class="o">+</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">))</span>
+
+<span class="n">mean_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">xs</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1s</span><span class="p">,</span> <span class="n">x2s</span><span class="p">:</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+    <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">x1s</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">x2s</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span> <span class="o">/</span> <span class="mi">5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Sample the GP at a random set of N points in [0, 100]</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="n">N</span><span class="p">,))</span>
+<span class="n">fs_true</span> <span class="o">=</span> <span class="n">sample_gp</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+
+<span class="c1"># Sample observations from Bernoulli </span>
+<span class="n">ys</span> <span class="o">=</span> <span class="n">Bernoulli</span><span class="p">(</span><span class="n">probit</span><span class="p">(</span><span class="n">fs_true</span><span class="p">))</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+<span class="c1"># For visualization, compute the predictive mean at a grid of points</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">f_grid_true</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">compute_gp_predictions</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">fs_true</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+
+<span class="c1"># Plot the probit of the true GP and the binary observations</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">probit</span><span class="p">(</span><span class="n">f_grid_true</span><span class="p">),</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;g(f(x))&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">ys</span><span class="o">==</span><span class="mi">1</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">ys</span><span class="o">==</span><span class="mi">1</span><span class="p">]),</span> <span class="s1">&#39;r+&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;y=1&quot;</span><span class="p">,</span> <span class="n">mew</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">ys</span><span class="o">==</span><span class="mi">0</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">ys</span><span class="o">==</span><span class="mi">0</span><span class="p">]),</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;y=0&quot;</span><span class="p">,</span> <span class="n">mew</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;g(f(x))&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now you will write code to perform Gibbs sampling in this model.</p>
+<p>We will use the augmentation scheme described in class. As we derived in class, the model above is equivalent to,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+f &amp;\sim \mathrm{GP}(\mu(\cdot), \, K(\cdot, \cdot)) \\
+z_n &amp;\sim \mathcal{N}(f(x_n), 1) \\
+y_n &amp;= \mathbb{I}[z_n &gt; 0].
+\end{align}
+\end{split}\]</div>
+<p>Using this augmented model, we can perform Bayesian inference by Gibbs sampling.</p>
+<p>Remember that, technically, <span class="math notranslate nohighlight">\(f\)</span> is a function that has values at a continuum of points. Thankfully, we don’t have to instantiate <span class="math notranslate nohighlight">\(f\)</span> everywhere. For the Gibbs sampler, it suffices to instantiate <span class="math notranslate nohighlight">\(f\)</span> only at the input points <span class="math notranslate nohighlight">\(f_n = f(x_n)\)</span>. That means the state of our Gibbs sampler will consist of the tuples <span class="math notranslate nohighlight">\(\{(f_n, z_n)\}_{n=1}^N\)</span>, and we will iteratively sample the following conditional distributions,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+z_n &amp;\sim p(z_n \mid f_n, y_n) \\
+\mathbf{f} = (f_1, \ldots, f_N)^\top &amp;\sim p(\mathbf{f} \mid \{x_n, z_n\}_{n=1}^N)
+\end{align}
+\end{split}\]</div>
+<p><strong>Write code to implement each of these Gibbs updates. You may use the <code class="docutils literal notranslate"><span class="pre">OneSidedTruncatedNormal</span></code> distribution implemented at the top of this notebook.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gibbs_sample_zs</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">ys</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a Gibbs step to sample (z_1, \ldots, z_N) from their conditional</span>
+<span class="sd">    distribution given the function value at that point f_n = f(x_n) and the</span>
+<span class="sd">    binary observation y_n.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fs: shape (N,) tensor of function evaluations at each input x_n</span>
+<span class="sd">        ys: shape (N,) tensor of binary observations y_n</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        zs: shape (N,) tensor of augmentation variables z_n sampled from</span>
+<span class="sd">            their conditional distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">zs</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">zs</span>
+
+<span class="k">def</span> <span class="nf">gibbs_sample_fs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">zs</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample Gaussian process values (f_1, ..., f_N) given inputs (x_1, ... x_N)</span>
+<span class="sd">    and augmentation variables (z_1, ..., z_N). After augmentation, this reduces</span>
+<span class="sd">    to GP Regression (see Lecture 15, Slide 17).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">fs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="test-your-gibbs-sampler">
+<h4>Test your Gibbs sampler<a class="headerlink" href="#test-your-gibbs-sampler" title="Permalink to this heading">#</a></h4>
+<p>We have written a Gibbs loop to test your sampler on the synthetic data generated above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gibbs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple function to iteratively update z and f.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">ys</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="c1"># Initialize the sampler with f_n = 0 and z_n = 0</span>
+    <span class="c1"># (zs will immediately be overwritten anyway)</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+    <span class="n">zs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">itr</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="n">gibbs_sample_zs</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+        <span class="n">fs</span> <span class="o">=</span> <span class="n">gibbs_sample_fs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">zs</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+        <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">zs</span><span class="p">,</span> <span class="n">fs</span><span class="p">))</span>
+
+    <span class="n">zs</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">samples</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">row_stack</span><span class="p">(</span><span class="n">zs</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">row_stack</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+
+<span class="c1"># Run the Gibbs sampler</span>
+<span class="n">z_samples</span><span class="p">,</span> <span class="n">f_samples</span> <span class="o">=</span> <span class="n">gibbs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute GP predictions on the grid</span>
+<span class="n">f_grid_samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">row_stack</span><span class="p">([</span>
+    <span class="n">compute_gp_predictions</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">fs</span> <span class="ow">in</span> <span class="n">f_samples</span>
+<span class="p">])</span>
+
+<span class="c1"># Plot the results</span>
+<span class="n">burnin</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">prob_samples</span> <span class="o">=</span> <span class="n">probit</span><span class="p">(</span><span class="n">f_grid_samples</span><span class="p">)</span>
+
+<span class="c1"># Compute the posterior median probability at each point on the grid</span>
+<span class="n">med_prob</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">prob_samples</span><span class="p">[</span><span class="n">burnin</span><span class="p">:],</span> <span class="n">q</span><span class="o">=</span><span class="mf">.50</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">med_prob</span><span class="p">,</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;post. median g(f(x))&quot;</span><span class="p">)</span>
+
+<span class="c1"># Compute and plot posterior quantiles for each point on the grid</span>
+<span class="k">for</span> <span class="n">lb</span><span class="p">,</span> <span class="n">ub</span> <span class="ow">in</span> <span class="p">[(</span><span class="mf">.25</span><span class="p">,</span> <span class="mf">.75</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">),</span> <span class="p">(</span><span class="mf">.025</span><span class="p">,</span> <span class="mf">.975</span><span class="p">)]:</span>
+    <span class="n">prob_lb</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">prob_samples</span><span class="p">[</span><span class="n">burnin</span><span class="p">:],</span> <span class="n">q</span><span class="o">=</span><span class="n">lb</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">prob_ub</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">prob_samples</span><span class="p">[</span><span class="n">burnin</span><span class="p">:],</span> <span class="n">q</span><span class="o">=</span><span class="n">ub</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">prob_lb</span><span class="p">,</span> <span class="n">prob_ub</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># Plot the true function and binary observations</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">probit</span><span class="p">(</span><span class="n">f_grid_true</span><span class="p">),</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;true g(f(x))&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">ys</span><span class="o">==</span><span class="mi">1</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">ys</span><span class="o">==</span><span class="mi">1</span><span class="p">]),</span> <span class="s1">&#39;r+&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;y=1&quot;</span><span class="p">,</span> <span class="n">mew</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">ys</span><span class="o">==</span><span class="mi">0</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">ys</span><span class="o">==</span><span class="mi">0</span><span class="p">]),</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;y=0&quot;</span><span class="p">,</span> <span class="n">mew</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Plot the bounds</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Labels and stuff</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;g(f(x))&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="part-2-poisson-processes">
+<h2>Part 2: Poisson processes<a class="headerlink" href="#part-2-poisson-processes" title="Permalink to this heading">#</a></h2>
+<section id="problem-2a-code-write-a-function-to-sample-a-homogeneous-poisson-process">
+<h3>Problem 2a [Code]: Write a function to sample a homogeneous Poisson process<a class="headerlink" href="#problem-2a-code-write-a-function-to-sample-a-homogeneous-poisson-process" title="Permalink to this heading">#</a></h3>
+<p>There are many ways to do this, like we saw in Lecture 16. Use the top-down method for simplicity.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample_homog_pp</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">intensity</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample a homogenous Poisson process on [0, T] with intensity lambda.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        T: scalar length of interval</span>
+<span class="sd">        intensity: scalar homogeneous intensity</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        xs: (N,) tensor of times in [0, T] where N is random</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">xs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="plot-one-of-your-samples">
+<h4>Plot one of your samples<a class="headerlink" href="#plot-one-of-your-samples" title="Permalink to this heading">#</a></h4>
+<p>Run the cell below to plot one of your samples</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_pp</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">rates</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper function to plot Poisson process.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;number of points: &quot;</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;expected number of points: &quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">rates</span><span class="p">,</span> <span class="n">times</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">rates</span><span class="p">,</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">rates</span><span class="p">),</span> <span class="n">rates</span><span class="p">,</span> 
+                     <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">],</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="n">height</span><span class="p">],</span> <span class="s1">&#39;ko&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">rates</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span>
+
+<span class="c1"># Sample a homogenous Poisson process on [0, 100] with intensity .1</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">))</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">intensity</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">sample_homog_pp</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">intensity</span><span class="p">)</span>
+<span class="n">plot_pp</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">]),</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">intensity</span><span class="p">,</span> <span class="n">intensity</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-2b-code-sample-an-inhomogeneous-poisson-process-by-thinning">
+<h3>Problem 2b [Code]: Sample an inhomogeneous Poisson process by thinning<a class="headerlink" href="#problem-2b-code-sample-an-inhomogeneous-poisson-process-by-thinning" title="Permalink to this heading">#</a></h3>
+<p>Write a function to sample an inhomogeneous Poisson process via thinning. Assume the intensity function is upper bounded by a constant <span class="math notranslate nohighlight">\(\lambda_{\mathsf{max}}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample_pp_thinning</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">intensity_func</span><span class="p">,</span> <span class="n">max_intensity</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sample a Poisson process via thinning.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        T: length of time interval</span>
+
+<span class="sd">        intensity_func: function that takes in a tensor of times in [0,T] and</span>
+<span class="sd">            outputs a tensor of intensities evaluated at those times and</span>
+<span class="sd">            in the range [0, max_intensity].</span>
+
+<span class="sd">        max_intensity: upper bound on the intensity function.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        xs: (N,) tensor of times in [0, T] distributed according to the </span>
+<span class="sd">            inhomogeneous Poisson process.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">##</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">xs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="test-your-function">
+<h4>Test your function<a class="headerlink" href="#test-your-function" title="Permalink to this heading">#</a></h4>
+<p>Sample from an inhomogeneous Poisson process an exponentiated sinusoidal intensity function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">))</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">intensity_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ts</span><span class="p">:</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+    <span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">ts</span> <span class="o">/</span> <span class="mf">20.0</span><span class="p">))</span>
+<span class="n">max_intensity</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">sample_pp_thinning</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">intensity_func</span><span class="p">,</span> <span class="n">max_intensity</span><span class="p">)</span>
+
+<span class="n">ts</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">intensities</span> <span class="o">=</span> <span class="n">intensity_func</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+<span class="n">plot_pp</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">intensities</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="part-3-sigmoidal-gaussian-cox-processes">
+<h2>Part 3: Sigmoidal Gaussian Cox Processes<a class="headerlink" href="#part-3-sigmoidal-gaussian-cox-processes" title="Permalink to this heading">#</a></h2>
+<p>A sigmoidal Gaussian Cox Process (SGCP, <a class="reference external" href="https://homepages.inf.ed.ac.uk/imurray2/pub/09poisson/adams-murray-mackay-2009b.pdf">Adams et al, 2009</a>) is a doubly stochastic point process with intensity,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+\lambda(x) = g(f(x))
+\end{align}
+\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+f &amp;\sim \mathrm{GP}(\mu(\cdot), K(\cdot, \cdot))
+\end{align}
+\]</div>
+<p>and <span class="math notranslate nohighlight">\(g: \mathbb{R} \mapsto \mathbb{R}_+\)</span> is a sigmoidal function. Adams et al took <span class="math notranslate nohighlight">\(g\)</span> to be a scaled logistic function, but we will consider a scaled <strong>probit function</strong> instead. That is, assume,</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+g(u) = \lambda_{\mathsf{max}}  \cdot \Pr(z \leq u) \quad \text{where} \quad z \sim \mathcal{N}(0, 1).
+\end{align}
+\]</div>
+<p>In this part of the assignment, you will write code to perform Gibbs sampling in an SGCP.</p>
+<section id="problem-3a-code-write-a-function-to-sample-an-scgp">
+<h3>Problem 3a [Code]: Write a function to sample an SCGP<a class="headerlink" href="#problem-3a-code-write-a-function-to-sample-an-scgp" title="Permalink to this heading">#</a></h3>
+<p>You may use the functions you wrote for Parts 1 and 2 as well as the <code class="docutils literal notranslate"><span class="pre">probit</span></code> helper function below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample_scgp</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">max_intensity</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample a sigmoidal Gaussian Cox process.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        T: the length of the interval</span>
+<span class="sd">        grid: grid of (M,) times at which to return the value of the sampled GP</span>
+<span class="sd">        mean_func: function that takes in an (N,) tensor of xs and outputs an </span>
+<span class="sd">            (N,) tensor of the means E[f(x)] for each x</span>
+<span class="sd">        kernel: function that takes in (N,) tensor of xs and (M,) tensor of x&#39;s </span>
+<span class="sd">            and outputs a (N, M) tensor of the kernel evaluated at each pair </span>
+<span class="sd">            (x, x&#39;). E.g. if the input tensors are the same, this function </span>
+<span class="sd">            computes the Gram matrix.</span>
+<span class="sd">        max_intensity: the maximum intensity (\lambda_max)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        grid_intensity: the sampled intensity evaluated at each time in grid</span>
+<span class="sd">        xs: a set of points drawn from the SCGP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">## </span>
+    <span class="c1"># YOUR CODE BELOW</span>
+    
+    <span class="c1"># 1. Sample a homogenous Poisson process. CA</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="c1"># 2. Sample the GP from its predictive distribution at </span>
+    <span class="c1">#    the points drawn from the Poisson process</span>
+    <span class="n">fts</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="c1"># 3. Accept or reject points randomly to get xs</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="c1"># 4. Sample the GP on the grid given (ts, fts)</span>
+    <span class="n">f_grid</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="c1"># 5. Evaluate the intensity on the grid</span>
+    <span class="n">grid_intensity</span> <span class="o">=</span> <span class="o">...</span>    
+    <span class="c1">#</span>
+    <span class="c1">##</span>
+    <span class="k">return</span> <span class="n">grid_intensity</span><span class="p">,</span> <span class="n">xs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize params</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span><span class="o">+</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">))</span>
+<span class="n">mean_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">xs</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1s</span><span class="p">,</span> <span class="n">x2s</span><span class="p">:</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+    <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">x1s</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">x2s</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span> <span class="o">/</span> <span class="mi">5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">max_intensity</span> <span class="o">=</span> <span class="mf">2.0</span>
+
+<span class="c1"># Initialize domain</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">grid_intensity</span><span class="p">,</span> <span class="n">xs</span> <span class="o">=</span> <span class="n">sample_scgp</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">max_intensity</span><span class="p">)</span>
+
+<span class="c1"># Plot the sample</span>
+<span class="n">plot_pp</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">grid_intensity</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_intensity</span> <span class="o">+</span> <span class="mf">.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-3b-code-comment-the-gibbs-sampling-code-below">
+<h3>Problem 3b [Code]: Comment the Gibbs sampling code below<a class="headerlink" href="#problem-3b-code-comment-the-gibbs-sampling-code-below" title="Permalink to this heading">#</a></h3>
+<p>From Parts 1 and 2, you already have all the functions you need to implement a Gibbs sampler for the sigmoidal Guassian Cox process!</p>
+<p>Note that in the <code class="docutils literal notranslate"><span class="pre">sample_scgp</span></code> function you rejected (thinned) a bunch of points randomly by sampling from a Bernoulli distribution with probability <span class="math notranslate nohighlight">\(g(f(x))\)</span> where <span class="math notranslate nohighlight">\(g\)</span> was the probit function. We can think of those accept/reject outcomes as binary latent variables. If we knew the locations of the rejected points, then inferring the GP would reduce to a GP Probit Classifcation problem, just like we implemented in Problem 1d.</p>
+<p>This motivates the following Gibbs sampling algorithm. The state of the Gibbs sampler will consist of the following latent variables:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\((r_1, \ldots, r_M)\)</span> the set of points that were rejected by the Poisson thinning algorithm.</p></li>
+<li><p><span class="math notranslate nohighlight">\((z_1, \ldots, z_{N+M})\)</span> the augmentation variables for the GP Classification problem at both the observed points <em>and</em> the rejected points.</p></li>
+<li><p><span class="math notranslate nohighlight">\((f_1, \ldots, f_{N+M})\)</span> the GP function values at both the observed points <em>and</em> the rejected points.</p></li>
+</ul>
+<p>The trick is, at each iteration of the Gibbs sampler we will generate a new set of rejected points <span class="math notranslate nohighlight">\((r_1, \ldots, r_M)\)</span>. The conditional distribution of these points is itself a Poisson process!</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{align}
+\{r_m\}_{m=1}^M \mid f &amp;\sim \mathrm{PP}(\lambda_{\mathsf{max}} - g(f(x))).
+\end{align}
+\]</div>
+<p>How do you sample that conditional distribution? Poisson thinning again!</p>
+<p>Rather than implementing this yourself, we’ve written code to do so. Your assignment is to <strong>comment the code below (function headers and line comments) to explain what it does.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># COMMENT THE FUNCTIONS AND LINES BELOW</span>
+
+<span class="k">def</span> <span class="nf">gibbs_update_rs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">fxs</span><span class="p">,</span> <span class="n">rs</span><span class="p">,</span> <span class="n">frs</span><span class="p">,</span> 
+                    <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">max_intensity</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    TODO</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">sample_homog_pp</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">max_intensity</span><span class="p">)</span>
+    <span class="c1"># TODO</span>
+    <span class="n">mu</span><span class="p">,</span> <span class="n">Sigma</span> <span class="o">=</span> <span class="n">compute_gp_predictions</span><span class="p">(</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">xs</span><span class="p">,</span> <span class="n">rs</span><span class="p">]),</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">fxs</span><span class="p">,</span> <span class="n">frs</span><span class="p">]),</span> <span class="n">ts</span><span class="p">,</span> 
+        <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+    <span class="c1"># TODO</span>
+    <span class="n">fts</span> <span class="o">=</span> <span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">Sigma</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="c1"># TODO</span>
+    <span class="n">lambda_ts</span> <span class="o">=</span> <span class="n">max_intensity</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">probit</span><span class="p">(</span><span class="n">fts</span><span class="p">))</span>
+    <span class="c1"># TODO</span>
+    <span class="n">accept</span> <span class="o">=</span> <span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_intensity</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="p">),))</span> <span class="o">&lt;</span> <span class="n">lambda_ts</span>
+    <span class="k">return</span> <span class="n">ts</span><span class="p">[</span><span class="n">accept</span><span class="p">],</span> <span class="n">fts</span><span class="p">[</span><span class="n">accept</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">gibbs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">max_intensity</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    TODO</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">xs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+    <span class="c1"># TODO</span>
+    <span class="n">fxs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+    <span class="n">rs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([])</span>
+    <span class="n">frs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+
+    <span class="n">f_grid_samples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">itr</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+        <span class="c1"># TODO</span>
+        <span class="n">rs</span><span class="p">,</span> <span class="n">frs</span> <span class="o">=</span> <span class="n">gibbs_update_rs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">fxs</span><span class="p">,</span> <span class="n">rs</span><span class="p">,</span> <span class="n">frs</span><span class="p">,</span> 
+                                  <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">max_intensity</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+
+        <span class="c1"># TODO</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="n">gibbs_sample_zs</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">fxs</span><span class="p">,</span> <span class="n">frs</span><span class="p">]),</span> 
+                             <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="p">)]))</span>
+
+        <span class="c1"># TODO</span>
+        <span class="n">fs</span> <span class="o">=</span> <span class="n">gibbs_sample_fs</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">xs</span><span class="p">,</span> <span class="n">rs</span><span class="p">]),</span> <span class="n">zs</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+        <span class="n">fxs</span><span class="p">,</span> <span class="n">frs</span> <span class="o">=</span> <span class="n">fs</span><span class="p">[:</span><span class="n">N</span><span class="p">],</span> <span class="n">fs</span><span class="p">[</span><span class="n">N</span><span class="p">:]</span>
+
+        <span class="c1"># TODO</span>
+        <span class="n">f_grid</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">compute_gp_predictions</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">xs</span><span class="p">,</span> <span class="n">rs</span><span class="p">]),</span> 
+                                           <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">fxs</span><span class="p">,</span> <span class="n">frs</span><span class="p">]),</span> 
+                                           <span class="n">grid</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+        <span class="n">f_grid_samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_grid</span><span class="p">)</span>
+        
+    <span class="n">f_grid_samples</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">row_stack</span><span class="p">(</span><span class="n">f_grid_samples</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f_grid_samples</span><span class="p">,</span> <span class="n">rs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="now-let-s-see-if-it-works">
+<h4>Now let’s see if it works!<a class="headerlink" href="#now-let-s-see-if-it-works" title="Permalink to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run the Gibbs sampler. It may take a minute.</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">305</span><span class="o">+</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">))</span>
+<span class="n">f_grid_samples</span><span class="p">,</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">gibbs</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">mean_func</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">max_intensity</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the results</span>
+<span class="n">burnin</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">intensity_samples</span> <span class="o">=</span> <span class="n">max_intensity</span> <span class="o">*</span> <span class="n">probit</span><span class="p">(</span><span class="n">f_grid_samples</span><span class="p">)</span>
+
+<span class="c1"># Compute the posterior median probability at each point on the grid</span>
+<span class="n">med_prob</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">intensity_samples</span><span class="p">[</span><span class="n">burnin</span><span class="p">:],</span> <span class="n">q</span><span class="o">=</span><span class="mf">.50</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">med_prob</span><span class="p">,</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;post. median g(f(x))&quot;</span><span class="p">)</span>
+
+<span class="c1"># Compute and plot posterior quantiles for each point on the grid</span>
+<span class="k">for</span> <span class="n">lb</span><span class="p">,</span> <span class="n">ub</span> <span class="ow">in</span> <span class="p">[(</span><span class="mf">.25</span><span class="p">,</span> <span class="mf">.75</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">),</span> <span class="p">(</span><span class="mf">.025</span><span class="p">,</span> <span class="mf">.975</span><span class="p">)]:</span>
+    <span class="n">intensity_lb</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">intensity_samples</span><span class="p">[</span><span class="n">burnin</span><span class="p">:],</span> <span class="n">q</span><span class="o">=</span><span class="n">lb</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">intensity_ub</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">intensity_samples</span><span class="p">[</span><span class="n">burnin</span><span class="p">:],</span> <span class="n">q</span><span class="o">=</span><span class="n">ub</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">intensity_lb</span><span class="p">,</span> <span class="n">intensity_ub</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># Plot the true function and binary observations</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">grid_intensity</span><span class="p">,</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;true g(f(x))&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;-ko&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Plot the bounds</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">T</span><span class="p">],</span> <span class="n">max_intensity</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="s1">&#39;:k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Labels and stuff</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;\lambda(x)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">max_intensity</span> <span class="o">+</span> <span class="mf">.05</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Posterior distribution of $\lambda(x)$&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-3c-short-answer-computational-efficiency">
+<h3>Problem 3c [Short Answer]: Computational efficiency<a class="headerlink" href="#problem-3c-short-answer-computational-efficiency" title="Permalink to this heading">#</a></h3>
+<p>Answer the following questions:</p>
+<ul class="simple">
+<li><p>You may have noticed that the number of iterations per second jumps around a bit during the course of sampling. What could cause that to happen?</p></li>
+<li><p>Suppose that we set the max intensity to <span class="math notranslate nohighlight">\(\lambda_{\mathsf{max}} = 10\)</span>. How would that affect the run time of the Gibbs sampler and why?</p></li>
+</ul>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+</section>
+<hr class="docutils" />
+<section id="bonus-math-gibbs-updates-for-lambda-mathsf-max">
+<h3>Bonus [math]: Gibbs updates for <span class="math notranslate nohighlight">\(\lambda_{\mathsf{max}}\)</span><a class="headerlink" href="#bonus-math-gibbs-updates-for-lambda-mathsf-max" title="Permalink to this heading">#</a></h3>
+<p>Derive a closed form Gibbs update for <span class="math notranslate nohighlight">\(\lambda_{\mathsf{max}}\)</span> given the remaining variables (including the latent variables like the rejected spikes, etc.).</p>
+<hr class="docutils" />
+<p><em>Your answer here.</em></p>
+<hr class="docutils" />
+<p><strong>Formatting:</strong> check that your code does not exceed 80 characters in line width. If you’re working in Colab, you can set <em>Tools → Settings → Editor → Vertical ruler column</em> to 80 to see when you’ve exceeded the limit.</p>
+<p>Download your notebook in .ipynb format and use the following commands to convert it to PDF:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">nbconvert</span> <span class="o">--</span><span class="n">to</span> <span class="n">pdf</span> <span class="n">hw8_yourname</span><span class="o">.</span><span class="n">ipynb</span>
+</pre></div>
+</div>
+<p><strong>Dependencies:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nbconvert</span></code>: If you’re using Anaconda for package management,</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">anaconda</span> <span class="n">nbconvert</span>
+</pre></div>
+</div>
+<p><strong>Upload</strong> your .pdf files to Gradescope.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./assignments/hw8"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../hw7/hw7.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">HW7: Autoregressive HMMs</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../notebooks/01_bayes_normal.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Bayesian Analysis of the Normal Distribution</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#helpers">Helpers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-gaussian-processes">Part 1: Gaussian processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1a-code-write-a-function-to-sample-a-1d-gaussian-process">Problem 1a [Code]: Write a function to sample a 1D Gaussian process</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-that-your-code-outputs-sensible-samples">Test that your code outputs sensible samples</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1b-code-write-a-function-to-compute-the-1d-gp-posterior-predictive-distribution">Problem 1b [Code]: Write a function to compute the 1D GP posterior predictive distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-that-your-code-outputs-reasonable-predictions">Test that your code outputs reasonable predictions</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1c-short-answer-playing-with-kernel-hyperparameters">Problem 1c [Short answer] Playing with kernel hyperparameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-1d-code-gp-probit-classification">Problem 1d [Code]: GP Probit Classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-your-gibbs-sampler">Test your Gibbs sampler</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-poisson-processes">Part 2: Poisson processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2a-code-write-a-function-to-sample-a-homogeneous-poisson-process">Problem 2a [Code]: Write a function to sample a homogeneous Poisson process</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-one-of-your-samples">Plot one of your samples</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-2b-code-sample-an-inhomogeneous-poisson-process-by-thinning">Problem 2b [Code]: Sample an inhomogeneous Poisson process by thinning</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-your-function">Test your function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-sigmoidal-gaussian-cox-processes">Part 3: Sigmoidal Gaussian Cox Processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3a-code-write-a-function-to-sample-an-scgp">Problem 3a [Code]: Write a function to sample an SCGP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3b-code-comment-the-gibbs-sampling-code-below">Problem 3b [Code]: Comment the Gibbs sampling code below</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#now-let-s-see-if-it-works">Now let’s see if it works!</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-3c-short-answer-computational-efficiency">Problem 3c [Short Answer]: Computational efficiency</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bonus-math-gibbs-updates-for-lambda-mathsf-max">Bonus [math]: Gibbs updates for <span class="math notranslate nohighlight">\(\lambda_{\mathsf{max}}\)</span></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Scott Linderman
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
