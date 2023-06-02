@@ -610,7 +610,7 @@ p(x; \mu, \sigma^2, a) &amp;\propto \mathcal{N}(x; \mu, \sigma^2) \, \mathbb{I}[
 </div>
 <section id="test-that-your-code-outputs-sensible-samples">
 <h4>Test that your code outputs sensible samples<a class="headerlink" href="#test-that-your-code-outputs-sensible-samples" title="Permalink to this heading">#</a></h4>
-<p>This code uses a mean function of zero and a squared exponential kernel with length scale <span class="math notranslate nohighlight">\(\ell = 5\)</span> and variance <span class="math notranslate nohighlight">\(\sigma^2 4\)</span>.</p>
+<p>This code uses a mean function of zero and a squared exponential kernel with length scale <span class="math notranslate nohighlight">\(\ell = 5\)</span> and variance <span class="math notranslate nohighlight">\(\sigma^2 = 1\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mean_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">xs</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
