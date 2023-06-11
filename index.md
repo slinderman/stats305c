@@ -51,5 +51,5 @@ You may also find these texts helpful
 | May 25 | Poisson Processes <br> {Download}`[slides]<slides/lecture16-poisson_processes.pdf>` | |
 | May 30 | Stochastic Differential Equations <br> {Download}`[slides]<slides/lecture17-sdes.pdf>` | |
 | June 1 | Dirichlet Process Mixture Models <br> {Download}`[slides]<slides/lecture18-dpmm.pdf>`| |
-| June 6 | Wrapping Up <br> {Download}`[slides]<slides/lecture19-wrap_up.pdf>`| |
-| June 13 | **Final Exam** <br> {Download}`[practice exam]<exam/practice_exam.pdf>` {Download}`[cheat sheet]<exam/distributions.pdf>` | |
+| June 6 | Model Comparison and Criticism <br> {Download}`[slides]<slides/lecture19-wrap_up.pdf>`| |
+| June 13 | **Final Exam** <br> {Download}`[practice exam]<exam/practice_exam.pdf>` {Download}`[solutions]<exam/practice_solns.pdf>` {Download}`[reference]<exam/distributions.pdf>` | |
