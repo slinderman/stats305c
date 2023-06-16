@@ -48,8 +48,8 @@ You may also find these texts helpful
 | May 16 | Hidden Markov Models <br> {Download}`[slides]<slides/lecture13_hmms.pdf>` | Ch 29.2-29.5 |
 | May 18 | Linear Dynamical Systems <br> {Download}`[slides]<slides/annotated/lecture14-lds.pdf>` | Ch 29.6-12.8 |
 | May 23 | Gaussian Processes <br> {Download}`[slides]<slides/annotated/lecture15-gps.pdf>`| Ch 18 |
-| May 25 | Poisson Processes <br> {Download}`[slides]<slides/lecture16-poisson_processes.pdf>` | |
-| May 30 | Stochastic Differential Equations <br> {Download}`[slides]<slides/lecture17-sdes.pdf>` | |
-| June 1 | Dirichlet Process Mixture Models <br> {Download}`[slides]<slides/lecture18-dpmm.pdf>`| |
+| May 25 | Poisson Processes <br> {Download}`[slides]<slides/annotated/lecture16-poisson_processes.pdf>` | |
+| May 30 | Gaussian Processes (continued) <br> {Download}`[slides]<slides/annotated/lecture15-gps.pdf>` | |
+| June 1 | Dirichlet Process Mixture Models <br> {Download}`[slides]<slides/annotated/lecture18-dpmm.pdf>`| |
 | June 6 | Model Comparison and Criticism <br> {Download}`[slides]<slides/lecture19-wrap_up.pdf>`| |
 | June 13 | **Final Exam** <br> {Download}`[practice exam]<exam/practice_exam.pdf>` {Download}`[solutions]<exam/practice_solns.pdf>` {Download}`[reference]<exam/distributions.pdf>` | |
