@@ -1,7 +1,7 @@
 # Overview
 Instructor: Scott Linderman <br>
-TA: Xavier Gonzalez <br>
-Term: Spring 2023 <br>
+TA: Aymen Echarghaoui <br>
+Term: Spring 2026 <br>
 Stanford University
 
 ---
@@ -13,19 +13,18 @@ Probabilistic modeling and inference of multivariate data. Topics may include mu
 Students should be comfortable with probability and statistics as well as multivariate calculus and linear algebra. This course will emphasize implementing models and algorithms, so coding proficiency is required.
 
 ## Logistics
-- Time: Tuesday and Thursday, 10:30-11:50am
+- Time: Monday and Wednesday, 1:30-2:50pm in Room [60-109](http://campus-map.stanford.edu/?srch=60-109)
 - Level: advanced undergrad and up
 - Grading basis: credit or letter grade
 - Office hours:
-  - Weds 4:30-5:30pm in Wu Tsai Neurosciences Instiute Room M252G (Scott)
-  - Thurs 5-7pm location Wu Tsai Neurosciences Instiute Room S275 (Xavier)
-- Assignments released Friday, due the following Thursday at 11:59pm
+  - Weds 3:00-4:00pm in CoDA Office (Scott)
+  - TBD (Aymen)
+- Assignments released Tuesday, due the following Monday at 11:59pm
 
 ## Books
-We will primarily use
-- Murphy. Probabilistic Machine Learning: Advanced Topics. MIT Press, 2023. [link](https://probml.github.io/pml-book/book2.html)
+In addition to the lecture notes, you may find these textbooks helpful:
 
-You may also find these texts helpful
+- Murphy. Probabilistic Machine Learning: Advanced Topics. MIT Press, 2023. [link](https://probml.github.io/pml-book/book2.html)
 - Bishop. Pattern recognition and machine learning. New York: Springer, 2006. [link](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
 - Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. [link](http://www.stat.columbia.edu/~gelman/book/)
 `

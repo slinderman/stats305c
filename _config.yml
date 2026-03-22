@@ -1,6 +1,7 @@
 # In _config.yml
-title: Applied Statistics III
+title: "STATS 305C: Applied Statistics III"
 author: Scott Linderman
+copyright: "2026"
 execute:
   execute_notebooks: force
   exclude_patterns:
@@ -27,13 +28,199 @@ bibtex_bibfiles:
 
 # In _config.yml
 sphinx:
+  extra_extensions:
+    - sphinx_proof
   config:
-    bibtex_reference_style: author_year
+    html_static_path: ['_static']
+    html_css_files:
+      - custom.css
+    bibtex_reference_style: label
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+    mathjax3_config:
+      tex:
+        macros:
+          "mba": "\\boldsymbol{a}"
+          "mbb": "\\boldsymbol{b}"
+          "mbc": "\\boldsymbol{c}"
+          "mbd": "\\boldsymbol{d}"
+          "mbe": "\\boldsymbol{e}"
+          "mbf": "\\boldsymbol{f}"
+          "mbg": "\\boldsymbol{g}"
+          "mbh": "\\boldsymbol{h}"
+          "mbi": "\\boldsymbol{i}"
+          "mbj": "\\boldsymbol{j}"
+          "mbk": "\\boldsymbol{k}"
+          "mbl": "\\boldsymbol{l}"
+          "mbm": "\\boldsymbol{m}"
+          "mbn": "\\boldsymbol{n}"
+          "mbo": "\\boldsymbol{o}"
+          "mbp": "\\boldsymbol{p}"
+          "mbq": "\\boldsymbol{q}"
+          "mbr": "\\boldsymbol{r}"
+          "mbs": "\\boldsymbol{s}"
+          "mbt": "\\boldsymbol{t}"
+          "mbu": "\\boldsymbol{u}"
+          "mbv": "\\boldsymbol{v}"
+          "mbw": "\\boldsymbol{w}"
+          "mbx": "\\boldsymbol{x}"
+          "mby": "\\boldsymbol{y}"
+          "mbz": "\\boldsymbol{z}"
+
+          "mbA": "\\boldsymbol{A}"
+          "mbB": "\\boldsymbol{B}"
+          "mbC": "\\boldsymbol{C}"
+          "mbD": "\\boldsymbol{D}"
+          "mbE": "\\boldsymbol{E}"
+          "mbF": "\\boldsymbol{F}"
+          "mbG": "\\boldsymbol{G}"
+          "mbH": "\\boldsymbol{H}"
+          "mbI": "\\boldsymbol{I}"
+          "mbJ": "\\boldsymbol{J}"
+          "mbK": "\\boldsymbol{K}"
+          "mbL": "\\boldsymbol{L}"
+          "mbM": "\\boldsymbol{M}"
+          "mbN": "\\boldsymbol{N}"
+          "mbO": "\\boldsymbol{O}"
+          "mbP": "\\boldsymbol{P}"
+          "mbQ": "\\boldsymbol{Q}"
+          "mbR": "\\boldsymbol{R}"
+          "mbS": "\\boldsymbol{S}"
+          "mbT": "\\boldsymbol{T}"
+          "mbU": "\\boldsymbol{U}"
+          "mbV": "\\boldsymbol{V}"
+          "mbW": "\\boldsymbol{W}"
+          "mbX": "\\boldsymbol{X}"
+          "mbY": "\\boldsymbol{Y}"
+          "mbZ": "\\boldsymbol{Z}"
+
+          "bbA": "\\mathbb{A}"
+          "bbB": "\\mathbb{B}"
+          "bbC": "\\mathbb{C}"
+          "bbD": "\\mathbb{D}"
+          "bbE": "\\mathbb{E}"
+          "bbG": "\\mathbb{G}"
+          "bbH": "\\mathbb{H}"
+          "bbI": "\\mathbb{I}"
+          "bbJ": "\\mathbb{J}"
+          "bbK": "\\mathbb{K}"
+          "bbL": "\\mathbb{L}"
+          "bbM": "\\mathbb{M}"
+          "bbN": "\\mathbb{N}"
+          "bbO": "\\mathbb{O}"
+          "bbP": "\\mathbb{P}"
+          "bbQ": "\\mathbb{Q}"
+          "bbR": "\\mathbb{R}"
+          "bbS": "\\mathbb{S}"
+          "bbT": "\\mathbb{T}"
+          "bbU": "\\mathbb{U}"
+          "bbV": "\\mathbb{V}"
+          "bbW": "\\mathbb{W}"
+          "bbX": "\\mathbb{X}"
+          "bbY": "\\mathbb{Y}"
+          "bbZ": "\\mathbb{Z}"
+
+          "cA": "\\mathcal{A}"
+          "cB": "\\mathcal{B}"
+          "cC": "\\mathcal{C}"
+          "cD": "\\mathcal{D}"
+          "cE": "\\mathcal{E}"
+          "cG": "\\mathcal{G}"
+          "cH": "\\mathcal{H}"
+          "cI": "\\mathcal{I}"
+          "cJ": "\\mathcal{J}"
+          "cK": "\\mathcal{K}"
+          "cL": "\\mathcal{L}"
+          "cM": "\\mathcal{M}"
+          "cN": "\\mathcal{N}"
+          "cO": "\\mathcal{O}"
+          "cP": "\\mathcal{P}"
+          "cQ": "\\mathcal{Q}"
+          "cR": "\\mathcal{R}"
+          "cS": "\\mathcal{S}"
+          "cT": "\\mathcal{T}"
+          "cU": "\\mathcal{U}"
+          "cV": "\\mathcal{V}"
+          "cW": "\\mathcal{W}"
+          "cX": "\\mathcal{X}"
+          "cY": "\\mathcal{Y}"
+          "cZ": "\\mathcal{Z}"
+
+          "mbalpha": "\\boldsymbol{\\alpha}"
+          "mbbeta": "\\boldsymbol{\\beta}"
+          "mbgamma": "\\boldsymbol{\\gamma}"
+          "mbdelta": "\\boldsymbol{\\delta}"
+          "mbepsilon": "\\boldsymbol{\\epsilon}"
+          "mbchi": "\\boldsymbol{\\chi}"
+          "mbeta": "\\boldsymbol{\\eta}"
+          "mbiota": "\\boldsymbol{\\iota}"
+          "mbkappa": "\\boldsymbol{\\kappa}"
+          "mblambda": "\\boldsymbol{\\lambda}"
+          "mbmu": "\\boldsymbol{\\mu}"
+          "mbnu": "\\boldsymbol{\\nu}"
+          "mbomega": "\\boldsymbol{\\omega}"
+          "mbtheta": "\\boldsymbol{\\theta}"
+          "mbphi": "\\boldsymbol{\\phi}"
+          "mbpi": "\\boldsymbol{\\pi}"
+          "mbpsi": "\\boldsymbol{\\psi}"
+          "mbrho": "\\boldsymbol{\\rho}"
+          "mbsigma": "\\boldsymbol{\\sigma}"
+          "mbtau": "\\boldsymbol{\\tau}"
+          "mbupsilon": "\\boldsymbol{\\upsilon}"
+          "mbxi": "\\boldsymbol{\\xi}"
+          "mbzeta": "\\boldsymbol{\\zeta}"
+          "mbvarepsilon": "\\boldsymbol{\\varepsilon}"
+          "mbvarphi": "\\boldsymbol{\\varphi}"
+          "mbvartheta": "\\boldsymbol{\\vartheta}"
+          "mbvarrho": "\\boldsymbol{\\varrho}"
+
+          "mbDelta": "\\boldsymbol{\\Delta}"
+          "mbGamma": "\\boldsymbol{\\Gamma}"
+          "mbLambda": "\\boldsymbol{\\Lambda}"
+          "mbOmega": "\\boldsymbol{\\Omega}"
+          "mbPhi": "\\boldsymbol{\\Phi}"
+          "mbPsi": "\\boldsymbol{\\Psi}"
+          "mbPi": "\\boldsymbol{\\Pi}"
+          "mbSigma": "\\boldsymbol{\\Sigma}"
+          "mbTheta": "\\boldsymbol{\\Theta}"
+          "mbUpsilon": "\\boldsymbol{\\Upsilon}"
+          "mbXi": "\\boldsymbol{\\Xi}"
+
+          "mbzero" : "\\boldsymbol{0}"
+          "mbone" : "\\boldsymbol{1}"
+          
+          "iid": ["\\stackrel{\\text{iid}}{#1}", 1]
+          "ind": ["\\stackrel{\\text{ind}}{#1}", 1]
+          "dif": "\\mathop{}\\!\\mathrm{d}"
+          "diag": "\\textrm{diag}"
+          "supp": "\\textrm{supp}"
+          "Tr": "\\textrm{Tr}"
+          "E": "\\mathbb{E}"
+          "Var": "\\textrm{Var}"
+          "Cov": "\\textrm{Cov}"
+          "reals": "\\mathbb{R}"
+          "naturals": "\\mathbb{N}"
+          "KL": ["D_{\\textrm{KL}}\\left(#1\\;\\|\\;#2\\right)", 2]
+
+parse:
+  myst_enable_extensions:  # default extensions to enable in the myst parser. See https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html
+    - amsmath
+    - colon_fence
+    # - deflist
+    - dollarmath
+    # - html_admonition
+    # - html_image
+    - linkify
+    # - replacements
+    # - smartquotes
+    - substitution
+    - tasklist
+  myst_url_schemes: [mailto, http, https] # URI schemes that will be recognised as external URLs in Markdown links
+  myst_dmath_double_inline: true  # Allow display math ($$) within an inline context
 
 # Information about where the book exists on the web
 repository:
   url                       : https://github.com/slinderman/stats305c  # Online location of your book
-  branch                    : spring2023  # Which branch of the repository should be used when creating links (optional)
+  branch                    : spring2026  # Which branch of the repository should be used when creating links (optional)
 
 launch_buttons:
   binderhub_url: ""
