@@ -1,0 +1,41 @@
+# In _config.yml
+title: Applied Statistics III
+author: Scott Linderman
+execute:
+  execute_notebooks: force
+  exclude_patterns:
+    - 'hw0.ipynb'
+    - 'hw1.ipynb'
+    - 'hw2.ipynb'
+    - 'hw3.ipynb'
+    - 'hw4.ipynb'
+    - 'hw5.ipynb'
+    - 'hw6.ipynb'
+    - 'hw7.ipynb'
+    - 'hw8.ipynb'
+    - '04_mcmc.ipynb'
+    - '09_cavi_nix.ipynb'
+    - '10_cavi_lda.ipynb'
+    - '11_advi_nix.ipynb'
+    - '12_nns_vaes.ipynb'
+    - '15_gps.ipynb'
+only_build_toc_files: true
+
+# Add a bibtex file so that we can create citations
+bibtex_bibfiles:
+  - references.bib
+
+# In _config.yml
+sphinx:
+  config:
+    bibtex_reference_style: author_year
+
+# Information about where the book exists on the web
+repository:
+  url                       : https://github.com/slinderman/stats305c  # Online location of your book
+  branch                    : spring2023  # Which branch of the repository should be used when creating links (optional)
+
+launch_buttons:
+  binderhub_url: ""
+  colab_url: "https://colab.research.google.com"
+

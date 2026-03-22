@@ -1,0 +1,32 @@
+format: jb-book
+root: index
+
+parts:
+  - caption: Assignments
+    chapters:
+    - file: assignments/hw0/hw0.ipynb
+    - file: assignments/hw1/hw1.ipynb
+    - file: assignments/hw2/hw2.ipynb
+    - file: assignments/hw3/hw3.ipynb
+    - file: assignments/hw4/hw4.ipynb
+    - file: assignments/hw5/hw5.ipynb
+    - file: assignments/hw6/hw6.ipynb
+    - file: assignments/hw7/hw7.ipynb
+    - file: assignments/hw8/hw8.ipynb
+
+  - caption: Notebooks
+    chapters:
+    - file: notebooks/01_bayes_normal.ipynb
+    - file: notebooks/02_mvn.ipynb
+    - file: notebooks/03_hier_gauss.ipynb
+    - file: notebooks/04_mcmc.ipynb
+    - file: notebooks/09_cavi_gmm.ipynb
+    - file: notebooks/09_cavi_nix.ipynb
+    - file: notebooks/10_cavi_lda.ipynb
+    - file: notebooks/11_advi_nix.ipynb
+    - file: notebooks/12_nns_vaes.ipynb
+    - file: notebooks/15_gps.ipynb
+
+  - caption: References
+    chapters:
+    - file: lectures/99_references.md
