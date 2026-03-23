@@ -5,15 +5,15 @@ copyright: "2026"
 execute:
   execute_notebooks: force
   exclude_patterns:
-    - 'hw0.ipynb'
-    - 'hw1.ipynb'
-    - 'hw2.ipynb'
-    - 'hw3.ipynb'
-    - 'hw4.ipynb'
-    - 'hw5.ipynb'
-    - 'hw6.ipynb'
-    - 'hw7.ipynb'
-    - 'hw8.ipynb'
+    - 'lab0.ipynb'
+    - 'lab1.ipynb'
+    - 'lab2.ipynb'
+    - 'lab3.ipynb'
+    - 'lab4.ipynb'
+    - 'lab5.ipynb'
+    - 'lab6.ipynb'
+    - 'lab7.ipynb'
+    - 'lab8.ipynb'
     - '04_mcmc.ipynb'
     - '09_cavi_nix.ipynb'
     - '10_cavi_lda.ipynb'
@@ -34,7 +34,7 @@ sphinx:
     html_static_path: ['_static']
     html_css_files:
       - custom.css
-    bibtex_reference_style: label
+    bibtex_reference_style: author_year
     mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
     mathjax3_config:
       tex:

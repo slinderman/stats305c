@@ -2,37 +2,61 @@ format: jb-book
 root: index
 
 parts:
-  - caption: Notes
+  - caption: "Part I: Foundations"
     chapters:
-    - file: lectures/00_bayes.md
-    - file: lectures/01_normal.ipynb
-    - file: lectures/02_mvn.md
+    - file: chapters/01_01_bayes.md
+    - file: chapters/01_02_normal.ipynb
+    - file: chapters/01_03_mvn.ipynb
+    - file: chapters/01_04_pgms.md
+    - file: chapters/01_05_hierarchical.ipynb
+    - file: chapters/01_06_model_comparison.md
 
-  - caption: Assignments
+  - caption: "Part II: Latent Variable Models"
     chapters:
-    - file: assignments/hw0/hw0.ipynb
-    - file: assignments/hw1/hw1.ipynb
-    - file: assignments/hw2/hw2.ipynb
-    - file: assignments/hw3/hw3.ipynb
-    - file: assignments/hw4/hw4.ipynb
-    - file: assignments/hw5/hw5.ipynb
-    - file: assignments/hw6/hw6.ipynb
-    - file: assignments/hw7/hw7.ipynb
-    - file: assignments/hw8/hw8.ipynb
+    - file: chapters/02_01_mixtures.ipynb
+    - file: chapters/02_02_lda.ipynb
+    - file: chapters/02_03_linear_lvms.ipynb
+    - file: chapters/02_04_vaes.ipynb
+    - file: chapters/02_05_diffusion.md
 
-  # - caption: Notebooks
-  #   chapters:
-  #   - file: notebooks/01_bayes_normal.ipynb
-  #   - file: notebooks/02_mvn.ipynb
-  #   - file: notebooks/03_hier_gauss.ipynb
-  #   - file: notebooks/04_mcmc.ipynb
-  #   - file: notebooks/09_cavi_gmm.ipynb
-  #   - file: notebooks/09_cavi_nix.ipynb
-  #   - file: notebooks/10_cavi_lda.ipynb
-  #   - file: notebooks/11_advi_nix.ipynb
-  #   - file: notebooks/12_nns_vaes.ipynb
-  #   - file: notebooks/15_gps.ipynb
+  - caption: "Part III: Inference and Learning Algorithms"
+    chapters:
+    - file: chapters/03_01_mcmc.ipynb
+    - file: chapters/03_02_hmc.ipynb
+    - file: chapters/03_03_em.ipynb
+    - file: chapters/03_04_cavi.ipynb
+    - file: chapters/03_05_advi.ipynb
+    - file: chapters/03_06_rl.ipynb
+    - file: chapters/03_07_continual_learning.md
+
+  - caption: "Part IV: Sequence Models"
+    chapters:
+    - file: chapters/04_01_hmms.ipynb
+    - file: chapters/04_02_lds.ipynb
+    - file: chapters/04_03_rnns.md
+    - file: chapters/04_04_transformers.md
+    - file: chapters/04_05_linear_attention.ipynb
+
+  - caption: "Part V: Stochastic Processes"
+    chapters:
+    - file: chapters/05_01_gps.ipynb
+    - file: chapters/05_02_sdes.md
+    - file: chapters/05_03_poisson_processes.ipynb
+    - file: chapters/05_04_dpmm.ipynb
+
+  - caption: Labs
+    chapters:
+    - file: labs/lab0/lab0.ipynb
+    - file: labs/lab1/lab1.ipynb
+    - file: labs/lab2/lab2.ipynb
+    - file: labs/lab3/lab3.ipynb
+    - file: labs/lab4/lab4.ipynb
+    - file: labs/lab5/lab5.ipynb
+    - file: labs/lab6/lab6.ipynb
+    - file: labs/lab7/lab7.ipynb
+    - file: labs/lab8/lab8.ipynb
+
 
   - caption: References
     chapters:
-    - file: lectures/99_references.md
+    - file: chapters/99_references.md
