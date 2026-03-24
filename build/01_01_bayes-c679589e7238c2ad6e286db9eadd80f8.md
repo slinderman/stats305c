@@ -64,3 +64,15 @@ The **marginal likelihood** $p(\mbX; \mbeta) = \int p(\mbtheta, \mbX; \mbeta) \d
 ## TODO: Worked Example(s)
 
 ## TODO: Project Description
+
+## Conclusion
+
+This chapter introduced the Bayesian approach to probabilistic modeling. The core framework — prior, likelihood, posterior, and marginal likelihood — provides a unified language for learning from data under uncertainty. Box's loop (build, compute, critique) captures the iterative nature of good probabilistic modeling: no model is final, and systematic criticism of model fit drives improvements. The hardest computational step is evaluating the marginal likelihood integral, and most of the course is devoted to algorithms that handle this challenge.
+
+:::{admonition} Next Steps
+:class: seealso
+Almost every subsequent chapter builds directly on this one. The most immediate next steps are:
+- [Bayesian Analysis of the Normal Distribution](normal) — conjugate inference for the Gaussian, the workhorse building block
+- [Probabilistic Graphical Models](pgms) — a language for specifying complex joint distributions compactly
+- [Markov Chain Monte Carlo](mcmc) — a general-purpose algorithm for approximating intractable posteriors
+:::

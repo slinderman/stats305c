@@ -188,3 +188,15 @@ Beyond goodness-of-fit, it is important to assess how sensitive conclusions are 
 - **Structural choices**: try different model families (e.g., $t$ distribution instead of Gaussian for robustness to outliers, hierarchical instead of pooled models).
 - **Prior choices**: vary prior hyperparameters and check that key inferential conclusions are stable.
 - **Quantity sensitivity**: extreme quantiles and extrapolations are more sensitive than means and interpolations.
+
+## Conclusion
+
+This chapter covered two pillars of model criticism in the Bayesian framework. The marginal likelihood provides a principled score for comparing models that automatically penalizes unnecessary complexity (Occam's razor), and it can be approximated via the Laplace approximation, importance sampling, or annealed importance sampling. Posterior predictive checks close the loop of Box's loop: by generating replicated data from the fitted model and comparing them to the observed data using test statistics, we can detect systematic failures and guide model improvement. Together these tools support the iterative cycle of building, computing, and critiquing probabilistic models.
+
+:::{admonition} Next Steps
+:class: seealso
+This chapter completes Part I. The tools developed here — model comparison and posterior predictive checks — apply throughout the rest of the course wherever models are fitted and evaluated. Part II introduces latent variable models where the marginal likelihood plays a central role in learning:
+- [Bayesian Mixture Models](mixtures) — the simplest latent variable model; marginal likelihood guides choice of number of components
+- [Variational Autoencoders](vaes) — deep generative models where the ELBO approximates the marginal likelihood
+:::
+

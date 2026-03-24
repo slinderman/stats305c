@@ -267,3 +267,14 @@ Several open problems remain active areas of research:
 - **Evaluation standards**: the field lacks consensus benchmarks, making it difficult to compare methods across papers.
 - **Class-incremental learning** without task identity at test time remains far harder than the other two scenarios, and no method approaches the performance of joint training.
 - **Continual learning with foundation models**: as large pretrained models become the dominant starting point, the relevant questions shift from "how to avoid forgetting" to "how to efficiently adapt while preserving generality" — a setting where the Bayesian sequential-update perspective may prove especially fruitful.
+
+## Conclusion
+
+Continual learning studies how to learn from a non-stationary stream of tasks without forgetting previously acquired knowledge. The central challenge — the stability–plasticity dilemma — manifests differently across the main families of methods: regularization-based approaches (EWC, SI, VCL) protect important parameters using the Fisher information or a variational posterior as a surrogate prior; replay-based approaches (experience replay, DER, GEM) counteract forgetting by revisiting past data or stored predictions; and architecture-based and gradient projection methods avoid interference by construction. The Bayesian perspective — sequential updating of a posterior — provides a principled foundation that unifies the regularization-based approaches and connects them to the variational inference algorithms developed throughout Part III.
+
+:::{admonition} Next Steps
+:class: seealso
+This chapter completes Part III. Continual learning draws on all of the inference algorithms studied in this part. Readers interested in related topics may wish to explore:
+- [Reinforcement Learning](rl) — another setting where agents must adapt over time, with connections to policy gradient methods and RLHF
+:::
+

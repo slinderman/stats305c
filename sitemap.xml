@@ -77,6 +77,9 @@
     <loc>http://localhost:3000/linear-attention</loc>
   </url>
   <url>
+    <loc>http://localhost:3000/discrete-diffusion</loc>
+  </url>
+  <url>
     <loc>http://localhost:3000/gps</loc>
   </url>
   <url>
