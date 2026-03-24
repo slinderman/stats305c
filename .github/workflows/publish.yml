@@ -5,7 +5,7 @@ on:
 
   push:
     branches:
-      - spring2023
+      - spring2026
 
 jobs:
   publish:
@@ -27,10 +27,9 @@ jobs:
           pip install -r requirements.txt
           jupyter-book build .
 
-      - name: Publish the documentation
-        uses: JamesIves/github-pages-deploy-action@3.6.2
+      # Push the book's HTML to github-pages
+      - name: GitHub Pages action
+        uses: peaceiris/actions-gh-pages@v3.6.1
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: _build/html
-          CLEAN: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_build/html

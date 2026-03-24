@@ -2,6 +2,10 @@ format: jb-book
 root: index
 
 parts:
+  - caption: "Course Project"
+    chapters:
+    - file: project
+
   - caption: "Part I: Foundations"
     chapters:
     - file: chapters/01_01_bayes.md

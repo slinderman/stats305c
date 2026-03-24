@@ -10,7 +10,7 @@ Stanford University
 Probabilistic modeling and inference of multivariate data. Topics may include multivariate Gaussian models, probabilistic graphical models, MCMC and variational Bayesian inference, dimensionality reduction, principal components, factor analysis, matrix completion, topic modeling, and state space models. Extensive work with data involving Python programming using PyTorch.
 
 ## Prerequisites
-Students should be comfortable with probability and statistics as well as multivariate calculus and linear algebra. This course will emphasize implementing models and algorithms, so coding proficiency is required.
+Students should be comfortable with basic probability and statistics as well as multivariate calculus and linear algebra. 
 
 ## Logistics
 - Time: Monday and Wednesday, 1:30-2:50pm in Room [60-109](http://campus-map.stanford.edu/?srch=60-109)
@@ -19,7 +19,7 @@ Students should be comfortable with probability and statistics as well as multiv
 - Office hours:
   - Weds 3:00-4:00pm in CoDA Office (Scott)
   - TBD (Aymen)
-- Assignments released Tuesday, due the following Monday at 11:59pm
+- Project deliverables due approximately every two weeks on Monday at 11:59pm (see {doc}`project`)
 
 ## Books
 In addition to the lecture notes, you may find these textbooks helpful:
@@ -27,28 +27,33 @@ In addition to the lecture notes, you may find these textbooks helpful:
 - Murphy. Probabilistic Machine Learning: Advanced Topics. MIT Press, 2023. [link](https://probml.github.io/pml-book/book2.html)
 - Bishop. Pattern recognition and machine learning. New York: Springer, 2006. [link](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
 - Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. [link](http://www.stat.columbia.edu/~gelman/book/)
-`
+
 ## Schedule
 
-| Date   | Topic | Reading |
-| ------ | ----- | ------- |
-| Apr 4  | Bayesian Analysis of the Normal Distribution <br> {Download}`[slides]<slides/annotated/lecture01-bayes_normal.pdf>` [[notebook]](notebooks/01_bayes_normal.ipynb) | Ch 2.3, 3.4.3 |
-| Apr 6  | Multivariate Normal Distribution <br> {Download}`[slides]<slides/annotated/lecture02-mvn.pdf>` [[notebook]](notebooks/02_mvn.ipynb)| Ch 2,3, 3.4.4 |
-| Apr 11 | Probabilistic Graphical Models <br> {Download}`[slides]<slides/annotated/lecture03_pgms.pdf>` [[notebook]](notebooks/03_hier_gauss.ipynb) | Ch 3.6.2, 4.2 |
-| Apr 13 | Markov Chain Monte Carlo <br> {Download}`[slides]<slides/annotated/lecture04-mcmc.pdf>` [[notebook]](notebooks/04_mcmc.ipynb) | Ch 11.1-11.2, 12.1-12.3 |
-| Apr 18 | Probabilistic PCA and Factor Analysis <br> {Download}`[slides]<slides/annotated/lecture05-continuous_lvms.pdf>` | Ch 28.3 |
-| Apr 20 | Hamiltonian Monte Carlo <br> {Download}`[slides]<slides/annotated/lecture06-hmc.pdf>` | [Neal, 2012](https://arxiv.org/abs/1206.1901), Ch 12.5 |
-| Apr 25 | Mixture Models <br> {Download}`[slides]<slides/annotated/lecture07-mixtures.pdf>`  | Ch 28.2 |
-| Apr 27 | Expectation Maximization <br> {Download}`[slides]<slides/lecture08-em.pdf>` | Ch 6.5 |
-| May 2  | Coordinate Ascent Variational Inference <br> {Download}`[slides]<slides/lecture09-cavi.pdf>` [[notebook 1]](notebooks/09_cavi_gmm.ipynb) [[notebook 2]](notebooks/09_cavi_nix.ipynb) | [Blei et al, 2017](https://www.tandfonline.com/doi/full/10.1080/01621459.2017.1285773), Ch 10.1-10.3 |
-| May 4  | Mixed Membership Models <br> {Download}`[slides]<slides/lecture10_mixed_membership.pdf>` [[notebook]](notebooks/10_cavi_lda.ipynb) |  Ch 28.5|
-| May 9  | Gradient-Based Variational Inference <br> {Download}`[slides]<slides/lecture11-advi.pdf>` [[notebook]](notebooks/11_advi_nix.ipynb) | Ch 21|
-| May 11 | Variational Autoencoders <br> {Download}`[slides]<slides/lecture12-vaes.pdf>` | [Kingma and Welling, 2019](https://arxiv.org/pdf/1906.02691.pdf), Ch 10.2|
-| May 16 | Hidden Markov Models <br> {Download}`[slides]<slides/lecture13_hmms.pdf>` | Ch 29.2-29.5 |
-| May 18 | Linear Dynamical Systems <br> {Download}`[slides]<slides/annotated/lecture14-lds.pdf>` | Ch 29.6-12.8 |
-| May 23 | Gaussian Processes <br> {Download}`[slides]<slides/annotated/lecture15-gps.pdf>`| Ch 18 |
-| May 25 | Poisson Processes <br> {Download}`[slides]<slides/annotated/lecture16-poisson_processes.pdf>` | |
-| May 30 | Gaussian Processes (continued) <br> {Download}`[slides]<slides/annotated/lecture15-gps.pdf>` | |
-| June 1 | Dirichlet Process Mixture Models <br> {Download}`[slides]<slides/annotated/lecture18-dpmm.pdf>`| |
-| June 6 | Model Comparison and Criticism <br> {Download}`[slides]<slides/lecture19-wrap_up.pdf>`| |
-| June 13 | **Final Exam** <br> {Download}`[practice exam]<exam/practice_exam.pdf>` {Download}`[solutions]<exam/practice_solns.pdf>` {Download}`[reference]<exam/distributions.pdf>` | |
+The course is organized around Box's Loop: formulate a problem, collect data, build a model, perform inference, criticize, revise, repeat. Topics from Parts I–III (Foundations, Latent Variable Models, Inference Algorithms) are interleaved so that each new model is paired with the inference tools needed to fit it. Part IV (Sequence Models) occupies the final few weeks.
+
+Project deliverable due dates are marked **D1–D4**.
+
+| Date | Topic | Reading |
+| ---- | ----- | ------- |
+| Mar 30 | Course overview | Ch 1.1 |
+| Apr 1  | The (Multivariate) Normal Distribution | Ch 1.2–1.3 |
+| Apr 6  | Probabilistic Graphical Models <br> **D1 due** | Ch 1.4–1.5 |
+| Apr 8  | Markov Chain Monte Carlo | Ch 3.1 |
+| Apr 13 | Mixture Models | Ch 2.1 |
+| Apr 15 | Expectation Maximization | Ch 3.3 |
+| Apr 20 | Probabilistic PCA <br> **D2 due** | Ch 2.3 |
+| Apr 22 | Hamiltonian Monte Carlo | Ch 3.2 | 
+| Apr 27 | Variational Inference | Ch 3.4–3.5 |
+| Apr 29 | Variational Autoencoders | Ch 2.4 |
+| May 4  | Hidden Markov Models <br> **D3 due**| Ch 4.1 |
+| May 6  | Linear Dynamical Systems | Ch 4.2 |
+| May 11 | Recurrent Neural Networks | Ch 4.3 |
+| May 13 | Transformers | Ch 4.4 |
+| May 18 | Linear Attention and Deep SSMs <br> **D4 due** | Ch 4.5 |
+| May 20 | Parallelizing Nonlinear RNNs | |
+| *May 25* | *No class — Memorial Day* | |
+| May 27 | Diffusion Models and SDEs | Ch 2.5, 5.2 |
+| Jun 1  | Reinforcement Learning | Ch 3.6 |
+| Jun 3  | Continual Learning | Ch 3.7 |
+| *Jun ~12* | **Final Report due** | |
