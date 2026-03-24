@@ -1,7 +1,7 @@
 version: 1
 
 project:
-  title: "STATS 305C: Applied Statistics III"
+  title: "Overview"
   authors:
     - name: Scott Linderman
   copyright: "2026"
@@ -179,6 +179,6 @@ project:
 site:
   template: book-theme
   options:
-    logo_text: "STATS 305C"
+    logo_text: "STATS 305C: Applied Statistics"
     hide_authors: true
     style: _static/custom.css

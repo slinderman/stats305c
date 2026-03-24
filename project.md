@@ -2,7 +2,11 @@
 
 Statistics is fundamentally an applied field. The methods and algorithms we study—MCMC, variational inference, Gaussian processes, hidden Markov models—exist to help scientists and practitioners reason rigorously about real-world phenomena. This course is organized around a **longitudinal project** in which you apply the tools of probabilistic machine learning to a real problem of your choosing, following the iterative cycle of applied statistics known as **Box's Loop**:
 
-> *Formulate a problem → Collect data → Build a model → Perform inference → Criticize the model → Revise*
+```{figure} figures/lecture1/boxsloop.jpeg
+:name: fig-boxsloop
+:align: center
+Box's loop: the iterative cycle of model building, inference, and criticism. Figure from [@blei2014build].
+```
 
 Rather than a collection of independent homework assignments, your project evolves throughout the quarter. Each deliverable advances your project by one stage of this loop, and the final report synthesizes everything you have learned. The goal is not to produce a publishable paper or a state-of-the-art result—it is to practice the full craft of applied statistics with honesty, rigor, and curiosity.
 
@@ -165,7 +169,7 @@ A concern with open-ended projects is that students submit AI-generated work wit
 
 **Problem diversity.** Because you choose your own problem and dataset in Deliverable 1, the class will naturally work on different problems. An AI-generated problem proposal is easy to spot when it is generic or mismatched to the data.
 
-**Longitudinal consistency.** Each deliverable must build on the previous one. A submission that contradicts or ignores prior deliverables, or that shows a sudden jump in sophistication without explanation, will raise questions.
+**Longitudinal consistency.** Each deliverable builds on the previous one. A submission that contradicts or ignores prior deliverables, or that shows a sudden jump in sophistication without explanation, will raise questions.
 
 **Oral check-ins (optional but encouraged).** Office hours are a good place to discuss your project with the instructor or TA. We may ask clarifying questions about your modeling choices. Students who understand their own project will have no difficulty with this.
 
