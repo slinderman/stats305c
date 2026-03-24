@@ -18,7 +18,7 @@ The output results from a stack of transformer blocks,
 \end{align*}
 Each block consists of two stages: one that operates vertically, combining information across the sequence length; another that operates horizontally, combining information across feature dimensions.
 
-![Transformer Block](figures/14_transformers/transformer-block.png)
+![Transformer Block](../figures/14_transformers/transformer-block.png)
 
 ## Attention
 
@@ -30,7 +30,7 @@ where $\mbA^{(m)} \in \reals_+^{T \times T}$ is a row-stochastic attention matri
 
 When we are using transformers for autoregressive sequence modeling, we constrain the attention matrix to be **causal** by requiring $A_{t,s}^{(m)} = 0$ for all $t < s$. In other words, the matrix is **lower triangular**.
 
-![Self Attention](figures/14_transformers/self-attention-1.png)
+![Self Attention](../figures/14_transformers/self-attention-1.png)
 
 ### Self-Attention
 
@@ -60,7 +60,7 @@ where $\mbU_q \mbx_t \in \reals^{K}$ are the **queries** and $\mbU_k \mbx_s \in 
 
 The parameters $\mbU_q \in \reals^{K \times D}$ and $\mbU_k \in \reals^{K \times D}$ are the two parameters defining the self-attention mechanism.
 
-![Self Attention with Queries and Keys](figures/14_transformers/self-attention-2.png)
+![Self Attention with Queries and Keys](../figures/14_transformers/self-attention-2.png)
 
 :::{admonition} Causal attention
 To enforce causality in the attention layer, we simply zero out the upper triangular part of the attention matrix and normalize the rows appropriately,
@@ -90,7 +90,7 @@ A_{t,s}^{(m,h)} &=
 \end{align*}
 is an attention weight at layer $m$ and head $h$ for $h=1,\ldots,H$. (Now you see why we dropped superscripts above &mdash; the notation is a handful!)
 
-![Multi-Headed Self Attention](figures/14_transformers/mhsa-1.png)
+![Multi-Headed Self Attention](../figures/14_transformers/mhsa-1.png)
 
 The outputs of the attention heads are either concatenated or linearly combined,
 \begin{align*}
@@ -100,7 +100,7 @@ The outputs of the attention heads are either concatenated or linearly combined,
 where $\mbV^{(m,h)} \in \reals^{D \times D}$ is a read-out matrix for layer $m$, head $h$.
 We denote the multi-headed self-attention (MHSA) mapping by $\texttt{mhsa}(\cdot)$.
 
-![Multi-Headed Self Attention](figures/14_transformers/mhsa-2.png)
+![Multi-Headed Self Attention](../figures/14_transformers/mhsa-2.png)
 
 :::{admonition} Queries, Keys, and Values
 The original transformer paper presents the output of a single head as a set of values,
@@ -127,7 +127,7 @@ After applying the multi-headed self-attention to obtain $\mbY^{(m)}$, the trans
 \end{align*}
 Note that the same function is applied to all positions $t$. 
 
-![MLP](figures/14_transformers/mlp.png)
+![MLP](../figures/14_transformers/mlp.png)
 
 :::{admonition} Computational Complexity
 :class: warning
@@ -144,7 +144,7 @@ Transformers use residual connections for both the multi-headed self-attention s
 \mbX^{(m)} &= \mbY^{(m)} + \texttt{mlp}(\mbY^{(m)})
 \end{align*}
 
-![Residual Connections](figures/14_transformers/residual-conn.png)
+![Residual Connections](../figures/14_transformers/residual-conn.png)
 
 
 ## Layer Norm

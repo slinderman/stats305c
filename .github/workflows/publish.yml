@@ -25,7 +25,7 @@ jobs:
       - name: Build the book
         run: |
           pip install -r requirements.txt
-          jupyter book build .
+          jupyter book build --execute --html
 
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
