@@ -19,20 +19,22 @@ Students should be comfortable with basic probability and statistics as well as 
 - Office hours:
   - Weds 3:00-4:00pm in CoDA Office (Scott)
   - TBD (Aymen)
-- Project deliverables due approximately every two weeks on Monday at 11:59pm (see [Course Project](project.md))
 
-## Books
-In addition to the lecture notes, you may find these textbooks helpful:
+We will alternate between **traditional lectures** on odd-numbered weeks and **lab meetings** on even-numbered weeks. The lab meetings will be a flipped classroom -- each project team will present their deliverable for that week. See the Assignments section below and the [Course Project](project.md) for more detail.
 
-- Murphy. Probabilistic Machine Learning: Advanced Topics. MIT Press, 2023. [link](https://probml.github.io/pml-book/book2.html)
-- Bishop. Pattern recognition and machine learning. New York: Springer, 2006. [link](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
-- Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. [link](http://www.stat.columbia.edu/~gelman/book/)
+## Deliverables
+
+The course will be organized around an extended project that is carried out throughout the quarter. There will be deliverables due every two weeks on **Sunday night at 11:59pm**. We will have lab meetings the week following the deliverables in which each project team will briefly present their progress. Each team will be assigned to either the Monday or the Wednesday group, and they should only attend the lab meeting they are assigned to. See the [Course Project](project.md) page for more detail.
+
+Additionally, there will be one math problem assigned each week, also due on **Sunday night at 11:59pm**. These problems will help you test your reasoning abilities and, if you're a PhD student, prepare for quals.
 
 ## Schedule
 
-The course is organized around Box's Loop: formulate a problem, collect data, build a model, perform inference, criticize, revise, repeat. Topics from Parts I–III (Foundations, Latent Variable Models, Inference Algorithms) are interleaved so that each new model is paired with the inference tools needed to fit it. Part IV (Sequence Models) occupies the final few weeks. We won't cover Part V (Stochastic Processes) this quarter, except in passing, but some chapters will reference that material in case you want to dig deeper on your own.
+The course will teach you the skills necessary to follow Box's Loop: formulate a problem, collect data, build a model, perform inference, criticize, revise, repeat. Topics from Parts I–III (Foundations, Latent Variable Models, Inference Algorithms) are interleaved so that each new model is paired with the inference tools needed to fit it. Part IV (Sequence Models) occupies the final few weeks. We won't cover Part V (Stochastic Processes) this quarter, except in passing, but some chapters will reference that material in case you want to dig deeper on your own.
 
-Project deliverable due dates are marked **D1–D4**.
+As described above, the course alternates between traditional lectures and lab meetings, where we will flip the classroom. You will be assigned to either the Monday or the Wednesday lab meeting; you should not attend both. During lab meetings, you will give a short (1 slide, 5 minute) presentation of your deliverable, and you will give feedback to others.
+
+Project deliverable due dates are marked below.
 
 | Date | Topic | Reading |
 | ---- | ----- | ------- |
@@ -61,3 +63,34 @@ Project deliverable due dates are marked **D1–D4**.
 | Jun 1  | **Attend:** Project Presentations (All Teams) | |
 | Jun 3  | **Attend:** Project Presentations (All Teams) | |
 | Jun 8  | **Final Report Due** | |
+
+
+## Grading
+
+| Component | Weight |
+|-----------|--------|
+| Milestones (4 × 12.5%) | 50% |
+| Final report | 25% |
+| Lab meeting participation | 10% |
+| Weekly math problems | 15% |
+
+Each milestone is graded on an **A, B, C, or F** scale:
+
+| Score | Meaning |
+|-------|---------|
+| A | Complete, thoughtful, and well-executed |
+| B | Acceptable but missing key elements or depth |
+| C | Did not take assignment seriously / just asked AI to do it |
+| F | Not submitted or substantially incomplete |
+
+Math problems will be graded on a **(0, 1, 2)** scale.
+
+Remember that project grades are based on the **quality and thoroughness of your applied statistics practice** — not on whether your model achieves impressive results. A project that honestly finds that a simple baseline outperforms a complex model, with a clear explanation of why, is an excellent project.
+
+
+## Books
+In addition to the lecture notes, you may find these textbooks helpful:
+
+- Murphy. Probabilistic Machine Learning: Advanced Topics. MIT Press, 2023. [link](https://probml.github.io/pml-book/book2.html)
+- Bishop. Pattern recognition and machine learning. New York: Springer, 2006. [link](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
+- Gelman et al. Bayesian Data Analysis. Chapman and Hall, 2005. [link](http://www.stat.columbia.edu/~gelman/book/)
