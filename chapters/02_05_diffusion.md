@@ -411,9 +411,12 @@ The generative process still produces a factored distribution, but we need a sep
 
 ## Conclusion
 
-There's a lot we didn't cover. The Stein score function that appeared in the inverse of the noising process allows for connections between denoising score matching [@song2019generative] and denoising diffusion models. 
+Denoising diffusion probabilistic models frame generative modeling as learning to invert a fixed, analytically tractable noising process. The key insight is that the optimal reverse transition is a mixture of Gaussians whose mean is a linear combination of the data and the noisy state, and that learning to denoise is equivalent to learning to generate. In the continuous-time limit, the reverse process is an SDE driven by the score function of the marginal density — a connection that unifies DDPMs with score-based generative modeling and Langevin dynamics. There is much more to explore: conditional generation (steering the reverse diffusion with text prompts), discrete diffusion models, and connections between the score function and denoising score matching.
 
-Another important topic is **conditional generation**. Suppose we want to take in text and spit out images, like DALL-E 2 or Stable Diffusion. One way to do so is using a diffusion model, but to steer the reverse diffusion based on the text prompt. So rather than just following the score function, the reverse process is also biased toward outputs that match the prompt. 
+:::{admonition} Next Steps
+:class: seealso
+This chapter completes Part II. The continuous-time SDE formulation of diffusion is developed formally in:
+- [Stochastic Differential Equations](sdes) — provides the mathematical framework for the reverse-time SDE and score-based generation
+:::
 
-Finally, this class was nominally about models for discrete data, but this lecture has focused on continuous diffusions. There has been recent work on discrete denoising diffusion models [@campbell2022continuous], which we'll have to cover another time!
 

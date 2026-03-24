@@ -181,3 +181,4 @@ site:
   options:
     logo_text: "STATS 305C"
     hide_authors: true
+    style: _static/custom.css

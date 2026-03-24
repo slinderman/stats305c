@@ -199,4 +199,10 @@ Training deep neural networks is somewhat of a dark art. Standard practice is to
 
 ## Conclusion
 
-Transformers are a workhorse of modern machine learning and key to many of the impressive advances over recent years. However, there are still areas for improvement. For example, the computational cost of attention is $\cO(T^2)$, and a lot of work has gone into cutting that down. Likewise, while the transformer allows for predictions to be made in parallel across an entire sequence, sampling from the learned autoregressive model is still takes linear time. In the lectures ahead, we'll discuss other recent architectures that address some of these concerns.
+Transformers achieve parallelism over a full sequence by replacing the sequential hidden-state recursion with multi-headed self-attention: each token directly attends to all previous tokens, enabling gradient information to flow in a single step rather than through $T$ chained Jacobians. The architecture combines self-attention with token-wise MLPs, residual connections, and layer normalization, and is trained end-to-end with standard gradient-based optimizers. The quadratic $O(T^2)$ cost of softmax attention is a practical bottleneck for long sequences and has motivated substantial recent work on more efficient alternatives.
+
+:::{admonition} Next Steps
+:class: seealso
+- [Linear Attention and Deep SSMs](linear-attention) — replaces softmax attention with linear-time approximations and connects transformers back to structured state space models
+:::
+

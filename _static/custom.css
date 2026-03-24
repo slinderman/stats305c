@@ -1,0 +1,20 @@
+/* Center matplotlib output figures */
+[data-name="safe-output-image"] img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Light pink admonition for "Reading" callouts */
+.admonition.reading {
+    border-left-color: #E8A0B0;
+}
+
+.admonition.reading > .admonition-title {
+    background-color: #FADADD;
+    color: #5a2a2a;
+}
+
+.admonition.reading > .admonition-title::before {
+    filter: invert(0.2) sepia(1) saturate(3) hue-rotate(300deg);
+}

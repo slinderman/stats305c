@@ -11,7 +11,7 @@ parts:
     - file: chapters/01_01_bayes.md
     - file: chapters/01_02_normal.ipynb
     - file: chapters/01_03_mvn.ipynb
-    - file: chapters/01_04_pgms.md
+    - file: chapters/01_04_pgms.ipynb
     - file: chapters/01_05_hierarchical.ipynb
     - file: chapters/01_06_model_comparison.md
 
@@ -40,6 +40,7 @@ parts:
     - file: chapters/04_03_rnns.md
     - file: chapters/04_04_transformers.md
     - file: chapters/04_05_linear_attention.ipynb
+    - file: chapters/04_06_discrete_diffusion.ipynb
 
   - caption: "Part V: Stochastic Processes"
     chapters:
