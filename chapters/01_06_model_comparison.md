@@ -1,6 +1,9 @@
 # Model Comparison and Posterior Predictive Checks
 
-**Prerequisites:** This chapter builds on [Bayesian Modeling](01_01_bayes) and [Hierarchical Gaussian Models](01_05_hierarchical). The annealed importance sampling section references [Markov Chain Monte Carlo](03_01_mcmc) (Part III); readers who have not yet encountered MCMC may skip that subsection and return after reading Part III.
+:::{admonition} Prerequisites
+:class: note
+This chapter builds on [Bayesian Modeling](01_01_bayes) and [Hierarchical Gaussian Models](01_05_hierarchical). The annealed importance sampling section references [Markov Chain Monte Carlo](03_01_mcmc) (Part III); readers who have not yet encountered MCMC may skip that subsection and return after reading Part III.
+:::
 
 ## Bayesian Model Comparison
 

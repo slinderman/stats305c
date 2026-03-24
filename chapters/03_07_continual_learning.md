@@ -1,6 +1,9 @@
 # Continual Learning
 
-**Prerequisites:** This chapter builds on [Markov Chain Monte Carlo](03_01_mcmc) (Fisher information and the Laplace approximation), [Coordinate Ascent Variational Inference](03_04_cavi), and [Gradient-Based Variational Inference](03_05_advi). Familiarity with neural networks and gradient-based optimization is assumed.
+:::{admonition} Prerequisites
+:class: note
+This chapter builds on [Markov Chain Monte Carlo](03_01_mcmc) (Fisher information and the Laplace approximation), [Coordinate Ascent Variational Inference](03_04_cavi), and [Gradient-Based Variational Inference](03_05_advi). Familiarity with neural networks and gradient-based optimization is assumed.
+:::
 
 A central assumption of classical statistical learning is that training data are drawn i.i.d. from a fixed distribution. Real-world systems routinely violate this: a medical diagnosis model must incorporate new disease variants without forgetting old ones; a language model deployed in production should update on new domains without degrading on existing benchmarks; a robot should accumulate motor skills over its lifetime rather than relearning each task from scratch. **Continual learning** (also called *lifelong learning* or *sequential learning*) is the study of how to learn from a non-stationary stream of data or tasks while retaining previously acquired knowledge [@delange2021continual].
 

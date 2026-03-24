@@ -60,7 +60,3 @@ parts:
     - file: labs/lab7/lab7.ipynb
     - file: labs/lab8/lab8.ipynb
 
-
-  - caption: References
-    chapters:
-    - file: chapters/99_references.md

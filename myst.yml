@@ -179,6 +179,5 @@ project:
 site:
   template: book-theme
   options:
-    html_css_files:
-      - custom.css
-  # Colab launch buttons are configured per-notebook via repository metadata above
+    logo_text: "STATS 305C"
+    hide_authors: true

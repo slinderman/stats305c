@@ -1,6 +1,9 @@
 # Transformers
 
-**Prerequisites:** This chapter builds on [Recurrent Neural Networks](04_03_rnns).
+:::{admonition} Prerequisites
+:class: note
+This chapter builds on [Recurrent Neural Networks](04_03_rnns).
+:::
 
 RNNs are natural models for sequential data, but the $\cO(T)$ time complexity of evaluation and backpropagating gradients is a severe limitation. In modern machine learning, one of the deciding factors is how many training epochs you can perform for a fixed computational budget. To that end, architectures that can process an entire sequence in parallel are advantageous. Transformers are one such architecture.
 

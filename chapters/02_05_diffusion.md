@@ -1,6 +1,9 @@
 # Denoising Diffusion Models
 
-**Prerequisites:** This chapter builds on [Variational Autoencoders](02_04_vaes). The continuous-time SDE formulation is developed formally in [Stochastic Differential Equations](05_02_sdes) (Part V); readers may find it helpful to read that chapter first or use it as a reference alongside this one.
+:::{admonition} Prerequisites
+:class: note
+This chapter builds on [Variational Autoencoders](02_04_vaes). The continuous-time SDE formulation is developed formally in [Stochastic Differential Equations](05_02_sdes) (Part V); readers may find it helpful to read that chapter first or use it as a reference alongside this one.
+:::
 
 Denoising diffusion probabilistic models (DDPMs) [@sohl2015deep; @ho2020denoising] are the deep generative models underlying image generation tools like DALL-E 2 (from Open AI) and Stable Diffusion (from Stability AI). This lecture will unpack how they work. These notes are partly inspired by @turner2024denoising.
 

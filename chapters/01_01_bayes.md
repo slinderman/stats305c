@@ -1,6 +1,9 @@
 # Bayesian Modeling
 
-**Prerequisites:** None beyond basic probability theory. This is the opening chapter of the course; every subsequent chapter builds on the concepts introduced here.
+:::{admonition} Prerequisites
+:class: note
+None beyond basic probability theory. This is the opening chapter of the course; every subsequent chapter builds on the concepts introduced here.
+:::
 
 *This course is about probabilistic modeling and inference with high-dimensional data.*
 
