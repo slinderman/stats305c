@@ -2,7 +2,7 @@ numpy
 scipy
 scikit-learn
 torch
-jupyter-book>=0.14,<2
+jupyter-book>=2
 matplotlib
 tqdm
 seaborn

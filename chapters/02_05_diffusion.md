@@ -2,7 +2,7 @@
 
 **Prerequisites:** This chapter builds on [Variational Autoencoders](02_04_vaes). The continuous-time SDE formulation is developed formally in [Stochastic Differential Equations](05_02_sdes) (Part V); readers may find it helpful to read that chapter first or use it as a reference alongside this one.
 
-Denoising diffusion probabilistic models (DDPMs) {cite:p}`sohl2015deep,ho2020denoising` are the deep generative models underlying image generation tools like DALL-E 2 (from Open AI) and Stable Diffusion (from Stability AI). This lecture will unpack how they work. These notes are partly inspired by {cite:t}`turner2024denoising`.
+Denoising diffusion probabilistic models (DDPMs) [@sohl2015deep; @ho2020denoising] are the deep generative models underlying image generation tools like DALL-E 2 (from Open AI) and Stable Diffusion (from Stability AI). This lecture will unpack how they work. These notes are partly inspired by @turner2024denoising.
 
 ## Key Ideas
 
@@ -372,7 +372,7 @@ This has a nice interpretation: to invert the noise process, **first undo the co
 
 ## Continuous time limit 
 
-In practice, the best performing diffusion models are based on a continuous-time formulation of the noising process as an SDE {cite:p}`song2020score`. To motivate this approach, think of the noise process above as a discretization of a continuous process $x(t)$ for $t \in [0,1]$ with time steps of size $\Delta = \tfrac{1}{T}$. That is, map $x_i \mapsto x(i/T)$, $\lambda_i \mapsto \lambda(i/T)$, and $\sigma_i \mapsto \sigma(i/T)$  for $i=0,1,\ldots, T$. Then the discrete model is can be rewritten as,
+In practice, the best performing diffusion models are based on a continuous-time formulation of the noising process as an SDE [@song2020score]. To motivate this approach, think of the noise process above as a discretization of a continuous process $x(t)$ for $t \in [0,1]$ with time steps of size $\Delta = \tfrac{1}{T}$. That is, map $x_i \mapsto x(i/T)$, $\lambda_i \mapsto \lambda(i/T)$, and $\sigma_i \mapsto \sigma(i/T)$  for $i=0,1,\ldots, T$. Then the discrete model is can be rewritten as,
 \begin{align*}
 x(t + \Delta) 
 &\sim \mathrm{N}(\lambda(t) x(t), \sigma(t)^2),
@@ -408,9 +408,9 @@ The generative process still produces a factored distribution, but we need a sep
 
 ## Conclusion
 
-There's a lot we didn't cover. The Stein score function that appeared in the inverse of the noising process allows for connections between denoising score matching {cite:p}`song2019generative` and denoising diffusion models. 
+There's a lot we didn't cover. The Stein score function that appeared in the inverse of the noising process allows for connections between denoising score matching [@song2019generative] and denoising diffusion models. 
 
 Another important topic is **conditional generation**. Suppose we want to take in text and spit out images, like DALL-E 2 or Stable Diffusion. One way to do so is using a diffusion model, but to steer the reverse diffusion based on the text prompt. So rather than just following the score function, the reverse process is also biased toward outputs that match the prompt. 
 
-Finally, this class was nominally about models for discrete data, but this lecture has focused on continuous diffusions. There has been recent work on discrete denoising diffusion models {cite:p}`campbell2022continuous`, which we'll have to cover another time!
+Finally, this class was nominally about models for discrete data, but this lecture has focused on continuous diffusions. There has been recent work on discrete denoising diffusion models [@campbell2022continuous], which we'll have to cover another time!
 

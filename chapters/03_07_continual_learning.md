@@ -2,7 +2,7 @@
 
 **Prerequisites:** This chapter builds on [Markov Chain Monte Carlo](03_01_mcmc) (Fisher information and the Laplace approximation), [Coordinate Ascent Variational Inference](03_04_cavi), and [Gradient-Based Variational Inference](03_05_advi). Familiarity with neural networks and gradient-based optimization is assumed.
 
-A central assumption of classical statistical learning is that training data are drawn i.i.d. from a fixed distribution. Real-world systems routinely violate this: a medical diagnosis model must incorporate new disease variants without forgetting old ones; a language model deployed in production should update on new domains without degrading on existing benchmarks; a robot should accumulate motor skills over its lifetime rather than relearning each task from scratch. **Continual learning** (also called *lifelong learning* or *sequential learning*) is the study of how to learn from a non-stationary stream of data or tasks while retaining previously acquired knowledge {cite}`delange2021continual`.
+A central assumption of classical statistical learning is that training data are drawn i.i.d. from a fixed distribution. Real-world systems routinely violate this: a medical diagnosis model must incorporate new disease variants without forgetting old ones; a language model deployed in production should update on new domains without degrading on existing benchmarks; a robot should accumulate motor skills over its lifetime rather than relearning each task from scratch. **Continual learning** (also called *lifelong learning* or *sequential learning*) is the study of how to learn from a non-stationary stream of data or tasks while retaining previously acquired knowledge [@delange2021continual].
 
 ## Problem Formulation
 
@@ -20,7 +20,7 @@ $$
 \min_\theta \frac{1}{T} \sum_{t=1}^T \mathcal{L}_t(\theta), \qquad \mathcal{L}_t(\theta) = \mathbb{E}_{(x,y)\sim p_t}[\ell(\theta; x, y)].
 $$
 
-The difficulty is that naive sequential training — minimizing $\mathcal{L}_t$ at each step with gradient descent — causes **catastrophic forgetting** {cite}`mccloskey1989catastrophic`: optimizing for the current task moves parameters into a region that performs poorly on previous tasks, and the loss of prior knowledge can be abrupt and nearly total.
+The difficulty is that naive sequential training — minimizing $\mathcal{L}_t$ at each step with gradient descent — causes **catastrophic forgetting** [@mccloskey1989catastrophic]: optimizing for the current task moves parameters into a region that performs poorly on previous tasks, and the loss of prior knowledge can be abrupt and nearly total.
 
 ### Scenarios
 
@@ -61,7 +61,7 @@ Regularization methods augment the loss for each new task with a penalty that di
 
 ### Elastic Weight Consolidation
 
-**Elastic weight consolidation (EWC)** {cite}`kirkpatrick2017overcoming` approximates the posterior over parameters after task $t-1$ as a Gaussian centered on the MAP estimate $\theta^*_{t-1}$:
+**Elastic weight consolidation (EWC)** [@kirkpatrick2017overcoming] approximates the posterior over parameters after task $t-1$ as a Gaussian centered on the MAP estimate $\theta^*_{t-1}$:
 
 $$
 p(\theta \mid \mathcal{D}_{1:t-1}) \approx \mathcal{N}(\theta;\, \theta^*_{t-1},\, F_{t-1}^{-1}),
@@ -83,11 +83,11 @@ $$
 
 This is a **weighted $\ell_2$ proximal penalty**: parameters with high Fisher weight are kept close to their previous values, while unimportant parameters are free to change.
 
-For a sequence of tasks, the Fisher from all previous tasks accumulates. In the **online EWC** variant {cite}`schwarz2018progress`, a single running estimate of the Fisher is maintained rather than storing one Fisher matrix per task.
+For a sequence of tasks, the Fisher from all previous tasks accumulates. In the **online EWC** variant [@schwarz2018progress], a single running estimate of the Fisher is maintained rather than storing one Fisher matrix per task.
 
 ### Synaptic Intelligence
 
-**Synaptic intelligence (SI)** {cite}`zenke2017continual` estimates parameter importance **online** during training rather than post-hoc. It tracks the cumulative contribution of each parameter to the decrease in the loss along the optimization trajectory. For a parameter $\theta_i$ moving from $\theta_{i,0}$ to $\theta_{i,T_t}$ during training on task $t$, the importance is:
+**Synaptic intelligence (SI)** [@zenke2017continual] estimates parameter importance **online** during training rather than post-hoc. It tracks the cumulative contribution of each parameter to the decrease in the loss along the optimization trajectory. For a parameter $\theta_i$ moving from $\theta_{i,0}$ to $\theta_{i,T_t}$ during training on task $t$, the importance is:
 
 $$
 \Omega_i^t = \frac{\sum_{k} \delta\theta_{i,k}\, (-\partial_{\theta_i} \mathcal{L}_t)_k}{\left(\Delta\theta_{i}^t\right)^2 + \xi},
@@ -119,7 +119,7 @@ This is **sequential Bayes**: the posterior after task $t-1$ becomes the prior f
 
 ### Variational Continual Learning
 
-**Variational continual learning (VCL)** {cite}`nguyen2018variational` maintains a variational approximation $q_t(\theta) \approx p(\theta \mid \mathcal{D}_{1:t})$ at each step. The variational objective at task $t$ is:
+**Variational continual learning (VCL)** [@nguyen2018variational] maintains a variational approximation $q_t(\theta) \approx p(\theta \mid \mathcal{D}_{1:t})$ at each step. The variational objective at task $t$ is:
 
 $$
 \mathcal{F}_t(q) = D_\mathrm{KL}(q(\theta) \,\|\, q_{t-1}(\theta)) - \mathbb{E}_{q(\theta)}[\log p(\mathcal{D}_t \mid \theta)],
@@ -153,7 +153,7 @@ Experience replay is conceptually simple and empirically effective, but its memo
 
 ### Dark Experience Replay
 
-**Dark Experience Replay (DER)** {cite}`buzzega2020dark` improves on standard replay by storing the model's **soft predictions** (logits) $z_n = f_\theta(x_n)$ at the time each exemplar is added to the buffer, in addition to the input $x_n$. The replay loss then includes a **knowledge distillation** term:
+**Dark Experience Replay (DER)** [@buzzega2020dark] improves on standard replay by storing the model's **soft predictions** (logits) $z_n = f_\theta(x_n)$ at the time each exemplar is added to the buffer, in addition to the input $x_n$. The replay loss then includes a **knowledge distillation** term:
 
 $$
 \mathcal{L}_\mathrm{DER}(\theta) = \mathcal{L}_t(\theta) + \alpha \underbrace{\frac{1}{|\mathcal{M}|}\sum_{(x_n, z_n)\in\mathcal{M}} \|f_\theta(x_n) - z_n\|^2}_{\text{distillation from stored logits}}.
@@ -163,7 +163,7 @@ Matching the current model's predictions to the stored logits preserves not just
 
 ### Gradient Episodic Memory
 
-**Gradient Episodic Memory (GEM)** {cite}`lopez2017gradient` uses the memory buffer $\mathcal{M}$ not to mix replay into the training loss, but to constrain the gradient update direction. GEM solves a quadratic program at each step to find the update $\tilde{g}$ that:
+**Gradient Episodic Memory (GEM)** [@lopez2017gradient] uses the memory buffer $\mathcal{M}$ not to mix replay into the training loss, but to constrain the gradient update direction. GEM solves a quadratic program at each step to find the update $\tilde{g}$ that:
 
 1. does not increase the loss on any past task's exemplars (the **non-interference** constraint), and
 2. is as close as possible to the current task's gradient $g_t$.
@@ -182,7 +182,7 @@ Architecture methods allocate dedicated parameters to each task, avoiding interf
 
 ### Progressive Neural Networks
 
-**Progressive neural networks** {cite}`rusu2016progressive` grow the architecture with each task: task $t$ receives a new column of weights $\theta^{(t)}$, while all previous columns $\theta^{(1)}, \ldots, \theta^{(t-1)}$ are frozen. Lateral connections allow the new column to receive input from all previous columns, enabling **positive forward transfer** — the new task can reuse representations learned for earlier tasks:
+**Progressive neural networks** [@rusu2016progressive] grow the architecture with each task: task $t$ receives a new column of weights $\theta^{(t)}$, while all previous columns $\theta^{(1)}, \ldots, \theta^{(t-1)}$ are frozen. Lateral connections allow the new column to receive input from all previous columns, enabling **positive forward transfer** — the new task can reuse representations learned for earlier tasks:
 
 $$
 h_k^{(t)} = \sigma\!\left(W_k^{(t)} h_{k-1}^{(t)} + \sum_{t' < t} U_k^{(t' \to t)} h_{k-1}^{(t')}\right),
@@ -200,7 +200,7 @@ A family of methods avoids forgetting by projecting gradient updates onto a subs
 
 ### Orthogonal Gradient Descent
 
-**Orthogonal gradient descent (OGD)** {cite}`farajtabar2020orthogonal` maintains the gradients of the loss for previous tasks at their optima, $g^{(t')} = \nabla_\theta \mathcal{L}_{t'}(\theta^*_{t'})$, and projects the current gradient onto their orthogonal complement:
+**Orthogonal gradient descent (OGD)** [@farajtabar2020orthogonal] maintains the gradients of the loss for previous tasks at their optima, $g^{(t')} = \nabla_\theta \mathcal{L}_{t'}(\theta^*_{t'})$, and projects the current gradient onto their orthogonal complement:
 
 $$
 \tilde{g}_t = g_t - \sum_{t'<t} \frac{g_t^\top g^{(t')}}{\|g^{(t')}\|^2} g^{(t')}.
@@ -210,7 +210,7 @@ The update $\tilde{g}_t$ is orthogonal to all past gradients and thus (to first 
 
 ### Gradient Projection Memory
 
-**Gradient Projection Memory (GPM)** {cite}`saha2021gradient` generalizes OGD by projecting onto the orthogonal complement of the **feature subspace** spanned by activations from past tasks, not just past gradients. For each layer $\ell$, the feature matrix $R^\ell$ is built from activation vectors over past task data, and its leading singular vectors (via SVD) define a basis for the important subspace:
+**Gradient Projection Memory (GPM)** [@saha2021gradient] generalizes OGD by projecting onto the orthogonal complement of the **feature subspace** spanned by activations from past tasks, not just past gradients. For each layer $\ell$, the feature matrix $R^\ell$ is built from activation vectors over past task data, and its leading singular vectors (via SVD) define a basis for the important subspace:
 
 $$
 R^\ell = U^\ell \Sigma^\ell {V^\ell}^\top.
@@ -228,7 +228,7 @@ where $G^\ell$ is the gradient matrix for layer $\ell$. This ensures that change
 
 ### Progress and Compress
 
-The **Progress & Compress** framework {cite}`schwarz2018progress` separates learning into two phases per task:
+The **Progress & Compress** framework [@schwarz2018progress] separates learning into two phases per task:
 
 - **Progress**: a single *active column* is trained on the current task using EWC regularization against a *knowledge base* (KB) network.
 - **Compress**: after each task, the knowledge in the active column is distilled into the KB network via online EWC.
@@ -249,14 +249,14 @@ Continual learning sits at the intersection of optimization, Bayesian inference,
 
 | **Method** | **Anti-forgetting mechanism** | **Memory cost** |
 |---|---|---|
-| EWC {cite}`kirkpatrick2017overcoming` | Diagonal Fisher penalty | $O(\|\theta\|)$ per task |
-| SI {cite}`zenke2017continual` | Online path-integral importance | $O(\|\theta\|)$ accumulated |
-| VCL {cite}`nguyen2018variational` | Variational posterior as prior | $O(\|\theta\|)$ + coresets |
+| EWC [@kirkpatrick2017overcoming] | Diagonal Fisher penalty | $O(\|\theta\|)$ per task |
+| SI [@zenke2017continual] | Online path-integral importance | $O(\|\theta\|)$ accumulated |
+| VCL [@nguyen2018variational] | Variational posterior as prior | $O(\|\theta\|)$ + coresets |
 | Experience replay | Stored exemplars | $O(|\mathcal{M}|)$ buffer |
-| DER {cite}`buzzega2020dark` | Stored exemplars + logit distillation | $O(|\mathcal{M}| \cdot C)$ |
-| GEM {cite}`lopez2017gradient` | Gradient projection via QP | $O(|\mathcal{M}|)$ buffer |
-| GPM {cite}`saha2021gradient` | Subspace gradient projection | $O(r \cdot \|\theta\|_\text{layer})$ per task |
-| Progressive nets {cite}`rusu2016progressive` | Frozen columns + lateral connections | $O(T \cdot \|\theta\|)$ |
+| DER [@buzzega2020dark] | Stored exemplars + logit distillation | $O(|\mathcal{M}| \cdot C)$ |
+| GEM [@lopez2017gradient] | Gradient projection via QP | $O(|\mathcal{M}|)$ buffer |
+| GPM [@saha2021gradient] | Subspace gradient projection | $O(r \cdot \|\theta\|_\text{layer})$ per task |
+| Progressive nets [@rusu2016progressive] | Frozen columns + lateral connections | $O(T \cdot \|\theta\|)$ |
 
 Several open problems remain active areas of research:
 

@@ -106,7 +106,7 @@ $$
 
 The optimal proposal is the posterior itself (giving zero variance), but that is not available in practice.
 
-**Annealed importance sampling (AIS)** {cite}`neal2001annealed` constructs a good proposal by defining a sequence of distributions that anneal from the prior to the posterior:
+**Annealed importance sampling (AIS)** [@neal2001annealed] constructs a good proposal by defining a sequence of distributions that anneal from the prior to the posterior:
 
 $$
 f_t(\boldsymbol{\theta}) \propto p(\boldsymbol{\theta} \mid \mathcal{M}_i) \, p(\mathbf{x} \mid \boldsymbol{\theta}, \mathcal{M}_i)^{\beta_t},
@@ -132,7 +132,7 @@ For exponential families this objective is available in closed form; for more co
 - It is most meaningful for **finite, discrete sets of models** $\{\mathcal{M}_i\}$.
 - The marginal likelihood **does not measure generalization**. It measures the expected probability of the *observed data under the prior*, not the probability of *new data under the posterior*.
 
-Research on Bayesian model comparison and marginal likelihood estimation remains active {cite}`lotfi2022bayesian`.
+Research on Bayesian model comparison and marginal likelihood estimation remains active [@lotfi2022bayesian].
 
 ## Posterior Predictive Checks
 

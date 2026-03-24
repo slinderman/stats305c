@@ -19,7 +19,7 @@ Students should be comfortable with basic probability and statistics as well as 
 - Office hours:
   - Weds 3:00-4:00pm in CoDA Office (Scott)
   - TBD (Aymen)
-- Project deliverables due approximately every two weeks on Monday at 11:59pm (see {doc}`project`)
+- Project deliverables due approximately every two weeks on Monday at 11:59pm (see [Course Project](project.md))
 
 ## Books
 In addition to the lecture notes, you may find these textbooks helpful:

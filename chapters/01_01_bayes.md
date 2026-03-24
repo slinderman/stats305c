@@ -17,7 +17,7 @@ A central theme is that *probabilistic models* provide a unified language for al
 
 ## Box's Loop
 
-How should we go about building and using probabilistic models? A useful guiding framework is **Box's loop** {cite}`blei2014build`, named after the statistician George Box (of "all models are wrong, but some are useful" fame). The loop has three stages:
+How should we go about building and using probabilistic models? A useful guiding framework is **Box's loop** [@blei2014build], named after the statistician George Box (of "all models are wrong, but some are useful" fame). The loop has three stages:
 
 1. **Build:** propose a probabilistic model — a joint distribution over data and parameters — that encodes your assumptions about how the data were generated.
 2. **Compute:** perform inference to find the posterior distribution of the parameters given the observed data.
@@ -28,7 +28,7 @@ Then repeat. Good probabilistic modeling is an iterative process: a simpler mode
 ```{figure} ../figures/lecture1/boxsloop.jpeg
 :name: fig-boxsloop
 :align: center
-Box's loop: the iterative cycle of model building, inference, and criticism. Figure from {cite}`blei2014build`.
+Box's loop: the iterative cycle of model building, inference, and criticism. Figure from [@blei2014build].
 ```
 
 ## The Bayesian Approach
