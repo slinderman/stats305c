@@ -1,6 +1,6 @@
 # Course Project
 
-Statistics is fundamentally an applied field. The methods and algorithms we study — MCMC, variational inference, hidden Markov models, diffusion models — exist to help scientists and practitioners reason rigorously about real-world phenomena. This course is organized around an **extended research project** in which you apply the tools of probabilistic machine learning to a real problem of your choosing. The project is designed to simulate the experience of doing real applied statistics research.  The goal is not to produce a publishable paper or a state-of-the-art result—it is to practice the full craft of applied statistics with honesty, rigor, and curiosity.
+Statistics is fundamentally an applied field. The methods and algorithms we study — MCMC, variational inference, hidden Markov models, generative models — can help scientists and practitioners reason rigorously about real-world phenomena. This course is organized around an **extended research project** in which you apply these methods to a real problem of your choosing. The project is designed to simulate the experience of doing real applied statistics research. The goal is not to produce a publishable paper or a state-of-the-art result — it is to practice the full craft of applied statistics with honesty, rigor, and curiosity.
 
 You will follow the iterative cycle known as **Box's Loop**: 
 
@@ -12,9 +12,11 @@ Box's loop: the iterative cycle of model building, inference, and criticism. Fig
 
 There are **four milestones** throughout the quarter, each corresponding to one stage of the loop. After each milestone, your team presents a one-slide summary at a **lab meeting**, which will take place during the class period. The quarter culminates in an **8-page research paper** in the AISTATS format.
 
+
 ## Teams
 
-You are required to work **in teams of two** —- collaboration is a key component of applied statistics, and it takes practice. You should find your partner in Week 1. If your partner drops the course, we will help you find a new partner.
+You are required to work **in teams of two** — collaboration is a key component of applied statistics, and it takes practice. You should find your partner in Week 1. If your partner drops the course, we will help you find a new partner.
+
 
 ## Choosing a Problem
 
@@ -35,13 +37,12 @@ You do **not** need to invent a new problem. You may:
 
 If you replicate an existing paper, you must go beyond simple replication — probe the assumptions, compare alternative models, or extend the analysis in a meaningful direction.
 
-**What to avoid.** Purely methodological projects ("we compare five VI algorithms on synthetic data") are not appropriate. The project must be grounded in a real applied problem; methods are the tools, not the subject.
+**What to avoid.** Methods for the sake of methods. ("A comparison of five VI algorithms on synthetic data" is not an acceptable course project.) The project must be grounded in a real applied problem. If you need to develop new methods to solve that problem, great! But the best methodological research always stems from a real world problem.
 
----
 
 ## Milestones
 
-There are four milestones, due roughly every two weeks on **Sunday at 11:59 pm**. Each is a short written report (1–2 pages) that advances your project by one stage of Box's Loop. Milestones are cumulative: each builds directly on the previous. You will present the deliverable for each milestone in the Lab Meeting the week after the due date (see below)
+There are four milestones, due roughly every two weeks on **Sunday at 11:59 pm**. Each is a short written report (1–2 pages) that advances your project by one stage of Box's Loop. Milestones are cumulative: each builds directly on the previous. You will present the deliverable for each milestone in the Lab Meeting the week after the due date (see below).
 
 ### Milestone 1 — Problem Formulation (Week 2)
 
@@ -50,15 +51,14 @@ There are four milestones, due roughly every two weeks on **Sunday at 11:59 pm**
 Describe the problem you intend to study:
 
 - **Scientific or applied question.** What are you trying to answer, and why does it matter?
-- **Data source.** What data exists (or can be collected)? Include a brief description of the format, size, and any known quality issues.
+- **Data source.** What data exists? Include a brief description of the format, size, and any known quality issues.
 - **Statistical framing.** How can probabilistic modeling help? What are the key sources of uncertainty? What would a reasonable model look like at a high level?
-- **Related work.** Cite 2–3 relevant papers or analyses. If you are replicating a paper, identify it here.
+- **Related work.** Cite 2–3 relevant papers or analyses. If you are building on an existing paper, identify it here.
 
-**Length:** 1–2 pages.
+**Submit:** A 1–2 page report with a link to your public GitHub repository that will track your progress on this project.
 
-**Pivot policy.** After receiving feedback on Milestone 1 you may revise your problem before proceeding. If the teaching staff identifies a significant issue (insufficient data, poor statistical fit, scope too large), we will flag it and allow a pivot. After Milestone 2, pivots require instructor approval.
+**Pivot policy.** After receiving feedback on Milestone 1 you may revise your problem before proceeding. If the teaching staff identifies a significant issue (insufficient data, poor statistical fit, scope too large), we will try to flag it early. After Milestone 2, pivots require instructor approval.
 
----
 
 ### Milestone 2 — Data and Exploratory Analysis (Week 4)
 
@@ -70,9 +70,8 @@ Obtain and explore your data:
 - **Exploratory analysis.** Visualize the data. Describe patterns, anomalies, and distributional properties. What do you observe? What remains unexplained?
 - **Refined model sketch.** Based on your EDA, sharpen your description of the model you plan to build. What distributional assumptions seem reasonable? What latent structure might be present?
 
-**Length:** 1–2 pages plus figures. A Jupyter notebook with embedded narrative is acceptable.
+**Submit:** A 1–2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress over this two-week period, including the Jupyter notebooks used to perform the analyses.
 
----
 
 ### Milestone 3 — Model and Inference (Week 6)
 
@@ -85,9 +84,8 @@ Implement a probabilistic model and fit it to your data:
 - **Posterior analysis.** Summarize and visualize the posterior. What do the results tell you about your problem?
 - **Baseline comparison.** Compare your probabilistic model to a simpler baseline. Does the added complexity help? Be honest.
 
-**Length:** 1–2 pages plus figures and code.
+**Submit:** A 1–2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress, including the code and notebooks used to generate your results.
 
----
 
 ### Milestone 4 — Criticism and Revision (Week 8)
 
@@ -100,19 +98,22 @@ Critically evaluate and improve your model:
 - **Revision.** Make at least one substantive improvement motivated by your criticism — a revised likelihood, a different prior, an alternative algorithm, or a different model family.
 - **Comparison.** Report results for both the original and revised models. Which is better, and by what criterion?
 
-**Length:** 1–2 pages plus figures and code.
+**Submit:** A 1–2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress, including the code and notebooks used to generate your results.
+
 
 ## Lab Meetings
 
-Following each milestone submission, the class period is devoted to a **lab meeting** -— a flipped-classroom session that simulates the rhythm of a real research group. The class is split into two groups (Monday and Wednesday teams); you will be assigned to one group and should attend only your assigned meeting.
+In the weeks following each milestone submission, the class periods will be devoted to **lab meetings** — flipped-classroom sessions that simulate the rhythm of a real research group. The class is split into two groups (Monday and Wednesday teams); you will be assigned to one group and should attend only your assigned meeting.
 
 The lab meeting format is:
 
 - **Each team presents one slide** (≈ 3 minutes) summarizing their milestone: what they did, what they found, and what questions or problems they encountered.
-- **Other teams give feedback** (≈ 5 minutes) asking questions, suggesting ideas, and pointing out potential issues.
+- **Your peers give feedback** (≈ 5 minutes) asking questions, suggesting ideas, and pointing out potential issues.
+
 The teaching staff will facilitate the discussion.
 
 **Participation in lab meetings is a major component of your grade.** This includes both presenting clearly and engaging substantively with other teams' work.
+
 
 ## Final Report
 
@@ -130,14 +131,15 @@ Required sections:
 
 Code must be in a public GitHub repository linked from the report. The commit history should reflect iterative development throughout the quarter — a repository with a single commit made the night before the deadline is a red flag.
 
-**Length:** 8 pages, excluding references and appendices.
+**Length:** 8 pages, excluding references. Appendices are not allowed.
+
 
 
 ## AI Use Policy
 
 The use of LLMs and AI coding assistants (ChatGPT, Claude, GitHub Copilot, etc.) is **permitted and in some cases encouraged**. These tools can accelerate data processing, help debug code, suggest modeling approaches, and assist with writing. Learning to use AI effectively is itself a valuable skill.
 
-However, the **scientific judgment** must be yours: choosing a meaningful question, deciding what data is appropriate, evaluating whether a model makes sense, and interpreting what your results actually mean. AI tools are poor substitutes for genuine domain knowledge and statistical reasoning. The lab meetings exist precisely to surface this distinction — shallow AI-generated analysis tends to fall apart under the questioning of peers who are genuinely curious about the problem.
+However, the **scientific judgment** must be yours: choosing a meaningful question, deciding what data is appropriate, evaluating whether a model makes sense, and interpreting what your results actually mean. The lab meetings exist precisely to surface this distinction — shallow AI-generated analysis tends to fall apart under questioning.
 
 **If you use AI tools**, your final report must include a **Responsible AI Use** section describing:
 
@@ -148,13 +150,14 @@ However, the **scientific judgment** must be yours: choosing a meaningful questi
 The responsible use section is not a confession; it is evidence of critical thinking.
 
 
+
 ## Getting Started
 
 A few suggestions for choosing a good problem:
 
 - **Look at papers you already find interesting.** If you are in a research group, talk to your advisor about available datasets and open questions. If not, browse recent issues of journals in a field you care about (neuroscience, economics, epidemiology, ecology) and look for studies that used statistical methods.
-- **Prioritize real data over synthetic.** Simulated data removes the messiness that makes applied statistics interesting and difficult.
+- **Prioritize real data over synthetic.** Simulated data can be incredibly useful for validating your methods but it removes the messiness that makes applied statistics interesting and difficult. Start with real data, then use simulated data to isolate and test specific aspects of your model and algorithm.
 - **Scope down early.** A narrowly focused analysis of one dataset is better than a broad comparison across many.
 - **The answer can be "the simple method works fine."** Some of the most useful applied statistics papers conclude that a simple model fits the data well and complex extensions are not warranted. That is a valid and valuable conclusion.
 
-If you are stuck, the teaching staff will help you brainstorm during office hours in the first week. Come with a general domain in mind and we will work from there.
+If you are stuck, the teaching staff will help you brainstorm during office hours in the first few weeks. Come with a general domain in mind and we will work from there.

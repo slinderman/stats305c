@@ -7,7 +7,7 @@ Stanford University
 ---
 
 ## Course Description
-Probabilistic modeling and inference of multivariate data. Topics may include multivariate Gaussian models, probabilistic graphical models, MCMC and variational Bayesian inference, dimensionality reduction, principal components, factor analysis, matrix completion, topic modeling, and state space models. Extensive work with data involving Python programming using PyTorch.
+This course will teach you how to do applied statistics research. We will follow Box's Loop: an iterative approach of asking a scientific question, collecting data to answer that question, building a model, performing statistical inference, and then criticizing and revising the model in light of your findings. We will develop the statistical tools to carry out this process: multivariate Gaussian models, graphical models, MCMC, variational Bayesian inference, latent variable models, state space models, Transformers, diffusion models, and more. We will practice this process through an extended research project and a flipped classroom with biweekly in-class lab meetings.
 
 ## Prerequisites
 Students should be comfortable with basic probability and statistics as well as multivariate calculus and linear algebra. 
@@ -20,19 +20,21 @@ Students should be comfortable with basic probability and statistics as well as 
   - Weds 3:00-4:00pm in CoDA Office (Scott)
   - TBD (Aymen)
 
-We will alternate between **traditional lectures** on odd-numbered weeks and **lab meetings** on even-numbered weeks. The lab meetings will be a flipped classroom -- each project team will present their deliverable for that week. See the Assignments section below and the [Course Project](project.md) for more detail.
+We will alternate between **traditional lectures** on odd-numbered weeks and **lab meetings** on even-numbered weeks. The lab meetings will be a flipped classroom -- each project team will present their deliverable for that week. See the next section and the [Course Project](project.md) for more detail.
 
-## Deliverables
+## Assignments
 
-The course will be organized around an extended project that is carried out throughout the quarter. There will be deliverables due every two weeks on **Sunday night at 11:59pm**. We will have lab meetings the week following the deliverables in which each project team will briefly present their progress. Each team will be assigned to either the Monday or the Wednesday group, and they should only attend the lab meeting they are assigned to. See the [Course Project](project.md) page for more detail.
+### Project Deliverables
+There will be project deliverables due every two weeks on **Sunday night at 11:59pm**. We will have lab meetings the week following the deliverables in which each project team will briefly present their progress. Each team will be assigned to either the Monday or the Wednesday group, and they should only attend the lab meeting they are assigned to. See the [Course Project](project.md) page for more detail.
 
-Additionally, there will be one math problem assigned each week, also due on **Sunday night at 11:59pm**. These problems will help you test your reasoning abilities and, if you're a PhD student, prepare for quals.
+### Math Problems
+Additionally, there will be one math problem assigned each week, due the following **Wednesday night at 11:59pm**. These problems will help you test your reasoning abilities and, if you're a PhD student, prepare for quals.
 
 ## Schedule
 
 The course will teach you the skills necessary to follow Box's Loop: formulate a problem, collect data, build a model, perform inference, criticize, revise, repeat. Topics from Parts I–III (Foundations, Latent Variable Models, Inference Algorithms) are interleaved so that each new model is paired with the inference tools needed to fit it. Part IV (Sequence Models) occupies the final few weeks. We won't cover Part V (Stochastic Processes) this quarter, except in passing, but some chapters will reference that material in case you want to dig deeper on your own.
 
-As described above, the course alternates between traditional lectures and lab meetings, where we will flip the classroom. You will be assigned to either the Monday or the Wednesday lab meeting; you should not attend both. During lab meetings, you will give a short (1 slide, 5 minute) presentation of your deliverable, and you will give feedback to others.
+As described above, the course alternates between traditional lectures and lab meetings, where we will flip the classroom. You will be assigned to either the Monday or the Wednesday lab meeting; you should not attend both. During lab meetings, you will give a short (1 slide, 3 minute) presentation of your deliverable, and you will give feedback to others.
 
 Project deliverable due dates are marked below.
 
@@ -71,8 +73,8 @@ Project deliverable due dates are marked below.
 |-----------|--------|
 | Milestones (4 × 12.5%) | 50% |
 | Final report | 25% |
-| Lab meeting participation | 10% |
-| Weekly math problems | 15% |
+| Lab meeting participation | 15% |
+| Weekly math problems | 10% |
 
 Each milestone is graded on an **A, B, C, or F** scale:
 

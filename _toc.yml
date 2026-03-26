@@ -2,8 +2,7 @@ format: jb-book
 root: index
 
 parts:
-  - caption: "Course Project"
-    chapters:
+  - chapters:
     - file: project
 
   - caption: "Part I: Foundations"

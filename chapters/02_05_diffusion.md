@@ -417,6 +417,13 @@ Denoising diffusion probabilistic models frame generative modeling as learning t
 :class: seealso
 This chapter completes Part II. The continuous-time SDE formulation of diffusion is developed formally in:
 - [Stochastic Differential Equations](sdes) — provides the mathematical framework for the reverse-time SDE and score-based generation
+- [Discrete Diffusion Models](discrete-diffusion) — extends the DDPM framework to discrete state spaces such as language and protein sequences
+:::
+
+:::{admonition} Recommended Reading
+:class: reading
+[@ho2020denoising], "Denoising Diffusion Probabilistic Models."
+[@song2020score], "Score-Based Generative Modeling through Stochastic Differential Equations."
 :::
 
 

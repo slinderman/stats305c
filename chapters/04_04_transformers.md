@@ -206,3 +206,8 @@ Transformers achieve parallelism over a full sequence by replacing the sequentia
 - [Linear Attention and Deep SSMs](linear-attention) — replaces softmax attention with linear-time approximations and connects transformers back to structured state space models
 :::
 
+:::{admonition} Recommended Reading
+:class: reading
+[@turner2023introduction], "An Introduction to Transformers."
+:::
+
