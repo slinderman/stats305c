@@ -46,7 +46,7 @@ There are four milestones, due roughly every two weeks on **Sunday at 11:59 pm**
 
 ### Milestone 1 — Problem Formulation (Week 2)
 
-*Corresponding to: "Formulate a problem"*
+*Corresponding to: "Formulate a problem"* **This milestone will be completed individually.** 
 
 Describe the problem you intend to study:
 
@@ -55,12 +55,11 @@ Describe the problem you intend to study:
 - **Statistical framing.** How can probabilistic modeling help? What are the key sources of uncertainty? What would a reasonable model look like at a high level?
 - **Related work.** Cite 2–3 relevant papers or analyses. If you are building on an existing paper, identify it here.
 
-**Submit:** A 1–2 page report with a link to your public GitHub repository that will track your progress on this project.
+**Deliverable:** A 1 page report and a 1-slide (2 minute) pitch delivered in lab meeting during Week 2.
 
-**Pivot policy.** After receiving feedback on Milestone 1 you may revise your problem before proceeding. If the teaching staff identifies a significant issue (insufficient data, poor statistical fit, scope too large), we will try to flag it early. After Milestone 2, pivots require instructor approval.
+**Next step.** After presenting your pitch and hearing others', you will **find a partner to work with for the rest of the course.** You and your teammate will refine the problem statement and begin working towards Milestone 2.
 
-
-### Milestone 2 — Data and Exploratory Analysis (Week 4)
+### Milestone 2 — Data and Exploratory Analysis (Week 4) **This milestone will be completed by each team of two.** 
 
 *Corresponding to: "Collect data"*
 
@@ -70,12 +69,12 @@ Obtain and explore your data:
 - **Exploratory analysis.** Visualize the data. Describe patterns, anomalies, and distributional properties. What do you observe? What remains unexplained?
 - **Refined model sketch.** Based on your EDA, sharpen your description of the model you plan to build. What distributional assumptions seem reasonable? What latent structure might be present?
 
-**Submit:** A 1–2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress over this two-week period, including the Jupyter notebooks used to perform the analyses.
+**Deliverable:** A 1–2 page report with your most important figures, and a link to your public GitHub repository. Your repository should have several commits documenting your progress over this two-week period, including the Jupyter notebooks used to perform the analyses.
 
 
 ### Milestone 3 — Model and Inference (Week 6)
 
-*Corresponding to: "Build a model" and "Perform inference"*
+*Corresponding to: "Build a model" and "Perform inference"* **This milestone will be completed by each team of two.** 
 
 Implement a probabilistic model and fit it to your data:
 
@@ -84,12 +83,12 @@ Implement a probabilistic model and fit it to your data:
 - **Posterior analysis.** Summarize and visualize the posterior. What do the results tell you about your problem?
 - **Baseline comparison.** Compare your probabilistic model to a simpler baseline. Does the added complexity help? Be honest.
 
-**Submit:** A 1–2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress, including the code and notebooks used to generate your results.
+**Deliverable:** A 1–2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress, including the code and notebooks used to generate your results.
 
 
 ### Milestone 4 — Criticism and Revision (Week 8)
 
-*Corresponding to: "Criticize the model" and "Revise"*
+*Corresponding to: "Criticize the model" and "Revise"* **This milestone will be completed by each team of two.** 
 
 Critically evaluate and improve your model:
 
@@ -98,15 +97,16 @@ Critically evaluate and improve your model:
 - **Revision.** Make at least one substantive improvement motivated by your criticism — a revised likelihood, a different prior, an alternative algorithm, or a different model family.
 - **Comparison.** Report results for both the original and revised models. Which is better, and by what criterion?
 
-**Submit:** A 1–2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress, including the code and notebooks used to generate your results.
+**Deliverable:** A 1–2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress, including the code and notebooks used to generate your results.
 
 
 ## Lab Meetings
 
-In the weeks following each milestone submission, the class periods will be devoted to **lab meetings** — flipped-classroom sessions that simulate the rhythm of a real research group. The class is split into two groups (Monday and Wednesday teams); you will be assigned to one group and should attend only your assigned meeting.
+In the weeks following each milestone submission, the class periods will be devoted to **lab meetings** — flipped-classroom sessions that simulate the rhythm of a real research group. The class is split into two groups (Monday and Wednesday teams); you will be assigned to one group and should attend only your assigned meeting. The lab meeting format is as follows.
 
-The lab meeting format is:
+For Milestone 1, each **individual** will present their pitch with 1 slide, maximum 2 minutes, with 2 minutes for discussion after.
 
+For Milestones 2-4:
 - **Each team presents one slide** (≈ 3 minutes) summarizing their milestone: what they did, what they found, and what questions or problems they encountered.
 - **Your peers give feedback** (≈ 5 minutes) asking questions, suggesting ideas, and pointing out potential issues.
 
@@ -117,7 +117,7 @@ The teaching staff will facilitate the discussion.
 
 ## Final Report
 
-The final report is due on the **last day of class**. It is an 8-page research paper written in the **AISTATS format**, as if you were submitting to a machine learning conference. It should synthesize all four milestones into a coherent, self-contained document.
+The final report is due on the **same day our final would usually be held**. It is an 8-page research paper written in the **AISTATS format**, as if you were submitting to a machine learning conference. It should synthesize all four milestones into a coherent, self-contained document.
 
 Required sections:
 
@@ -134,7 +134,6 @@ Code must be in a public GitHub repository linked from the report. The commit hi
 **Length:** 8 pages, excluding references. Appendices are not allowed.
 
 
-
 ## AI Use Policy
 
 The use of LLMs and AI coding assistants (ChatGPT, Claude, GitHub Copilot, etc.) is **permitted and in some cases encouraged**. These tools can accelerate data processing, help debug code, suggest modeling approaches, and assist with writing. Learning to use AI effectively is itself a valuable skill.
@@ -148,7 +147,6 @@ However, the **scientific judgment** must be yours: choosing a meaningful questi
 3. **What the AI got wrong or missed.** Honest reflection on failures demonstrates that you were engaged, not passive.
 
 The responsible use section is not a confession; it is evidence of critical thinking.
-
 
 
 ## Getting Started
