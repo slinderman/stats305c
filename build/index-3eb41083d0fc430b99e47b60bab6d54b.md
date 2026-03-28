@@ -45,6 +45,7 @@ Project deliverable due dates are marked below.
 | Apr 5  | **Deliverable 1 Due** (1pg report per person) | | 
 | Apr 6  | **Watch:** Mixture Models <br> **Attend:** Lab Meeting (Monday Teams) | Ch 2.1 |
 | Apr 8  | **Watch:** Expectation Maximization <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 3.3  |
+| Apr 10  | **Required:** You must find your teammate by this date. |  |
 | Apr 13 | **Attend:** Probabilistic PCA | Ch 2.3 |
 | Apr 15 | **Attend:** Markov Chain Monte Carlo | Ch 3.1 |
 | Apr 19 | **Deliverable 2 Due** (1-2pg report per team)| |
