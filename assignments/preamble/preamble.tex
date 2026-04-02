@@ -1,0 +1,172 @@
+% \RequirePackage[l2tabu, orthodox]{nag}
+
+
+% \usepackage[left=1.in, right=1.in, top=1.25in, bottom=1.25in]{geometry}
+
+% FONTS
+%\usepackage[T1]{fontenc}
+
+% Replace default Latin Modern typewriter with its proportional counterpart
+% http://www.tug.dk/FontCatalogue/lmoderntypewriterprop/
+%\renewcommand*\ttdefault{lmvtt}
+
+
+%%% OPTION 1 - Fourier Math + New Century Schoolbook + ParaType Sans
+
+% % Import Fourier Math (this imposes its own New Century Schoolbook type)
+% % http://www.ctan.org/tex-archive/fonts/fouriernc/
+%\usepackage{fouriernc}
+%\usepackage{amsmath}
+% % Replace with TeX Gyre Schola version of New Century Schoolbook (must scale!)
+% % http://www.tug.dk/FontCatalogue/tgschola/
+%\usepackage[scale=0.92]{tgschola}
+%\usepackage[scaled=0.88]{PTSans}
+
+%% OPTION 2 - MathDesign Math + Bitstream Charter + ParaType Sans
+
+% Import MathDesign (this brings along Bitstream Charter)
+% http://www.ctan.org/tex-archive/fonts/mathdesign/
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage{amsmath}
+\usepackage[scaled=0.92]{PTSans}
+
+
+% %%% OPTION 3 - MTPRO 2 Math + Termes Times + ParaType Sans
+
+% \usepackage{tgtermes}
+% \usepackage{amsmath}
+% \usepackage[subscriptcorrection,
+%             amssymbols,
+%             mtpbb,
+%             mtpcal,
+%             nofontinfo  % suppresses all warnings
+%            ]{mtpro2}
+% \usepackage{scalefnt,letltxmacro}
+% \LetLtxMacro{\oldtextsc}{\textsc}
+% \renewcommand{\textsc}[1]{\oldtextsc{\scalefont{1.10}#1}}
+% \usepackage[scaled=0.92]{PTSans}
+
+% Use default fonts here
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% \usepackage{titling}
+
+% % COLOR
+% \usepackage[table,usenames,dvipsnames]{xcolor}
+\definecolor{shadecolor}{gray}{0.9}
+
+% SPACING and TEXT
+\usepackage[final,expansion=alltext]{microtype}
+\usepackage[english]{babel}
+\usepackage[parfill]{parskip}
+\usepackage{afterpage}
+\usepackage{framed}
+\usepackage{verbatim}
+\usepackage{setspace}
+
+\newenvironment{exercise}[1]
+{
+    \itshape
+    \paragraph{Exercise: \textit{#1}}
+}
+{ 
+}
+
+
+% \usepackage[bottom]{footmisc}
+\usepackage[symbol]{footmisc}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+
+
+% FIGURES
+\usepackage{graphicx}
+\usepackage[labelfont={it, small}, 
+            textfont={small,singlespacing},
+            % justification={justified,RaggedRight},
+            singlelinecheck=false,
+            margin=0pt]{caption}
+\usepackage[format=hang]{subcaption}
+% \usepackage{ccaption}
+
+% % APPENDIX FIGURES
+% \usepackage{chngcntr}
+
+% % TABLES
+% \usepackage{booktabs}
+% \usepackage{longtable}
+% \usepackage{hhline}
+
+% ALGORITHMS
+\usepackage[algoruled]{algorithm2e}
+\usepackage{listings}
+\usepackage{fancyvrb}
+\fvset{fontsize=\normalsize}
+
+\usepackage{minted}
+\usemintedstyle{tango}
+
+% % THEOREMS
+\usepackage{amsthm}
+\newtheorem{proposition}{Proposition}
+% \newtheorem{lemma}{Lemma}
+
+% % BIBLIOGRAPHY
+\usepackage{natbib}
+
+% HYPERREF
+% \usepackage[colorlinks,linktoc=all]{hyperref}
+% \usepackage[all]{hypcap}
+\hypersetup{citecolor=MidnightBlue}
+\hypersetup{linkcolor=black}
+\hypersetup{urlcolor=MidnightBlue}
+
+% CLEVEREF must come after HYPERREF
+\usepackage[nameinlink]{cleveref}
+
+% ACRONYMS
+\usepackage[acronym,smallcaps,nowarn]{glossaries}
+% \makeglossaries
+
+% COLOR DEFINITIONS
+\definecolor{lightblue}{HTML}{6FC3FF}
+\newcommand{\red}[1]{\textcolor{BrickRed}{#1}}
+\newcommand{\orange}[1]{\textcolor{BurntOrange}{#1}}
+\newcommand{\green}[1]{\textcolor{OliveGreen}{#1}}
+\newcommand{\blue}[1]{\textcolor{MidnightBlue}{#1}}
+\newcommand{\gray}[1]{\textcolor{black!60}{#1}}
+\definecolor{light-gray}{gray}{0.95}
+
+% LISTINGS DEFINTIONS
+\lstdefinestyle{mystyle}{
+    commentstyle=\color{OliveGreen},
+    keywordstyle=\color{BurntOrange},
+    numberstyle=\tiny\color{black!60},
+    stringstyle=\color{MidnightBlue},
+    basicstyle=\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\usepackage[colorinlistoftodos,
+            prependcaption,
+            textsize=small,
+            backgroundcolor=yellow,
+            linecolor=lightgray,
+            bordercolor=lightgray]{todonotes}
+
+\usepackage{soul}
+
+\usepackage{media9}
+
+
+\usepackage{xcolor,colortbl}
