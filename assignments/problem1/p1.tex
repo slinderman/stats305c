@@ -1,0 +1,76 @@
+\documentclass[11pt]{article}
+
+\input{../preamble/preamble_latex.tex}
+\input{../preamble/preamble_math.tex}
+
+
+\title{STATS 305C: Problem Set 1}
+
+\begin{document}
+\maketitle
+
+\noindent
+Let $\mbX=\{\mbx_{n}\}_{n=1}^{N}$ denote a dataset with data points $\mbx_{n} \in \reals^D$. 
+We model the data as i.i.d. Gaussian random variables,
+\begin{align*}
+    \mbx_{n} \mid \mbmu, \mbSigma &\iid{\sim} \cN(\mbmu, \mbSigma), \qquad n=1,\dots,N.
+\end{align*}
+where $\mbmu = (\mu_1,\dots,\mu_D)^\top \in \reals^D$ is the mean and $\mbSigma = \mathrm{diag}(\sigma_{1}^2,\dots,\sigma_{D}^2)$ is a diagonal covariance matrix.
+
+For the prior, we model each variance parameter as a scaled inverse-$\chi^2$ random variable,
+\begin{align*}
+    \sigma_{d}^2 &\sim \chi^{-2}(\nu_0, \sigma_0^2),
+\end{align*}
+and the means as conditionally Gaussian given the variances,
+\begin{align*}
+    \mu_{d} \mid \sigma_{d}^2 &\sim \cN\left(\mu_0, \frac{\sigma_{d}^2}{\kappa_{0}}\right).
+\end{align*}
+The hyperparameters of this model are $\{\mu_{0}, \sigma_{0}^2, \kappa_{0}, \nu_{0}\}$.
+
+\begin{enumerate}[label=(\alph*)]
+    \item Show that the posterior $p(\mu_{d},\sigma_{d}^2 \mid \mbX)$ is normal inverse chi-squared.
+    \begin{align*}
+    (\mu_{d},\sigma_{d}^2) \mid \mbX \sim \mathrm{NIX}(\mu_{d}', \kappa_{d}', \nu_{d}', \sigma_{d}'^2)
+    \end{align*}
+    and identify the posterior parameters $\mu_{d}',\kappa_{d}',\nu_{d}', \sigma_{d}'^2$.
+
+    \item Dropping the subscripts for now, the NIX density can be written as
+    \begin{align*}
+    \mathrm{NIX}(\mu,\sigma^2 \mid \mu',\kappa',\nu', \sigma'^2)
+    =
+    \frac{1}{Z(\nu',\sigma'^2,\kappa',\mu')}
+    \sigma^{-(\nu'+3)}
+    \exp\!\left(
+    -\frac{1}{2\sigma^2}\Big[\nu' \sigma'^2+\kappa'(\mu-\mu')^2\Big]
+    \right)
+    \end{align*}
+    Derive $Z(\nu',\sigma'^2,\kappa',\mu')$ explicitly. 
+    
+    \item Now suppose that $\sigma_0^2$ is unknown and takes values in a finite grid of points,
+    $\cV = \{v^{(1)},\dots,v^{(P)}\}$,
+    with prior probabilities $\pi_p$ for $p=1,\dots,P$.
+
+    Show that the marginal likelihood for a group of data points given that $\sigma_0^2 = v^{(p)}$ is
+    \begin{align*}
+    p(\mbX \mid \sigma_0^2=v^{(p)})
+    \propto
+    \prod_{d=1}^D \frac{Z(\nu_{d}', \sigma_{d,p}'^2, \kappa_{d}',\mu_{d}')}
+         {Z(\nu_0, v_p, \kappa_0, \mu_0)}
+    \end{align*}
+    where $\sigma_{d,p}'^2$ corresponds to $\sigma_{d}'^2$ from part (a) but with $\sigma_0^2=v^{(p)}$.
+    
+    \item Show that the full posterior can be written as the mixture
+    \begin{align*}
+        p(\sigma_0^2,\mbmu,\mbSigma \mid \mbX)
+        =
+        \sum_{p=1}^P w_{p}\,
+        \delta_{v^{(p)}}(\sigma_0^2)\, \prod_{d=1}^D
+        \mathrm{NIX}(\mu_{d},\sigma_{d}^2 \mid \mu_{d}',\kappa_{d}',\nu_{d}', \sigma_{d,p}'^2)
+    \end{align*}
+    where
+    \begin{align*}
+        w_{p} = p(\sigma_0^2=v^{(p)} \mid \mbX) \propto
+        \pi_p \, p(\mbX \mid \sigma_0^2=v^{(p)}).
+    \end{align*}
+\end{enumerate}
+\end{document}
