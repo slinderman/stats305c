@@ -48,14 +48,14 @@ There are four milestones, due roughly every two weeks on **Sunday at 11:59 pm**
 
 *Corresponding to: "Formulate a problem"* **This milestone will be completed individually.** 
 
-Describe the problem you intend to study:
+Describe the problem you propose to study:
 
 - **Scientific or applied question.** What are you trying to answer, and why does it matter?
 - **Data source.** What data exists? Include a brief description of the format, size, and any known quality issues.
 - **Statistical framing.** How can probabilistic modeling help? What are the key sources of uncertainty? What would a reasonable model look like at a high level?
 - **Related work.** Cite 2–3 relevant papers or analyses. If you are building on an existing paper, identify it here.
 
-**Deliverable:** A 1 page report and a 1-slide (2 minute) pitch delivered in lab meeting during Week 2.
+**Deliverable:** A 1 page report (your AI disclosure and references may go on page 2) and a 1-slide (2 minute) pitch delivered in lab meeting during Week 2.
 
 **Next step.** After presenting your pitch and hearing others', you will **find a partner to work with for the rest of the course.** You and your teammate will refine the problem statement and begin working towards Milestone 2.
 
