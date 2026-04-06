@@ -17,8 +17,8 @@ Students should be comfortable with basic probability and statistics as well as 
 - Level: advanced undergrad and up
 - Grading basis: credit or letter grade
 - Office hours:
-  - Weds 3:00-4:00pm in CoDA E258 (Scott)
-  - TBD (Aymen)
+  - **Scott**: Wed 3:00-4:00pm in CoDA E258
+  - **Aymen**: Fri 3:00-5:00pm in Sequoia 207 (Bowker Room)
 
 We will alternate between **traditional lectures** on odd-numbered weeks and **lab meetings** on even-numbered weeks. The lab meetings will be a flipped classroom -- each project team will present their deliverable for that week. See the next section and the [Course Project](project.md) for more detail.
 
