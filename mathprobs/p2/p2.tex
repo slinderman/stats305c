@@ -11,23 +11,23 @@ Poisson distributions: with probability $\pi$ an observation is drawn from
 $\mathrm{Poi}(\mu_1)$, and with probability $1 - \pi$ it is drawn from
 $\mathrm{Poi}(\mu_0)$.
 \begin{enumerate}[label=(\alph*)]
-    \item Write out the log-likelihood $\ell(Y;\, \mu_0, \mu_1, \pi)$. Why is direct
+    \item Write out the marginal log-likelihood $\log p(Y;\, \theta)$ where $\theta = (\mu_0, \mu_1, \pi)$. Why is direct
     maximization of this log-likelihood difficult?
     \item Introduce latent binary labels $Z_1, \ldots, Z_n$, where $Z_i = 1$ means
     observation $i$ was drawn from the $\mathrm{Poi}(\mu_1)$ component.
     \begin{enumerate}[label=(\roman*)]
-        \item Specify the hierarchical model: the marginal distribution of $Z_i$
+        \item Specify the generative model: the marginal distribution of $Z_i$
         and the conditional distribution of $Y_i \mid Z_i$.
-        \item Write out the complete-data log-likelihood
-        $\ell(Y, Z;\, \mu_0, \mu_1, \pi)$.
+        \item Write out the log joint probability:
+        $\log p(Y, Z;\, \theta)$.
     \end{enumerate}
     \item We now use the EM algorithm to estimate the parameters in part~(a).
     \medskip
 
     \noindent\textit{E-step.}
-    Given current estimates
-    $\theta^{(t)} = \bigl(\mu_0^{(t)},\, \mu_1^{(t)},\, \pi^{(t)}\bigr)$,
-    compute the responsibilities
+    Let
+    $\theta^{(t)} = \bigl(\mu_0^{(t)},\, \mu_1^{(t)},\, \pi^{(t)}\bigr)$ denote the parameter estimates at iteration $t$ of EM.
+    Compute the responsibilities
     \begin{align*}
         w_i^{(t)}
         \;=\;
@@ -35,23 +35,23 @@ $\mathrm{Poi}(\mu_0)$.
         \;=\;
         \mathbb{P}_{\theta^{(t)}}(Z_i = 1 \mid Y_i),
     \end{align*}
-    then form the expected complete-data log-likelihood
+    then form the expected log joint probability,
     \begin{align*}
-        \mathbb{E}_{\theta^{(t)}}\!\left[\ell(Y, Z;\, \theta) \;\middle|\; Y\right].
+        \mathbb{E}_{\theta^{(t)}}\!\left[\log p(Y, Z;\, \theta) \;\middle|\; Y\right].
     \end{align*}
 
     \medskip
     \noindent\textit{M-step.}
-    Maximize the expected complete-data log-likelihood with respect to $\theta$ and
+    Maximize the expected log joint probability with respect to $\theta$ and
     show that the closed-form update equations are
     \begin{align*}
         \pi^{(t+1)}
         &\;=\;
-        \frac{1}{n}\sum_{i=1}^n w_i^{(t)}, \\[6pt]
+        \frac{1}{n}\sum_{i=1}^n w_i^{(t)}, &
         \mu_0^{(t+1)}
         &\;=\;
         \frac{\displaystyle\sum_{i=1}^n \bigl(1 - w_i^{(t)}\bigr)\,Y_i}
-             {\displaystyle\sum_{i=1}^n \bigl(1 - w_i^{(t)}\bigr)}, \\[6pt]
+             {\displaystyle\sum_{i=1}^n \bigl(1 - w_i^{(t)}\bigr)}, &
         \mu_1^{(t+1)}
         &\;=\;
         \frac{\displaystyle\sum_{i=1}^n w_i^{(t)}\,Y_i}
@@ -61,6 +61,6 @@ $\mathrm{Poi}(\mu_0)$.
     \medskip
     \noindent\textit{Convergence.}
     What quantity should you monitor to assess convergence? Explain why monitoring
-    the expected complete-data log-likelihood is not sufficient.
+    the expected log joint probability is not sufficient.
 \end{enumerate}
 \end{document}
