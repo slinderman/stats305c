@@ -1,0 +1,53 @@
+\documentclass[11pt]{article}
+\input{../preamble/preamble_latex.tex}
+\input{../preamble/preamble_math.tex}
+
+\title{STATS 305C: Week 3 Math Problem}
+\date{Due Weds April 22, 2026 at 11:59pm}
+
+\begin{document}
+\maketitle
+\noindent
+
+\paragraph{The Bayesian Lasso}
+The Lasso problem is an $L_1$ penalized least squares problem,
+\begin{align}
+    \cL(\mbw) &= \sum_{n=1}^N (y_n - \mbx_n^\top \mbw)^2 + \gamma \sum_{d=1}^D |w_d|.
+    \label{eq:lasso}
+\end{align}
+From a Bayesian perspective, minimizing $\cL(\mbw)$ is equivalent to \textit{maximum a posteriori} (MAP) estimation in the following Bayesian model,
+\begin{equation}
+\label{eq:bayes_lasso}
+\begin{aligned}
+    w_d &\iid{\sim} \mathrm{Lap}(\lambda) \\
+    y_n &\sim \cN(\mbx_n^\top \mbw, \sigma^2),
+\end{aligned}
+\end{equation}
+where $\mathrm{Lap}(\lambda)$ denotes a Laplace distribution with density $\mathrm{Lap}(w; \lambda) = \tfrac{\lambda}{2} e^{-\lambda |w|}$.
+
+\begin{enumerate}[label=(\alph*)]
+    \item Find a setting of $\lambda$ such that the MAP estimate of model~\eqref{eq:bayes_lasso} is the same as the minimizer of~\eqref{eq:lasso}. Your solution should be in terms of $\gamma$ and $\sigma^2$.
+    
+    \item The Laplace density can also be written as a \textit{scale mixtures of Gaussians},
+    \begin{align*}
+        \mathrm{Lap}(w; \lambda) = \frac{\lambda}{2} e^{-\lambda |w|} 
+        = \int_0^\infty \cN(w; 0, v) \cdot \mathrm{Exp}\Big(v; \tfrac{\lambda^2}{2} \Big) \dif v
+        = \int_0^\infty \frac{1}{\sqrt{2\pi v}} e^{-\frac{w^2}{2v}} \cdot \frac{\lambda^2}{2} e^{-\frac{\lambda^2v}{2}} \dif v
+    \end{align*}
+    Let $\mby = \{y_n\}_{n=1}^N$ and $\mbX = \{\mbx_n\}_{n=1}^N$. Use the integral representation above to write a joint distribution,
+    \begin{align*}
+        p(\mbw, \mbv, \mby \mid \mbX; \lambda, \sigma^2)
+    \end{align*}
+    on an extended space that includes the \textit{augmentation variables} ${\mbv = (v_1, \ldots, v_D)}$, such that the marginal distribution $p(\mbw, \mby \mid \mbX; \lambda, \sigma^2)$ matches that of the generative model described in eq.~\eqref{eq:bayes_lasso}.
+    
+    \item Derive a blocked Gibbs sampling algorithm to approximately sample the posterior distribution ${p(\mbw, \mbv \mid \mbX, \mby; \lambda, \sigma^2)}$, treating $\lambda$ and $\sigma^2$ as fixed hyperparameters. Derive the conditional distributions for each step.
+    
+    \textit{Hint: Consider the conditional distribution of $v_d^{-1}$ instead of $v_d$, and look up the inverse Gaussian distribution.}
+    % , which has density of the form,}
+    % \begin{align*}
+    %     \mathrm{IG}(x; \mu, \lambda) &= \sqrt{\frac{\lambda}{2 \pi x^3}} \exp \left\{ -\frac{\lambda (x -\mu)^2}{2 \mu^2 x} \right\}.
+    % \end{align*}
+    
+\end{enumerate}
+
+\end{document}
