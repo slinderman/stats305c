@@ -69,7 +69,7 @@ Obtain and explore your data:
 - **Exploratory analysis.** Visualize the data. Describe patterns, anomalies, and distributional properties. What do you observe? What remains unexplained?
 - **Refined model sketch.** Based on your EDA, sharpen your description of the model you plan to build. What distributional assumptions seem reasonable? What latent structure might be present?
 
-**Deliverable:** A 1–2 page report with your most important figures, and a link to your public GitHub repository. Your repository should have several commits documenting your progress over this two-week period, including the Jupyter notebooks used to perform the analyses.
+**Deliverable:** A 2 page report with your most important figures, and a link to your public GitHub repository. Your repository should have several commits documenting your progress over this two-week period, including the Jupyter notebooks used to perform the analyses.
 
 
 ### Milestone 3 — Model and Inference (Week 6)
@@ -83,7 +83,7 @@ Implement a probabilistic model and fit it to your data:
 - **Posterior analysis.** Summarize and visualize the posterior. What do the results tell you about your problem?
 - **Baseline comparison.** Compare your probabilistic model to a simpler baseline. Does the added complexity help? Be honest.
 
-**Deliverable:** A 1–2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress, including the code and notebooks used to generate your results.
+**Deliverable:** A 2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress, including the code and notebooks used to generate your results.
 
 
 ### Milestone 4 — Criticism and Revision (Week 8)
@@ -97,7 +97,7 @@ Critically evaluate and improve your model:
 - **Revision.** Make at least one substantive improvement motivated by your criticism — a revised likelihood, a different prior, an alternative algorithm, or a different model family.
 - **Comparison.** Report results for both the original and revised models. Which is better, and by what criterion?
 
-**Deliverable:** A 1–2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress, including the code and notebooks used to generate your results.
+**Deliverable:** A 2 page report with your most important figures. Your GitHub repository should have several commits documenting your progress, including the code and notebooks used to generate your results.
 
 
 ## Lab Meetings
