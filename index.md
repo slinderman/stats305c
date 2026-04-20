@@ -48,17 +48,17 @@ Project deliverable due dates are marked below.
 | Apr 10 | **Required:** You must find your teammate by this date. |  |
 | Apr 13 | **Attend:** Hierarchical Models | Ch 1.5 |
 | Apr 15 | **Attend:** Markov Chain Monte Carlo | Ch 3.1 |
-| Apr 19 | **Deliverable 2 Due** (1-2pg report per team)| |
+| Apr 19 | **Deliverable 2 Due** (2pg report per team)| |
 | Apr 20 | **Watch:** Probabilistic PCA <br> **Attend:** Lab Meeting (Monday Teams) | Ch 2.3 |
 | Apr 22 | **Watch:** Variational Autoencoders <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 2.4 | 
 | Apr 27 | **Attend:** Hidden Markov Models <br> **Attend:** Lab Meeting (Monday Teams) | Ch 4.1 |
 | Apr 29 | **Attend:** Linear Dynamical Systems <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 4.2 |
-| May 3  | **Deliverable 3 Due** (1-2pg report per team)| | 
+| May 3  | **Deliverable 3 Due** (2pg report per team)| | 
 | May 4  | **Watch:** Gaussian Processes <br> **Attend:** Lab Meeting (Monday Teams) | Ch 5.1 |
 | May 6  | **Watch:** Poisson Processes <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 5.3 | 
 | May 11 | **Attend:** Transformers | Ch 4.4 |
 | May 13 | **Attend:** Linear Attention and Deep SSMs | Ch 4.5 |
-| May 17 | **Deliverable 4 Due** (1-2pg report per team)| |
+| May 17 | **Deliverable 4 Due** (2pg report per team)| |
 | May 18 | **Watch:** Parallelizing Nonlinear RNNs <br> **Attend:** Lab Meeting (Monday Teams) |   |
 | May 20 | **Watch:** Continual Learning <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 3.7 |
 | *May 25* | *No class — Memorial Day* | |
