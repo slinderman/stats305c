@@ -1,0 +1,38 @@
+\documentclass[11pt]{article}
+\input{../preamble/preamble_latex.tex}
+\input{../preamble/preamble_math.tex}
+
+\title{STATS 305C: Week 4 Math Problem}
+\date{Due Weds April 29, 2026 at 11:59pm}
+\begin{document}
+\maketitle
+\noindent
+Consider the following generative model for observations $\mathbf{x} \in \mathbb{R}^D$
+and latent variables $z \in \mathbb{R}$,
+\begin{align*}
+    p(z, \mathbf{x}) = \mathrm{N}(z \mid 0, 1)\,\mathrm{N}(\mathbf{x} \mid \boldsymbol{\theta} \cdot z,\, \sigma^2 I),
+\end{align*}
+where $\boldsymbol{\theta} \in \mathbb{R}^D$ is a parameter to be learned, and $\sigma^2$ is a
+fixed hyperparameter. Assume the amortized posterior (aka encoder) is of the form,
+\begin{align*}
+    q(z \mid \mathbf{x}) = \mathrm{N}(z \mid \boldsymbol{\phi}^\top \mathbf{x},\, v^2),
+\end{align*}
+where $\boldsymbol{\phi} \in \mathbb{R}^D$ and $v^2 \in \mathbb{R}_+$ are variational
+parameters to be learned. This is a variational autoencoder (VAE) with a \textbf{linear}
+encoder and decoder.
+
+\begin{enumerate}[label=(\alph*)]
+    \item Write the local ELBO $\mathcal{L}(\boldsymbol{\theta}, \boldsymbol{\phi}, v)
+    \leq \log p(\mathbf{x};\, \boldsymbol{\theta})$ for a single observation $\mathbf{x}$.
+    Leave your answer in terms of the Gaussian density function.
+
+    \item When you maximize the ELBO, what quantity is minimized?
+
+    \item Fixing $\boldsymbol{\theta}$, solve for the variational parameters
+    $\boldsymbol{\phi}^*$ and $v^*$ that maximize the ELBO.
+
+    \item With the optimal variational parameters found above, is the ELBO tight?
+    I.e., does $\mathcal{L}(\boldsymbol{\theta}, \boldsymbol{\phi}^*, v^*)$ equal
+    $\log p(\mathbf{x};\, \boldsymbol{\theta})$?
+\end{enumerate}
+\end{document}
