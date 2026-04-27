@@ -51,8 +51,8 @@ Project deliverable due dates are marked below.
 | Apr 19 | **Deliverable 2 Due** (2pg report per team)| |
 | Apr 20 | **Watch:** Probabilistic PCA <br> **Attend:** Lab Meeting (Monday Teams) | Ch 2.3 |
 | Apr 22 | **Watch:** Variational Autoencoders <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 2.4 | 
-| Apr 27 | **Attend:** Hidden Markov Models <br> **Attend:** Lab Meeting (Monday Teams) | Ch 4.1 |
-| Apr 29 | **Attend:** Linear Dynamical Systems <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 4.2 |
+| Apr 27 | **Attend:** Hidden Markov Models | Ch 4.1 |
+| Apr 29 | **Attend:** Linear Dynamical Systems | Ch 4.2 |
 | May 3  | **Deliverable 3 Due** (2pg report per team)| | 
 | May 4  | **Watch:** Gaussian Processes <br> **Attend:** Lab Meeting (Monday Teams) | Ch 5.1 |
 | May 6  | **Watch:** Poisson Processes <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 5.3 | 
