@@ -1,0 +1,57 @@
+\documentclass[11pt]{article}
+\input{../preamble/preamble_latex.tex}
+\input{../preamble/preamble_math.tex}
+
+
+\title{STATS 305C: Week 5 Math Problem}
+\date{Due Weds May 6, 2026 at 11:59pm}
+\begin{document}
+\maketitle
+\noindent
+
+Consider a hidden Markov model (HMM),
+\begin{align*}
+    z_1 &\sim \pi_0 \\
+    z_t &\sim \pi_{z_{t-1}} && \text{for } t = 2, \ldots, T \\
+    x_t &\sim p(x \mid \theta_{z_t}) && \text{for } t = 1, \ldots, T
+\end{align*}
+where $z_t \in \{1, \ldots, K\}$ denotes the discrete latent state at time $t$. The HMM
+parameters consist of the initial state probabilities, $\pi_0$, the transition probabilities
+$\{\pi_k\}_{k=1}^K$, and the emission parameters $\{\theta_k\}_{k=1}^K$.
+
+\bigskip
+\noindent
+We can reparameterize the latent states in terms of their states at the times of change
+points, $c_n \in \{1, \ldots, K\}$, and the corresponding durations between change points,
+$d_n \in \mathbb{N}_+$ (these are positive integers). Let $c_1 = z_1$ and let $d_1$ denote
+the number of time steps before the state changes. Then let $c_2 = z_{1+d_1}$ and let $d_2$
+be the number of time steps before the state changes again. For example, this state sequence
+would be reparameterized as follows,
+\begin{align*}
+    z_{1:T} = \underbrace{3, 3, 3, 3, 3,}_{c_1=3,\, d_1=5}
+              \underbrace{1, 1, 1, 1,}_{c_2=1,\, d_2=4}
+              \underbrace{2, 2, 2, 2, 2, 2,}_{c_3=2,\, d_3=6}
+              \underbrace{1, 1, 1, 1, 1.}_{c_4=1,\, d_4=5}
+\end{align*}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Derive the probability mass function $p(d_n \mid c_n = k)$.
+
+    \item Derive the probability mass function $p(c_{n+1} \mid c_n = k)$.
+
+    \item Formulating the HMM in terms of states and durations suggests a natural extension
+    to hidden \textit{semi-Markov} models (HSMMs), which allow for different distributions
+    over the durations. For example, suppose we modeled the durations as following a negative
+    binomial distribution,
+    \begin{align*}
+        p(d_n \mid c_n = k) = \mathrm{NB}(d_n - 1;\, r, q_k)
+    \end{align*}
+    where $r \in \mathbb{N}_+$ is a fixed positive integer and $q_k \in [0, 1]$ is a
+    parameter. (The $d_n - 1$ on the r.h.s.\ comes from the fact that the negative binomial
+    has support for all natural numbers including 0, whereas our durations must be at least
+    1.) The negative binomial distribution is defined as the number of times a coin comes up
+    tails before $r$ heads are observed, when $q_k$ is the probability of heads. How can an
+    HSMM with negative binomial durations be reduced to an HMM on an extended state space?
+\end{enumerate}
+
+\end{document}
