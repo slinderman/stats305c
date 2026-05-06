@@ -57,9 +57,9 @@ Project deliverable due dates are marked below.
 | May 4  | **Watch:** Switching Linear Dynamical Systems <br> **Attend:** Lab Meeting (Monday Teams) | Ch 4.3 |
 | May 6  | **Watch:** Recurrent Neural Networks <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 4.4 |
 | May 11 | **Attend:** Transformers | Ch 4.5 |
-| May 13 | **Attend:** Linear Attention and Deep SSMs | Ch 4.6 |
+| May 13 | **Attend:** Deep SSMs and Linear Attention | Ch 4.6 |
 | May 17 | **Deliverable 4 Due** (2pg report per team)| |
-| May 18 | **Watch:** Parallelizing Nonlinear RNNs <br> **Attend:** Lab Meeting (Monday Teams) |   |
+| May 18 | **Watch:** Parallelizing Nonlinear RNNs <br> **Attend:** Lab Meeting (Monday Teams) | Ch 4.7 |
 | May 20 | **Watch:** Continual Learning <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 3.7 |
 | *May 25* | *No class — Memorial Day* | |
 | May 27 | **Attend:** Diffusion Models and SDEs | Ch 2.5, 5.2 |
