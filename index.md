@@ -40,29 +40,29 @@ Project deliverable due dates are marked below.
 
 | Date | Topic | Reading |
 | ---- | ----- | ------- |
-| Mar 30 | **Attend:** Course overview | Ch 1.1 |
-| Apr 1  | **Attend:** The (Multivariate) Normal Distribution | Ch 1.2–1.3 |
+| Mar 30 | **Attend:** Course overview | [Ch 1.1](chapters/01_01_bayes) |
+| Apr 1  | **Attend:** The (Multivariate) Normal Distribution | [Ch 1.2](chapters/01_02_normal)–[1.3](chapters/01_03_mvn) |
 | Apr 5  | **Deliverable 1 Due** (1pg report per person) | | 
-| Apr 6  | **Watch:** Mixture Models <br> **Attend:** Lab Meeting (Monday Teams) | Ch 2.1 |
-| Apr 8  | **Watch:** Expectation Maximization <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 3.3  |
+| Apr 6  | **Watch:** Mixture Models <br> **Attend:** Lab Meeting (Monday Teams) | [Ch 2.1](chapters/02_01_mixtures) |
+| Apr 8  | **Watch:** Expectation Maximization <br> **Attend:** Lab Meeting (Wednesday Teams) | [Ch 3.3](chapters/03_03_em) |
 | Apr 10 | **Required:** You must find your teammate by this date. |  |
-| Apr 13 | **Attend:** Hierarchical Models | Ch 1.5 |
-| Apr 15 | **Attend:** Markov Chain Monte Carlo | Ch 3.1 |
+| Apr 13 | **Attend:** Hierarchical Models | [Ch 1.5](chapters/01_05_hierarchical) |
+| Apr 15 | **Attend:** Markov Chain Monte Carlo | [Ch 3.1](chapters/03_01_mcmc) |
 | Apr 19 | **Deliverable 2 Due** (2pg report per team)| |
-| Apr 20 | **Watch:** Probabilistic PCA <br> **Attend:** Lab Meeting (Monday Teams) | Ch 2.3 |
-| Apr 22 | **Watch:** Variational Autoencoders <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 2.4 | 
-| Apr 27 | **Attend:** Hidden Markov Models | Ch 4.1 |
-| Apr 29 | **Attend:** Linear Dynamical Systems | Ch 4.2 |
+| Apr 20 | **Watch:** Probabilistic PCA <br> **Attend:** Lab Meeting (Monday Teams) | [Ch 2.3](chapters/02_03_linear_lvms) |
+| Apr 22 | **Watch:** Variational Autoencoders <br> **Attend:** Lab Meeting (Wednesday Teams) | [Ch 2.4](chapters/02_04_vaes) | 
+| Apr 27 | **Attend:** Hidden Markov Models | [Ch 4.1](chapters/04_01_hmms) |
+| Apr 29 | **Attend:** Linear Dynamical Systems | [Ch 4.2](chapters/04_02_lds) |
 | May 3  | **Deliverable 3 Due** (2pg report per team)| | 
-| May 4  | **Watch:** Switching Linear Dynamical Systems <br> **Attend:** Lab Meeting (Monday Teams) | Ch 4.3 |
-| May 6  | **Watch:** Recurrent Neural Networks <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 4.4 |
-| May 11 | **Attend:** Transformers | Ch 4.5 |
-| May 13 | **Attend:** Deep SSMs and Linear Attention | Ch 4.6 |
+| May 4  | **Watch:** Switching Linear Dynamical Systems <br> **Attend:** Lab Meeting (Monday Teams) | [Ch 4.3](chapters/04_03_slds) |
+| May 6  | **Watch:** Recurrent Neural Networks <br> **Attend:** Lab Meeting (Wednesday Teams) | [Ch 4.4](chapters/04_04_rnns) |
+| May 11 | **Attend:** Transformers | [Ch 4.5](chapters/04_05_transformers) |
+| May 13 | **Attend:** Deep SSMs and Linear Attention | [Ch 4.6](chapters/04_06_linear_attention) |
 | May 17 | **Deliverable 4 Due** (2pg report per team)| |
-| May 18 | **Watch:** Parallelizing Nonlinear RNNs <br> **Attend:** Lab Meeting (Monday Teams) | Ch 4.7 |
-| May 20 | **Watch:** Continual Learning <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 3.7 |
+| May 18 | **Watch:** Parallelizing Nonlinear RNNs <br> **Attend:** Lab Meeting (Monday Teams) | [Ch 4.7](chapters/04_07_parallel_rnns) |
+| May 20 | **Watch:** Continual Learning <br> **Attend:** Lab Meeting (Wednesday Teams) | [Ch 3.7](chapters/03_07_continual_learning) |
 | *May 25* | *No class — Memorial Day* | |
-| May 27 | **Attend:** Diffusion Models and SDEs | Ch 2.5, 5.2 |
+| May 27 | **Attend:** Diffusion Models and SDEs | [Ch 2.5](chapters/02_05_diffusion), [5.2](chapters/05_02_sdes) |
 | Jun 1  | **Attend:** Project Presentations (All Teams) | |
 | Jun 3  | **Attend:** Project Presentations (All Teams) | |
 | Jun 8  | **Final Report Due** | |
