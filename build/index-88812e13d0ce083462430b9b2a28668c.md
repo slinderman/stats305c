@@ -54,10 +54,10 @@ Project deliverable due dates are marked below.
 | Apr 27 | **Attend:** Hidden Markov Models | Ch 4.1 |
 | Apr 29 | **Attend:** Linear Dynamical Systems | Ch 4.2 |
 | May 3  | **Deliverable 3 Due** (2pg report per team)| | 
-| May 4  | **Watch:** Gaussian Processes <br> **Attend:** Lab Meeting (Monday Teams) | Ch 5.1 |
-| May 6  | **Watch:** Poisson Processes <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 5.3 | 
-| May 11 | **Attend:** Transformers | Ch 4.4 |
-| May 13 | **Attend:** Linear Attention and Deep SSMs | Ch 4.5 |
+| May 4  | **Watch:** Switching Linear Dynamical Systems <br> **Attend:** Lab Meeting (Monday Teams) | Ch 4.3 |
+| May 6  | **Watch:** Recurrent Neural Networks <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 4.4 |
+| May 11 | **Attend:** Transformers | Ch 4.5 |
+| May 13 | **Attend:** Linear Attention and Deep SSMs | Ch 4.6 |
 | May 17 | **Deliverable 4 Due** (2pg report per team)| |
 | May 18 | **Watch:** Parallelizing Nonlinear RNNs <br> **Attend:** Lab Meeting (Monday Teams) |   |
 | May 20 | **Watch:** Continual Learning <br> **Attend:** Lab Meeting (Wednesday Teams) | Ch 3.7 |

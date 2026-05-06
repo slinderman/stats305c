@@ -68,6 +68,9 @@
     <loc>http://localhost:3000/lds</loc>
   </url>
   <url>
+    <loc>http://localhost:3000/slds</loc>
+  </url>
+  <url>
     <loc>http://localhost:3000/rnns</loc>
   </url>
   <url>
@@ -75,6 +78,9 @@
   </url>
   <url>
     <loc>http://localhost:3000/linear-attention</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/parallel-rnns</loc>
   </url>
   <url>
     <loc>http://localhost:3000/discrete-diffusion</loc>
