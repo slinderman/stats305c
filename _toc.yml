@@ -41,7 +41,7 @@ parts:
     - file: chapters/04_05_transformers.md
     - file: chapters/04_06_linear_attention.md
     - file: chapters/04_07_parallel_rnns.md
-    - file: chapters/04_08_discrete_diffusion.ipynb
+    - file: chapters/04_08_discrete_diffusion.md
 
   - caption: "Part V: Stochastic Processes"
     chapters:
@@ -49,6 +49,7 @@ parts:
     - file: chapters/05_02_sdes.md
     - file: chapters/05_03_poisson_processes.ipynb
     - file: chapters/05_04_dpmm.ipynb
+    - file: chapters/05_05_ctmc.md
 
   - caption: Labs
     chapters:
