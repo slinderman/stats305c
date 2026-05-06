@@ -98,6 +98,9 @@
     <loc>http://localhost:3000/dpmm</loc>
   </url>
   <url>
+    <loc>http://localhost:3000/ctmc</loc>
+  </url>
+  <url>
     <loc>http://localhost:3000/lab0</loc>
   </url>
   <url>
