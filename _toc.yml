@@ -36,10 +36,12 @@ parts:
     chapters:
     - file: chapters/04_01_hmms.ipynb
     - file: chapters/04_02_lds.ipynb
-    - file: chapters/04_03_rnns.md
-    - file: chapters/04_04_transformers.md
-    - file: chapters/04_05_linear_attention.ipynb
-    - file: chapters/04_06_discrete_diffusion.ipynb
+    - file: chapters/04_03_slds.ipynb
+    - file: chapters/04_04_rnns.md
+    - file: chapters/04_05_transformers.md
+    - file: chapters/04_06_linear_attention.md
+    - file: chapters/04_07_parallel_rnns.md
+    - file: chapters/04_08_discrete_diffusion.ipynb
 
   - caption: "Part V: Stochastic Processes"
     chapters:
