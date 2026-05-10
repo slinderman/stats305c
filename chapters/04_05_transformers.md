@@ -11,7 +11,15 @@ Transformers underlie large language models (LLMs) like Open AI's ChatGPT and Go
 
 ## Preliminaries
 
-Let $\mbX^{(0)} \in \reals^{T \times D}$ denote our data matrix with row $\mbx_t^{(0)} \in \reals^D$ representing the $t$-th **token** in the sequence. For example, the tokens could be a vector embedding of a word, sub-word, or character. The embeddings may be fixed or learned as part of the model.
+### Tokenization
+
+Before a transformer can process text, the raw string must be converted into a sequence of discrete **tokens** drawn from a finite vocabulary $\cV$. The choice of tokenization scheme involves a tradeoff: word-level tokenization yields short sequences but requires a very large vocabulary and cannot handle unknown words; character-level tokenization handles any input but produces very long sequences that stress the $O(T^2)$ attention cost.
+
+Modern LLMs use **subword tokenization**, which decomposes text into vocabulary units that are between characters and words in granularity. The dominant algorithm is **Byte Pair Encoding (BPE)** [@sennrich2016bpe], which starts from a character vocabulary and iteratively merges the most frequent adjacent pair of symbols until the vocabulary reaches a target size $|\cV|$ (typically 32k–128k tokens). Common words become single tokens; rare words are split into subword pieces. Because BPE operates on bytes, it handles any Unicode text without unknown-token issues.
+
+Each discrete token index $\ell_t \in \{1, \ldots, |\cV|\}$ is then mapped to a continuous vector via a learned **embedding matrix** $\mbE \in \reals^{|\cV| \times D}$, giving $\mbc_t = \mbE_{\ell_t} \in \reals^D$.
+
+Let $\mbX^{(0)} \in \reals^{T \times D}$ denote our data matrix with row $\mbx_t^{(0)} \in \reals^D$ representing the $t$-th token embedding. The embeddings may be fixed or learned as part of the model.
 
 The output of the transformer will be another matrix of the same shape, $\mbX^{(M)} \in \reals^{T \times D}$. These output features can be used for downstream tasks like sentiment classification, machine translation, or autoregressive modeling.
 
@@ -129,6 +137,18 @@ $$
 where $\mathrm{swish}(z) = z \cdot \sigma(z)$ and $\odot$ is elementwise multiplication. The gating branch $\mbW_2 \mbx$ acts as a content-dependent filter on the nonlinear branch. SwiGLU is now the default in LLaMA, PaLM, Gemma, and most state-of-the-art open-weight models.
 :::
 
+### Mixture of Experts
+
+A **mixture of experts (MoE)** layer replaces the single MLP at each transformer block with $E$ independent "expert" MLPs and a learned **router** that selects a sparse subset of them for each token [@shazeer2017outrageously]. Given a token $\mby_t$, the router computes a probability over experts,
+$$
+g_t = \mathrm{softmax}(\mbW_g\, \mby_t) \in \reals^E,
+$$
+and routes the token to the top-$k$ experts (typically $k = 1$ or $k = 2$):
+$$
+\texttt{moe}(\mby_t) = \sum_{e \in \mathrm{top\text{-}k}(g_t)} g_{t,e}\; \texttt{mlp}_e(\mby_t).
+$$
+Because only $k \ll E$ experts are active per token, the computation per token is the same as a dense model with a single MLP — but the total number of parameters scales with $E$. This decoupling of **parameter count** from **compute** allows MoE models to reach much higher capacity for the same training FLOP budget. @fedus2021switch showed that even $k = 1$ (routing each token to a single expert) works well at scale; modern deployments such as Mixtral 8×7B use $E = 8$ experts with $k = 2$. The main practical challenges are load balancing (ensuring tokens are spread roughly evenly across experts, typically enforced with an auxiliary loss) and the communication overhead of routing tokens to different devices in a distributed setting.
+
 ## Layer Norm
 
 LayerNorm stabilizes training by z-scoring each token and applying a learned shift and scale:
@@ -182,6 +202,10 @@ where $\mbW \in \reals^{V \times D}$. Like hidden states in an RNN, the final-la
 ## Training
 
 Standard practice is to use the AdamW optimizer with gradient clipping, a warmup-then-cosine learning rate schedule, and dropout. Treat these as hyperparameters; the optimal settings are model- and data-dependent.
+
+## Open-Weight LLMs
+
+The transformer landscape is evolving too rapidly for any static summary to remain useful for long. That said, students interested in working with LLMs directly have access to a growing ecosystem of high-quality open-weight models — models whose weights are publicly released even if training details are not always fully disclosed. Current families worth being aware of include Meta's **LLaMA** series [@touvron2023llama2; @grattafiori2024llama3], Mistral AI's **Mistral** and **Mixtral** models [@jiang2023mistral; @jiang2024mixtral], Google's **Gemma** family [@team2024gemma2], and Alibaba's **Qwen** series. These span a range of sizes (1B–405B parameters) and are available through Hugging Face, Ollama, and similar platforms. All of them implement the core building blocks described in this chapter — Pre-LN, RoPE, GQA, and SwiGLU — with the main differences lying in scale, training data, and fine-tuning for instruction following.
 
 ## Conclusion
 
