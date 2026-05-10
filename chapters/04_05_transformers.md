@@ -97,6 +97,11 @@ where $\mbU_o^{(m,h)} \in \reals^{D \times K}$ maps each head's output back to t
 
 ![Multi-Headed Self Attention](../figures/14_transformers/mhsa-2.png)
 
+:::{admonition} Head dimension in practice
+:class: note
+The standard convention is $K = D / H$, so the per-head query/key/value dimension is much smaller than the full token dimension. In Qwen3-8B [@qwen3], for example, $D = 4096$, $H = 32$, giving $K = 128$ — a factor of 32 smaller than $D$. This keeps the total Q, K, and V parameter count at $3 \times H \times D \times K = 3D^2$, the same as a single $D \times D$ projection regardless of how many heads are used. It also means each head's read and write operations on the residual stream are genuinely low-rank: the head projects the $D$-dimensional stream down to $K$ dimensions to compute attention, then projects the result back up.
+:::
+
 :::{admonition} Grouped Query Attention (GQA)
 :class: note
 Standard multi-head attention maintains $H$ independent sets of key and value projections, each of which must be cached during generation. **Grouped Query Attention** [@ainslie2023gqa] reduces this cost by sharing a single set of K/V heads across a group of $G$ query heads, shrinking the KV cache by a factor of $G$ with minimal quality loss. GQA is now standard in most open-weight LLMs (LLaMA 2/3, Mistral, Gemma).
@@ -202,6 +207,14 @@ where $\mbW \in \reals^{V \times D}$. Like hidden states in an RNN, the final-la
 ## Training
 
 Standard practice is to use the AdamW optimizer with gradient clipping, a warmup-then-cosine learning rate schedule, and dropout. Treat these as hyperparameters; the optimal settings are model- and data-dependent.
+
+### Scaling Laws
+
+One of the most practically useful findings in LLM research is that validation loss follows **power-law scaling** in model size $N$ (number of parameters) and dataset size $D$ (number of training tokens) [@kaplan2020scaling]. The loss decreases smoothly as either resource grows, with the two contributions approximately additive — meaning a bottleneck on one resource cannot be compensated by adding more of another.
+
+An immediate consequence is that for a fixed compute budget $C \approx 6ND$ FLOPs, there is an optimal allocation between model size and training tokens. @kaplan2020scaling initially argued that model size should be prioritized, leading to the practice of training large models on relatively few tokens. @hoffmann2022chinchilla revisited this with more careful experiments and found that model size and training tokens should scale in roughly equal proportion: the **Chinchilla** result is that the compute-optimal number of training tokens is approximately $D^* \approx 20N$. Concretely, a 7B-parameter model trained compute-optimally should see around 140B tokens — much more data than earlier models of comparable size used.
+
+This has had an outsized practical impact: post-Chinchilla models (LLaMA and its successors) train smaller models on far more data than pre-Chinchilla norms, achieving better performance at inference time for the same training compute.
 
 ## Open-Weight LLMs
 
